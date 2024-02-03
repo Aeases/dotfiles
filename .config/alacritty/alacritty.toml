@@ -1,0 +1,82 @@
+# "cursor.style" = "Block"
+# "debug.render_timer" = false
+
+
+import = [
+  # uncomment the flavour you want below:
+  # "~/.config/alacritty/catppuccin-latte.toml"
+  # "~/.config/alacritty/catppuccin-frappe.toml"
+  # "~/.config/alacritty/catppuccin-macchiato.toml"
+  # "~/.config/alacritty/catppuccin-mocha.toml"
+  "~/.config/alacritty/onedark.toml"
+]
+
+live_config_reload = true
+
+[bell]
+animation = "EaseOutExpo"
+duration = 0
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+size = 21
+
+[font.bold]
+family = "JetBrainsMono"
+style = "Bold"
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.italic]
+family = "JetBrainsMono"
+
+[font.normal]
+family = "JetBrainsMonoNerdFont"
+style = "Medium"
+
+[font.offset]
+x = 0
+y = 0
+
+[mouse]
+# faux_scrolling_lines = 1
+hide_when_typing = true
+
+[[mouse.bindings]]
+action = "PasteSelection"
+mouse = "Middle"
+
+# [mouse.double_click]
+# threshold = 300
+
+# [mouse.triple_click]
+# threshold = 300
+
+[selection]
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+
+[shell]
+program = "/bin/zsh"
+
+[window]
+decorations = "full"
+dynamic_title = true
+# option_as_alt = "Both"
+startup_mode = "Maximized"
+opacity = 1.0
+
+[window.dimensions]
+columns = 160
+lines = 80
+
+[window.padding]
+x = 4
+y = 4
