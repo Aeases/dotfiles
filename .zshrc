@@ -46,7 +46,7 @@ fi
 
 
 alias open=xdg-open
-
+alias l='ls -la'
 # Node Version Manager
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
