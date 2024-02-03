@@ -12,18 +12,21 @@ INC_APPEND_HISTORY="true"
 HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history # Persist history
 HISTSIZE=1000000
 SAVEHIST=1000000
-setopt appendhistory
-
+setopt appendhistory autocd autopushd pushdminus pushdsilent pushdtohome
 # Disable highlighting pasted text
 zle_highlight=('paste:none')
 # Disable Autocorrect
 unsetopt correct_all BEEP
 
-
+# Plugins manager
 ZINIT_HOME="${HOME}/.config/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
+
+# Init Completions
+autoload -Uz compinit
+compinit
 # Load powerlevel10k theme
 zinit ice depth"1" # git clone depth
 zinit light romkatv/powerlevel10k
@@ -36,6 +39,7 @@ zinit load zdharma/history-search-multi-word
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
+
 if [ Linux = `uname` ]; then
   source "${HOME}/.profile-linux"
 fi
@@ -47,17 +51,6 @@ fi
 
 alias open=xdg-open
 alias l='ls -la'
-# Node Version Manager
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH=$BUN_INSTALL/bin:$PATH
-
-# Deno binaries
-export PATH="/var/home/aeases/.deno/bin:$PATH"
 
 
 . "$HOME/.cargo/env"
