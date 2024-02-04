@@ -20,17 +20,17 @@ unsetopt correct_all BEEP
 
 DHOME=$HOME/dotfiles/
 # Plugins manager
-ZINIT_HOME="${DHOME}/.config/zinit/zinit.git"
+ZINIT_HOME="${HOME}/.config/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
 # Ensure tpm is installed
-TMUX_TPM="${DHOME}/.config/tmux/plugins/tpm"
-if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
-  echo "Tmux Plugin Manager is not installed, installing now."
-  "run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'"
-fi
+# TMUX_TPM="${DHOME}/.config/tmux/plugins/tpm"
+# if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
+#   echo "Tmux Plugin Manager is not installed, installing now."
+#   "run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'"
+# fi
 
 # Init Completions
 autoload -Uz compinit
