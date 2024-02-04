@@ -8,7 +8,7 @@ import = [
   # "~/.config/alacritty/catppuccin-frappe.toml"
   # "~/.config/alacritty/catppuccin-macchiato.toml"
   # "~/.config/alacritty/catppuccin-mocha.toml"
-  "~/.config/alacritty/onedark.toml"
+  "~/.config/alacritty/themes/onedark.toml"
 ]
 
 live_config_reload = true

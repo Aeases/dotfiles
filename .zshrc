@@ -24,6 +24,13 @@ ZINIT_HOME="${HOME}/.config/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
+# Ensure tpm is installed
+TMUX_TPM="${HOME}/.config/tmux/plugins/tpm"
+if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
+  echo "Tmux Plugin Manager is not installed, installing now."
+  git clone https://github.com/tmux-plugins/tpm $TMUX_TPM && $TMUX_TPM/bin/install_plugins
+fi
+
 # Init Completions
 autoload -Uz compinit
 compinit
