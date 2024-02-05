@@ -18,7 +18,7 @@ zle_highlight=('paste:none')
 # Disable Autocorrect
 unsetopt correct_all BEEP
 
-DHOME=$HOME/dotfiles/
+DHOME=$HOME/dotfiles
 # Plugins manager
 ZINIT_HOME="${HOME}/.config/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
@@ -50,6 +50,8 @@ zinit load zdharma/history-search-multi-word
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
+
+source "${HOME}/.profile"
 
 if [ Linux = `uname` ]; then
   source "${HOME}/.profile-linux"
