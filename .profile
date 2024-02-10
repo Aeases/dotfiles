@@ -8,6 +8,9 @@ fi
 alias v="nvim"
 export HOMEBREW_NO_ANALYTICS=1
 
+# something a little like cargo watch, but for wasm-pack.
+alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
+
 # Node Version Manager
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
