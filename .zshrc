@@ -28,11 +28,11 @@ source "${ZINIT_HOME}/zinit.zsh"
 # Ensure tpm is installed
 TMUX_PLUGIN_MANAGER_PATH="${DHOME}/.config/tmux/plugins"
 TMUX_TPM="${TMUX_PLUGIN_MANAGER_PATH}/tpm"
+# TODO: Make tmux check if ANY folder from the plugins directory is entirely empty, if so rmdir it, and do a plugin install.
 if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
   echo "Tmux Plugin Manager is not installed, installing now."
   rmdir ${TMUX_PLUGIN_MANAGER_PATH}/*
   git clone https://github.com/tmux-plugins/tpm $TMUX_TPM && $TMUX_TPM/tpm && $TMUX_TPM/bin/install_plugins
-  # "run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'"
 fi
 
 # Init Completions
