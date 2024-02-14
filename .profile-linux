@@ -1,9 +1,7 @@
-. "$HOME/.cargo/env"
-
 
 # Fix for nodejs "ERR_OSSL_EVP_UNSUPPORTED
-export NODE_OPTIONS=--openssl-legacy-provider
-
+#export NODE_OPTIONS=--openssl-legacy-provider
+export PROJECT_DIR="$HOME/Dev/"
 # Added by Toolbox App
 export PATH="$PATH:/var/home/aeases/.local/share/JetBrains/Toolbox/scripts"
 
@@ -36,4 +34,12 @@ then
 fi
 export PATH
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# TMUX AutoLaunch
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+    tmux attach -t default || tmux new -s default
+fi
+
+# Enable Linuxbrew if available
+test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc

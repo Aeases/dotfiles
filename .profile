@@ -1,32 +1,37 @@
 
-# Custom Terminal Keybinds
-bindkey '^a' autosuggest-accept # Makes Ctrl+a accept zsh completions
 
 if which eza > /dev/null 2>&1; then
   alias ls="eza"
 fi
 alias v="nvim"
-export HOMEBREW_NO_ANALYTICS=1
+
+alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 
 # something a little like cargo watch, but for wasm-pack.
-alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 
 # Node Version Manager
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# bun
+# Add installed bun binaries to path
 export BUN_INSTALL="$HOME/.bun"
 export PATH=$BUN_INSTALL/bin:$PATH
 
+# Add Rust cargo binaries to path
+export PATH="$HOME/.cargo/bin:$PATH"
 
-# http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html
-# http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
-# http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 
-# Make sure that the terminal is in application mode when zle is active, since
-# only then values from $terminfo are valid
+export HOMEBREW_NO_ANALYTICS=1
+
+
+
+
+# >>> MY CUSTOM KEYBINDS <<<
+bindkey '^a' autosuggest-accept # Makes Ctrl+a accept zsh completions
+
+
+# >>> ZSH KEYBINDS STOLEN FROM OMZ <<< 
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
   function zle-line-init() {
     echoti smkx
