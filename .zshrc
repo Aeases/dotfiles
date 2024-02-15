@@ -51,6 +51,8 @@ zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
 
+
+# Platform specific scripts
 source "${HOME}/.profile"
 
 if [ Linux = `uname` ]; then
@@ -61,6 +63,7 @@ if [ Darwin = `uname` ]; then
   source "${HOME}/.profile-macos"
 fi
 
+eval "$(zoxide init zsh --cmd zd)"
 
 alias open=xdg-open
 alias l='ls -la'
