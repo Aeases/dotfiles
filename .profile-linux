@@ -7,7 +7,7 @@ export PATH="$PATH:/var/home/aeases/.local/share/JetBrains/Toolbox/scripts"
 
 # Podman stuff
 export PODMAN_USERNS=keep-id
-export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock
+export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock # NOTE: Forwards calls to docker socket to podman's emulated docker socket.
 
 # Deno binaries
 export PATH="/var/home/aeases/.deno/bin:$PATH"
@@ -35,11 +35,11 @@ fi
 export PATH
 
 # TMUX AutoLaunch
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-    tmux attach -t default || tmux new-session -s default
-fi
+# if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+#     tmux attach -t default || tmux new-session -s default
+# fi
 
 # Enable Linuxbrew if available
 test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
 test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+#echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc

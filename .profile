@@ -18,8 +18,6 @@ export NVM_DIR="$HOME/.nvm"
 export BUN_INSTALL="$HOME/.bun"
 export PATH=$BUN_INSTALL/bin:$PATH
 
-# Add Rust cargo binaries to path
-export PATH="$HOME/.cargo/bin:$PATH"
 
 
 export HOMEBREW_NO_ANALYTICS=1
@@ -150,3 +148,4 @@ bindkey '\C-x\C-e' edit-command-line
 
 # file rename magick
 bindkey "^[m" copy-prev-shell-word
+. "$HOME/.cargo/env"

@@ -69,7 +69,6 @@ alias open=xdg-open
 alias l='ls -la'
 
 
-. "$HOME/.cargo/env"
 export PATH=$PATH:/var/home/aeases/.spicetify
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
