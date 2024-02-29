@@ -8,7 +8,8 @@ import = [
   # "~/.config/alacritty/catppuccin-frappe.toml"
   # "~/.config/alacritty/catppuccin-macchiato.toml"
   # "~/.config/alacritty/catppuccin-mocha.toml"
-  "~/.config/alacritty/themes/onedark.toml"
+  #"~/.config/alacritty/themes/onedark.toml"
+  "~/.config/alacritty/themes/flexoki.toml"
 ]
 
 live_config_reload = true
@@ -28,7 +29,7 @@ TERM = "xterm-256color"
 size = 21
 
 [font.bold]
-family = "JetBrainsMono"
+family = "JetBrainsMonoNL Nerd Font Mono"
 style = "Bold"
 
 [font.glyph_offset]
@@ -36,10 +37,10 @@ x = 0
 y = 0
 
 [font.italic]
-family = "JetBrainsMono"
+family = "JetBrainsMonoNL Nerd Font Mono"
 
 [font.normal]
-family = "JetBrainsMonoNerdFont"
+family = "JetBrainsMonoNL Nerd Font Mono"
 style = "Medium"
 
 [font.offset]
@@ -63,8 +64,6 @@ mouse = "Middle"
 [selection]
 semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
-[shell]
-program = "/bin/zsh"
 
 [window]
 decorations = "full"

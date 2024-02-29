@@ -35,6 +35,9 @@ if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
   git clone https://github.com/tmux-plugins/tpm $TMUX_TPM && $TMUX_TPM/tpm && $TMUX_TPM/bin/install_plugins
 fi
 
+# Platform specific scripts
+source "${HOME}/.zprofile"
+
 # Init Completions
 autoload -Uz compinit
 compinit
@@ -52,8 +55,6 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
 
 
-# Platform specific scripts
-source "${HOME}/.profile"
 
 if [ Linux = `uname` ]; then
   source "${HOME}/.profile-linux"

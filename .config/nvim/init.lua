@@ -173,14 +173,20 @@ require('lazy').setup({
     },
   },
 
-  {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
+  -- {
+  --   -- Theme inspired by Atom
+  --   'navarasu/onedark.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'onedark'
+  --   end,
+  -- },
+
+    { 'kepano/flexoki-neovim', name = 'flexoki', priority = 1000, 
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'flexoki-dark'
     end,
-  },
+    },
 
   {
     -- Set lualine as statusline
@@ -189,9 +195,9 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
-        component_separators = '|',
-        section_separators = '',
+        theme = 'auto',
+        component_separators = '',
+        section_separators = { left = '', right = '' },
       },
     },
   },
@@ -287,6 +293,7 @@ vim.wo.signcolumn = 'yes'
 -- Decrease update time
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
+vim.o.guifont = "JetBrainsMonoNL Nerd Font Mono:h14"
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -307,6 +314,12 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- move/drag functions in visual mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+-- Make kj exit to normal mode.
+vim.keymap.set("i", "kj", "<Esc>")
+--vim.len.timeoutlen = 75
+
+
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
