@@ -1,16 +1,23 @@
 
 
+alias v="nvim"
+alias nvide="neovide"
+alias nv="neovide"
+alias rebuild="sudo -E -s nvim /etc/nixos/configuration.nix && sudo nixos-rebuild switch"
+alias venv="python -m venv"
+
+# something a little like cargo watch, but for wasm-pack.
+alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
+
 if which eza > /dev/null 2>&1; then
   alias ls="eza --icons=auto"
 fi
-alias v="nvim"
-alias rebuild="sudo nvim /etc/nixos/configuration.nix && sudo nixos-rebuild switch"
-alias venv="python -m venv"
+if which bat > /dev/null 2>&1; then
+  alias cat="bat -pp"
+fi
 
-
-alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
-
-# something a little like cargo watch, but for wasm-pack.
+# ZSH-autcomplete settings
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#d19a66"
 
 # Node Version Manager
 export NVM_DIR="$HOME/.nvm"
