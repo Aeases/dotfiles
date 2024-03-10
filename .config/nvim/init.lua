@@ -28,11 +28,16 @@ require('lazy').setup({
   "lambdalisue/suda.vim",
 
   -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
+ -- 'tpope/vim-sleuth',
+  'NMAC427/guess-indent.nvim',
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {},
+    opts = {
+      highlight = {
+        multiline = false,
+      },
+    },
   },
 
   {
@@ -261,9 +266,18 @@ vim.wo.signcolumn = 'yes'
 
 -- Decrease update time
 vim.o.updatetime = 250
-vim.o.timeoutlen = 300
-vim.o.guifont = "JetBrainsMonoNL Nerd Font Mono:h14"
+vim.o.timeoutlen = 75
 
+vim.o.guifont = "JetBrainsMonoNL Nerd Font Mono:h14"
+vim.o.autochdir = true
+-- Make each tab take up 2 columns
+vim.o.tabstop = 2
+
+-- Make the tab button write two spaces
+vim.o.softtabstop = 2
+
+-- Make a level of indentation be 2 columns
+vim.o.shiftwidth = 2
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
@@ -286,7 +300,13 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Make kj exit to normal mode.
 vim.keymap.set("i", "kj", "<Esc>")
---vim.len.timeoutlen = 75
+
+-- Remap to center page when going up / down
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+-- Make leader p not repalce the register when pasting over something
+vim.keymap.set("n", "<leader>p", "\"_dP")
 
 
 
@@ -354,7 +374,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'css', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'astro' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'css', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'astro', 'java' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -499,8 +519,9 @@ local servers = {
   -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
-  -- tsserver = {},
+  tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs'} },
+  astro = {},
   -- jdtls = {},
   -- julia_lsp = {},
 
