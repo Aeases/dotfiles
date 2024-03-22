@@ -23,7 +23,11 @@ require('lazy').setup({
   'tpope/vim-rhubarb',
 
   -- Tmux Integration
-  "christoomey/vim-tmux-navigator",
+  -- "christoomey/vim-tmux-navigator",
+  {
+    "mrjones2014/smart-splits.nvim",
+    lazy=false,
+  },
   -- Writing files with sudo
   "lambdalisue/suda.vim",
 
@@ -302,6 +306,7 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Make kj exit to normal mode.
 vim.keymap.set("i", "kj", "<Esc>")
+vim.keymap.set("i", "jk", "<Esc>")
 
 -- Remap to center page when going up / down
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
@@ -310,7 +315,24 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 -- Make leader p not repalce the register when pasting over something
 vim.keymap.set("n", "<leader>p", "\"_dP")
 
+vim.opt_local.formatoptions:remove({'r', 'o'})
 
+-- NOTE: Keymaps for smart splits (mainly wezterm) integration
+vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
+vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
+vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
+vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
+-- moving between splits
+vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
+vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
+vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
+vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
+vim.keymap.set('n', '<C-\\>', require('smart-splits').move_cursor_previous)
+-- swapping buffers between windows
+vim.keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
+vim.keymap.set('n', '<leader><leader>j', require('smart-splits').swap_buf_down)
+vim.keymap.set('n', '<leader><leader>k', require('smart-splits').swap_buf_up)
+vim.keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`

@@ -4,6 +4,12 @@ local wezterm = require 'wezterm'
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+config.default_cursor_style = 'BlinkingBar'
+config.visual_bell = {
+  fade_in_duration_ms = 150,
+  fade_out_duration_ms = 150,
+	--target = 'CursorColor',
+}
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
@@ -36,6 +42,7 @@ config.window_frame = {
 
 --
 config.colors = {
+	visual_bell = '#FF2020',
   tab_bar = {
 		inactive_tab_edge = '#100F0F',
 	
@@ -48,7 +55,7 @@ config.colors = {
       -- The color of the background area for the tab
       bg_color = '#1C1B1A',
       -- The color of the text for the tab
-      fg_color = '#c0c0c0',
+      fg_color = '#66800B',
 
       -- Specify whether you want "Half", "Normal" or "Bold" intensity for the
       -- label shown for this tab.
@@ -72,7 +79,7 @@ config.colors = {
     -- Inactive tabs are the tabs that do not have focus
     inactive_tab = {
       bg_color = '#100F0F',
-      fg_color = '#c0c0c0',
+      fg_color = '#4385BE',
 
       -- The same options that were listed under the `active_tab` section above
       -- can also be used for `inactive_tab`.
@@ -108,6 +115,44 @@ config.colors = {
 
 
 
+-- if you are *NOT* lazy-loading smart-splits.nvim (recommended)
+local function is_vim(pane)
+  -- this is set by the plugin, and unset on ExitPre in Neovim
+  return pane:get_user_vars().IS_NVIM == 'true'
+end
+
+local direction_keys = {
+  Left = 'h',
+  Down = 'j',
+  Up = 'k',
+  Right = 'l',
+  -- reverse lookup
+  h = 'Left',
+  j = 'Down',
+  k = 'Up',
+  l = 'Right',
+}
+
+local function split_nav(resize_or_move, key)
+  return {
+    key = key,
+    mods = resize_or_move == 'resize' and 'META' or 'CTRL',
+    action = wezterm.action_callback(function(win, pane)
+      if is_vim(pane) then
+        -- pass the keys through to vim/nvim
+        win:perform_action({
+          SendKey = { key = key, mods = resize_or_move == 'resize' and 'META' or 'CTRL' },
+        }, pane)
+      else
+        if resize_or_move == 'resize' then
+          win:perform_action({ AdjustPaneSize = { direction_keys[key], 3 } }, pane)
+        else
+          win:perform_action({ ActivatePaneDirection = direction_keys[key] }, pane)
+        end
+      end
+    end),
+  }
+end
 
 
 
@@ -118,13 +163,27 @@ config.keys = {
     { key = "\\",mods = "LEADER",       action=wezterm.action{SplitHorizontal={domain="CurrentPaneDomain"}}},
     { key = "s", mods = "LEADER",       action=wezterm.action{SplitVertical={domain="CurrentPaneDomain"}}},
     { key = "v", mods = "LEADER",       action=wezterm.action{SplitHorizontal={domain="CurrentPaneDomain"}}},
-    { key = "o", mods = "LEADER",       action="TogglePaneZoomState" },
-    { key = "z", mods = "LEADER",       action="TogglePaneZoomState" },
+    -- { key = "o", mods = "LEADER",       action="TogglePaneZoomState" },
+    -- { key = "z", mods = "LEADER",       action="TogglePaneZoomState" },
+    { key = "m", mods = "LEADER",       action="TogglePaneZoomState" },
     { key = "c", mods = "LEADER",       action=wezterm.action{SpawnTab="CurrentPaneDomain"}},
-    { key = "h", mods = "LEADER",       action=wezterm.action{ActivatePaneDirection="Left"}},
-    { key = "j", mods = "LEADER",       action=wezterm.action{ActivatePaneDirection="Down"}},
-    { key = "k", mods = "LEADER",       action=wezterm.action{ActivatePaneDirection="Up"}},
-    { key = "l", mods = "LEADER",       action=wezterm.action{ActivatePaneDirection="Right"}},
+    -- move between split panes
+    split_nav('move', 'h'),
+    split_nav('move', 'j'),
+    split_nav('move', 'k'),
+    split_nav('move', 'l'),
+    -- { key = "h", mods = "LEADER",       action=wezterm.action{ActivatePaneDirection="Left"}},
+    -- { key = "j", mods = "LEADER",       action=wezterm.action{ActivatePaneDirection="Down"}},
+    -- { key = "k", mods = "LEADER",       action=wezterm.action{ActivatePaneDirection="Up"}},
+    -- { key = "l", mods = "LEADER",       action=wezterm.action{ActivatePaneDirection="Right"}},
+    -- resize panes
+    split_nav('resize', 'h'),
+    split_nav('resize', 'j'),
+    split_nav('resize', 'k'),
+    split_nav('resize', 'l'),
+		{ key = "q", mods = "ALT", action=wezterm.action{ActivateTabRelative=-1}},
+    { key = "e", mods = "ALT", action=wezterm.action{ActivateTabRelative=1}},
+    { key = "Enter", mods = "LEADER", action=wezterm.action.ActivateCopyMode },
     { key = "H", mods = "LEADER|SHIFT", action=wezterm.action{AdjustPaneSize={"Left", 5}}},
     { key = "J", mods = "LEADER|SHIFT", action=wezterm.action{AdjustPaneSize={"Down", 5}}},
     { key = "K", mods = "LEADER|SHIFT", action=wezterm.action{AdjustPaneSize={"Up", 5}}},
@@ -143,5 +202,14 @@ config.keys = {
     { key = "x", mods = "LEADER",       action=wezterm.action{CloseCurrentPane={confirm=true}}},
 }
 -- and finally, return the configuration to wezterm
+
+
+
+
+
+
+
+
+
 
 return config
