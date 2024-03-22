@@ -217,6 +217,8 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
+  -- Kitty Syntax highlighting
+  'fladson/vim-kitty'
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -268,7 +270,7 @@ vim.wo.signcolumn = 'yes'
 vim.o.updatetime = 250
 vim.o.timeoutlen = 75
 
-vim.o.guifont = "JetBrainsMonoNL Nerd Font Mono:h14"
+vim.o.guifont = "Hack:h14" -- JetBrainsMonoNL Nerd Font Mono:h14
 vim.o.autochdir = true
 -- Make each tab take up 2 columns
 vim.o.tabstop = 2

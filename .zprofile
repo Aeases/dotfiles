@@ -5,7 +5,8 @@ alias nvide="neovide"
 alias nv="neovide"
 alias rebuild="sudo -E -s nvim /etc/nixos/configuration.nix && sudo nixos-rebuild switch"
 alias venv="python -m venv"
-
+alias lg="lazygit"
+alias gst="git status"
 # something a little like cargo watch, but for wasm-pack.
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 
@@ -36,7 +37,7 @@ export HOMEBREW_NO_ANALYTICS=1
 
 
 # >>> MY CUSTOM KEYBINDS <<<
-bindkey '^a' autosuggest-accept # Makes Ctrl+a accept zsh completions
+bindkey '^[a' autosuggest-accept # Makes Ctrl+a accept zsh completions
 
 
 # >>> ZSH KEYBINDS STOLEN FROM OMZ <<< 
