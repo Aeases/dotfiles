@@ -58,6 +58,7 @@ zinit light zdharma/fast-syntax-highlighting
 
 if [ Linux = `uname` ]; then
   source "${HOME}/.profile-linux"
+	source "$XDG_CONFIG_HOME/wezterm/wezterm.sh"
 fi
 
 if [ Darwin = `uname` ]; then

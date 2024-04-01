@@ -22,6 +22,8 @@ require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
 
+  -- Github Copilot
+  'github/copilot.vim',
   -- Tmux Integration
   -- "christoomey/vim-tmux-navigator",
   {
@@ -272,7 +274,7 @@ vim.wo.signcolumn = 'yes'
 
 -- Decrease update time
 vim.o.updatetime = 250
-vim.o.timeoutlen = 75
+vim.o.timeoutlen = 125
 
 vim.o.guifont = "Hack:h14" -- JetBrainsMonoNL Nerd Font Mono:h14
 vim.o.autochdir = true

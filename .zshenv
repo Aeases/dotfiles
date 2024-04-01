@@ -3,6 +3,7 @@ export XDG_DATA_DIRS="$HOME/.nix-profile/share:$XDG_DATA_DIRS"
 export ELECTRON_OZONE_PLATFORM_HINT=auto
 export NVC="$HOME/.config/nvim/"
 export EDITOR='nvim'
+export PATH=~/.npm-global/bin:$PATH
 export LF_ICONS="\
 tw=:\
 st=:\

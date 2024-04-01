@@ -4,56 +4,125 @@ local wezterm = require 'wezterm'
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+
+local function tab_title(tab_info)
+  local title = tab_info.tab_title
+  -- if the tab title is explicitly set, take that
+  if title and #title > 0 then
+    return title
+  end
+  -- Otherwise, use the title from the active pane
+  -- in that tab
+	local paneCurrProcess= basename(tab_info.active_pane.foreground_process_name)
+	local paneCurrDir = tab_info.active_pane.current_working_dir.file_path
+	-- local paneCurrDir = "/var/home/aeases/"
+	local PathStringlen = string.len(paneCurrDir)
+	local paneCD = string.sub(paneCurrDir, 0, PathStringlen - 1)
+	return basename(paneCD) .. " ❴" .. paneCurrProcess .. "❵"
+end
+
+wezterm.on(
+  'format-tab-title',
+  function(tab, tabs, panes, config, hover, max_width)
+    local title = tab_title(tab)
+		local active_bg = '#279087'
+		local active_fg = '#100F0F'
+		local inactive_bg = '#1C1B1A'
+		local inactive_fg = '#CECDC3'
+    if tab.is_active then
+      return wezterm.format {
+			{ Foreground = { Color = active_bg } },
+			{ Text = '' },
+			'ResetAttributes',
+			{ Background = { Color = active_bg } },
+			{ Foreground = { Color = active_fg } },
+			{Attribute={Intensity="Bold"}},
+			{ Text = "" .. title .. ""},
+			'ResetAttributes',
+			{ Foreground = { Color = active_bg } },
+			{ Text = '' },
+			'ResetAttributes'
+		}
+		else
+      return wezterm.format {
+			{ Foreground = { Color = inactive_bg } },
+			{ Text = ' ' },
+			'ResetAttributes',
+			{ Background = { Color = inactive_bg } },
+			{ Foreground = { Color = inactive_fg } },
+			{Attribute={Intensity="Bold"}},
+			{ Text = title },
+			'ResetAttributes',
+			{ Foreground = { Color = inactive_bg } },
+			{ Text = ' ' },
+			'ResetAttributes'
+		}
+    end
+    return title
+  end
+)
+
+
+
 config.default_cursor_style = 'BlinkingBar'
 config.visual_bell = {
   fade_in_duration_ms = 150,
   fade_out_duration_ms = 150,
+	
 	--target = 'CursorColor',
 }
+config.text_blink_rapid_ease_out = "EaseInOut"
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
 --wezterm.color.load_scheme("/home/aeases/.config/wezterm/themes/flexoki-dark.toml")
 config.color_scheme = 'flexoki-dark'
-
+local background_color = '#100F0F' --'#100F0F'
 config.window_padding = {
   left = "0px",
   right = "0px",
-	top = "0px",
+	top = "1",
+	bottom = "0px",
 }
 
 
 -- For Fancy tab bar
-config.use_fancy_tab_bar = true
+config.use_fancy_tab_bar = false
+config.show_new_tab_button_in_tab_bar = false
+config.tab_max_width = 100
+config.hide_tab_bar_if_only_one_tab = false
+config.tab_bar_at_bottom = true
+config.show_tab_index_in_tab_bar = false
+config.window_decorations = "RESIZE"
+config.font_size = 26
 config.window_frame = {
   font = wezterm.font { family = 'Hack', weight = 'Bold' },
   -- The size of the font in the tab bar.
   -- Default to 10.0 on Windows but 12.0 on other systems
-  font_size = 12.0,
+  
 
   -- The overall background color of the tab bar when
   -- the window is focused
-	active_titlebar_border_bottom = '#100F0F',
-	inactive_titlebar_border_bottom = '#100F0F',
+	active_titlebar_border_bottom = background_color,
+	inactive_titlebar_border_bottom = background_color,
   -- The overall background color of the tab bar
-  active_titlebar_bg = '#100F0F',
-  inactive_titlebar_bg = '#100F0F',
+  active_titlebar_bg = background_color,
+  inactive_titlebar_bg = background_color,
 }
 
 --
 config.colors = {
 	visual_bell = '#FF2020',
   tab_bar = {
-		inactive_tab_edge = '#100F0F',
+		inactive_tab_edge = background_color,
 	
 		-- The color of the strip that goes along the top of the window
     -- (does not apply when fancy tab bar is in use)
-    background = '#100F0F',
-
+    background = background_color,
     -- The active tab is the one that has focus in the window
     active_tab = {
       -- The color of the background area for the tab
-      bg_color = '#1C1B1A',
+			bg_color = background_color,
       -- The color of the text for the tab
       fg_color = '#66800B',
 
@@ -65,7 +134,7 @@ config.colors = {
       -- Specify whether you want "None", "Single" or "Double" underline for
       -- label shown for this tab.
       -- The default is "None"
-      underline = 'Single',
+      underline = 'None',
 
       -- Specify whether you want the text to be italic (true) or not (false)
       -- for this tab.  The default is false.
@@ -78,7 +147,7 @@ config.colors = {
 
     -- Inactive tabs are the tabs that do not have focus
     inactive_tab = {
-      bg_color = '#100F0F',
+      bg_color = background_color,
       fg_color = '#4385BE',
 
       -- The same options that were listed under the `active_tab` section above
@@ -97,7 +166,7 @@ config.colors = {
 
     -- The new tab button that let you create new tabs
     new_tab = {
-      bg_color = '#100F0F',
+      bg_color = background_color,
       fg_color = '#c0c0c0',
 
       -- The same options that were listed under the `active_tab` section above
@@ -154,6 +223,12 @@ local function split_nav(resize_or_move, key)
   }
 end
 
+-- Equivalent to POSIX basename(3)
+-- Given "/foo/bar" returns "bar"
+-- Given "c:\\foo\\bar" returns "bar"
+function basename(s)
+  return string.gsub(s, '(.*[/\\])(.*)', '%2')
+end
 
 
 config.leader = { key="a", mods="CTRL" }
