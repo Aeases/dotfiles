@@ -7,9 +7,11 @@ alias rebuild="sudo -E -s nvim /etc/nixos/configuration.nix && sudo nixos-rebuil
 alias venv="python -m venv"
 alias lg="lazygit"
 alias gst="git status"
+alias host="distrobox-host-exec bash"
 # something a little like cargo watch, but for wasm-pack.
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 
+lwhich () { which $1 | xargs dirname | xargs eza --color=always -l | grep $1 }
 if which eza > /dev/null 2>&1; then
   alias ls="eza --icons=auto"
 fi

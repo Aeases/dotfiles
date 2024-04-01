@@ -3,8 +3,8 @@ local wezterm = require 'wezterm'
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
-
-
+config.enable_wayland = false
+config.warn_about_missing_glyphs = false
 local function tab_title(tab_info)
   local title = tab_info.tab_title
   -- if the tab title is explicitly set, take that
@@ -90,7 +90,7 @@ config.window_padding = {
 config.use_fancy_tab_bar = false
 config.show_new_tab_button_in_tab_bar = false
 config.tab_max_width = 100
-config.hide_tab_bar_if_only_one_tab = false
+config.hide_tab_bar_if_only_one_tab = true
 config.tab_bar_at_bottom = true
 config.show_tab_index_in_tab_bar = false
 config.window_decorations = "RESIZE"
@@ -230,8 +230,21 @@ function basename(s)
   return string.gsub(s, '(.*[/\\])(.*)', '%2')
 end
 
+config.skip_close_confirmation_for_processes_named = {
+  'bash',
+  'sh',
+  'zsh',
+  'fish',
+  'tmux',
+  'nu',
+  'cmd.exe',
+  'pwsh.exe',
+  'powershell.exe',
+	'lf',
+}
 
 config.leader = { key="a", mods="CTRL" }
+config.disable_default_key_bindings = true
 config.keys = {
     { key = "a", mods = "LEADER|CTRL",  action=wezterm.action{SendString="\x01"}},
     { key = "-", mods = "LEADER",       action=wezterm.action{SplitVertical={domain="CurrentPaneDomain"}}},
@@ -241,7 +254,7 @@ config.keys = {
     -- { key = "o", mods = "LEADER",       action="TogglePaneZoomState" },
     -- { key = "z", mods = "LEADER",       action="TogglePaneZoomState" },
     { key = "m", mods = "LEADER",       action="TogglePaneZoomState" },
-    { key = "c", mods = "LEADER",       action=wezterm.action{SpawnTab="CurrentPaneDomain"}},
+    { key = "t", mods = "LEADER",       action=wezterm.action{SpawnTab="CurrentPaneDomain"}},
     -- move between split panes
     split_nav('move', 'h'),
     split_nav('move', 'j'),
@@ -259,6 +272,7 @@ config.keys = {
 		{ key = "q", mods = "ALT", action=wezterm.action{ActivateTabRelative=-1}},
     { key = "e", mods = "ALT", action=wezterm.action{ActivateTabRelative=1}},
     { key = "Enter", mods = "LEADER", action=wezterm.action.ActivateCopyMode },
+    { key = "Enter", mods = "SUPER", action=wezterm.action.ActivateCopyMode },
     { key = "H", mods = "LEADER|SHIFT", action=wezterm.action{AdjustPaneSize={"Left", 5}}},
     { key = "J", mods = "LEADER|SHIFT", action=wezterm.action{AdjustPaneSize={"Down", 5}}},
     { key = "K", mods = "LEADER|SHIFT", action=wezterm.action{AdjustPaneSize={"Up", 5}}},
@@ -274,7 +288,12 @@ config.keys = {
     { key = "9", mods = "LEADER",       action=wezterm.action{ActivateTab=8}},
     { key = "&", mods = "LEADER|SHIFT", action=wezterm.action{CloseCurrentTab={confirm=true}}},
     { key = "d", mods = "LEADER",       action=wezterm.action{CloseCurrentPane={confirm=true}}},
-    { key = "x", mods = "LEADER",       action=wezterm.action{CloseCurrentPane={confirm=true}}},
+    { key = "c", mods = "LEADER",       action=wezterm.action{CloseCurrentPane={confirm=true}}},
+    { key = "c", mods = "CTRL|SHIFT",       action=wezterm.action{CopyTo="Clipboard"}},
+    { key = "v", mods = "CTRL|SHIFT",       action=wezterm.action{PasteFrom="Clipboard"}},
+    { key = "-", mods = "CTRL",       action=wezterm.action.DecreaseFontSize },
+    { key = "=", mods = "CTRL",       action=wezterm.action.IncreaseFontSize },
+
 }
 -- and finally, return the configuration to wezterm
 

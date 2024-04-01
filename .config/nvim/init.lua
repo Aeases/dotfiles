@@ -16,26 +16,38 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  -- NOTE: First, some plugins that don't require any configuration
-
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
 
-  -- Github Copilot
-  'github/copilot.vim',
-  -- Tmux Integration
-  -- "christoomey/vim-tmux-navigator",
+  -- Writing files with sudo
+  "lambdalisue/suda.vim",
+
+  -- Github Copilot (kinda useless ngl)
+  --'github/copilot.vim',
+
+  -- wezterm integration
   {
     "mrjones2014/smart-splits.nvim",
     lazy=false,
   },
-  -- Writing files with sudo
-  "lambdalisue/suda.vim",
+
+  -- pop-up vscode esque terminals
+  {'akinsho/toggleterm.nvim', version = "*", config = true},
+
+  {
+    "lmburns/lf.nvim",
+    lazy=false,
+    dependencies = {
+      'akinsho/toggleterm.nvim',
+    },
+    config=true,
+  },
 
   -- Detect tabstop and shiftwidth automatically
- -- 'tpope/vim-sleuth',
+  -- 'tpope/vim-sleuth'
   'NMAC427/guess-indent.nvim',
+
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
