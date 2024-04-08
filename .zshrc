@@ -35,7 +35,6 @@ if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
   git clone https://github.com/tmux-plugins/tpm $TMUX_TPM && $TMUX_TPM/tpm && $TMUX_TPM/bin/install_plugins
 fi
 
-# Platform specific scripts
 source "${HOME}/.zprofile"
 
 # Init Completions
@@ -44,7 +43,6 @@ compinit
 # Load powerlevel10k theme
 zinit ice depth"1" # git clone depth
 zinit light romkatv/powerlevel10k
-
 # Load pure theme
 zinit ice pick"async.zsh" src"pure.zsh" # with zsh-async library that's bundled with it.
 zinit light sindresorhus/pure
@@ -52,10 +50,12 @@ zinit light sindresorhus/pure
 zinit load zdharma/history-search-multi-word
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
+
 zinit light zdharma/fast-syntax-highlighting
 
-
-
+# Platform specific scripts
 if [ Linux = `uname` ]; then
   source "${HOME}/.profile-linux"
 	source "$XDG_CONFIG_HOME/wezterm/wezterm.sh"
@@ -75,3 +75,5 @@ export PATH=$PATH:/var/home/aeases/.spicetify
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export PATH=$PATH:/var/home/zane/.spicetify

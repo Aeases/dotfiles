@@ -3,7 +3,7 @@ local wezterm = require 'wezterm'
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
-config.enable_wayland = false
+config.enable_wayland = true
 config.warn_about_missing_glyphs = false
 local function tab_title(tab_info)
   local title = tab_info.tab_title
@@ -293,6 +293,7 @@ config.keys = {
     { key = "v", mods = "CTRL|SHIFT",       action=wezterm.action{PasteFrom="Clipboard"}},
     { key = "-", mods = "CTRL",       action=wezterm.action.DecreaseFontSize },
     { key = "=", mods = "CTRL",       action=wezterm.action.IncreaseFontSize },
+    { key = "Enter", mods = "ALT",       action=wezterm.action.ToggleFullScreen },
 
 }
 -- and finally, return the configuration to wezterm
