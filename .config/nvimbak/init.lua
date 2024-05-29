@@ -23,10 +23,6 @@ require('lazy').setup({
   -- Writing files with sudo
   "lambdalisue/suda.vim",
 
-  -- Telescope Prompts for LSP and other stuff
-  "nvim-telescope/telescope-ui-select.nvim",
-
-
   -- Github Copilot (kinda useless ngl)
   --'github/copilot.vim',
 
@@ -42,11 +38,7 @@ require('lazy').setup({
   -- pop-up vscode esque terminals
   {'akinsho/toggleterm.nvim', version = "*", config = true},
 
-  {
-    "mfussenegger/nvim-jdtls",
-    dependencies = { "folke/which-key.nvim" },
-    ft='java',
-  },
+
 
   {
     "lmburns/lf.nvim",
@@ -89,13 +81,6 @@ require('lazy').setup({
       highlight = {
         multiline = false,
       },
-      keywords = {
-        EXP = { icon = "E", color = "#333977"},
-        PURPOSE = { icon="P", color = "#743999" },
-        CITATION = { icon="C", color = "#bf9406" },
-        -- PURPOSE: 
-        -- EXP: 
-      }, -- NOTE: 
     },
   },
 
@@ -241,16 +226,7 @@ require('lazy').setup({
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help ibl`
     main = 'ibl',
-    opts = {
-      scope = {
-        enabled = true,
-        show_start = false,
-        show_end = false,
-        show_exact_scope = false,
-        highlight = { "Function", "Label" },
-        priority = 500,
-      }
-    },
+    opts = {},
   },
 
   -- "gc" to comment visual regions/lines
@@ -423,7 +399,6 @@ require('telescope').setup {
       case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                        -- the default case_mode is "smart_case"
     },
-    ["ui-select"] = {},
   },
   defaults = {
     mappings = {
@@ -437,7 +412,6 @@ require('telescope').setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
-pcall(require('telescope').load_extension, 'ui-select')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -612,7 +586,7 @@ local servers = {
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs'} },
   astro = {},
-  --jdtls = {},
+  -- jdtls = {},
   -- julia_lsp = {},
 
   lua_ls = {
