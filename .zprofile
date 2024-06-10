@@ -10,7 +10,7 @@ alias gst="git status"
 alias host="distrobox-host-exec bash"
 # something a little like cargo watch, but for wasm-pack.
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
-
+alias d2b='python ~/Dev/PDI/binaryConversion.py -d2b'
 lwhich () { which $1 | xargs dirname | xargs eza --color=always -l | grep $1 }
 if which eza > /dev/null 2>&1; then
   alias ls="eza --icons=auto"
