@@ -95,10 +95,13 @@ config.tab_bar_at_bottom = true
 config.show_tab_index_in_tab_bar = false
 config.window_decorations = "RESIZE"
 config.font_size = 26
-
+config.font = wezterm.font_with_fallback {'M PLUS 1 Code', 'JetBrains Mono', 'DengXian'}
+--config.font = wezterm.font_with_fallback {'Noto Sans Mono Medium', 'JetBrains Mono', 'M PLUS 2 Medium', 'DengXian' }
+--config.font = wezterm.font_with_fallback {'JetBrains Mono', {family = 'M PLUS 1 Code', weight = 'Medium'}, 'DengXian'}
+local f = "一回"
 config.window_frame = {
   -- font = wezterm.font { family = 'Hack', weight = 'Bold' },
-	font = wezterm.font_with_fallback	 {'Hack', 'DengXian'},
+	font = wezterm.font_with_fallback	 {'M PLUS 2 Medium', 'Hack', 'DengXian'},
   -- The size of the font in the tab bar.
   -- Default to 10.0 on Windows but 12.0 on other systems
   
