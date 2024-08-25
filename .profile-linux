@@ -9,6 +9,9 @@ export PROJECT_DIR="$HOME/Dev/"
 export PODMAN_USERNS=keep-id
 export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock # NOTE: Forwards calls to docker socket to podman's emulated docker socket.
 
+#Java
+export JAVA_HOME="/usr/"
+
 # Deno binaries
 export PATH="$HOME/.deno/bin:$PATH"
 
