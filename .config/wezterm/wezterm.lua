@@ -3,7 +3,7 @@ local wezterm = require("wezterm")
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
-config.enable_wayland = false
+config.enable_wayland = true
 config.warn_about_missing_glyphs = false
 local function tab_title(tab_info)
 	local title = tab_info.tab_title
