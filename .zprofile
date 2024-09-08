@@ -21,6 +21,8 @@ fi
 
 ccg () { gcc ./$1 -o $1.bin && ./$1.bin; rm "$1.bin" }
 
+gifMe () {mkdir -p /tmp/gifMeImages/; rm /tmp/gifMeImages/*.png; ffmpeg -i $1 -vf scale=320:-1 -r 30 /tmp/gifMeImages/ffout%3d.png && magick convert -delay 2 -loop 0 /tmp/gifMeImages/ffout*.png ./${1:t:r}.gif }
+
 # ZSH-autcomplete settings
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#d19a66"
 
