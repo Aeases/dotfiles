@@ -19,6 +19,8 @@ if which bat > /dev/null 2>&1; then
   alias cat="bat -pp"
 fi
 
+ccg () { gcc ./$1 -o $1.bin && ./$1.bin; rm "$1.bin" }
+
 # ZSH-autcomplete settings
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#d19a66"
 
