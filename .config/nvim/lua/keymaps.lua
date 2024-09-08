@@ -44,7 +44,8 @@ vim.keymap.set('n', '<leader>p', '"_dP')
 
 vim.opt_local.formatoptions:remove { 'r', 'o' }
 
-
+vim.api.nvim_create_user_command('W', 'write', {})
+vim.api.nvim_create_user_command('Q', 'quit', {})
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
