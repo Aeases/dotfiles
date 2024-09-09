@@ -1,4 +1,10 @@
 
+# INFO: ARCH PACKAGES
+#   pacman -Syu zoxide ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat
+#
+#
+
+
 # Fix for nodejs "ERR_OSSL_EVP_UNSUPPORTED
 #export NODE_OPTIONS=--openssl-legacy-provider
 export PROJECT_DIR="$HOME/Dev/"

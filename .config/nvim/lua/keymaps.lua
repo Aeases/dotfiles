@@ -32,15 +32,15 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 vim.keymap.set('i', 'kj', '<Esc>')
 vim.keymap.set('i', 'jk', '<Esc>')
 
--- Make kj exit to visual mode.
-vim.keymap.set('v', 'kj', '<Esc>')
-vim.keymap.set('v', 'jk', '<Esc>')
+-- -- Make kj exit to visual mode.
+-- vim.keymap.set('v', 'kj', '<Esc>')
+-- vim.keymap.set('v', 'jk', '<Esc>')
 
 -- Remap to center page when going up / down
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 
 -- Make leader p not repalce the register when pasting over something
-vim.keymap.set({ 'n', 'v'}, '<leader>p', '"_dP')
+vim.keymap.set({ 'n', 'v' }, '<leader>p', '"_dP')
 
 vim.opt_local.formatoptions:remove { 'r', 'o' }
 
