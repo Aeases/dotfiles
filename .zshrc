@@ -56,6 +56,9 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
 zinit light zdharma/fast-syntax-highlighting
 # zinit snippet "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/shrink-path/shrink-path.plugin.zsh"
 
+source "${HOME}/.scriptsyFripsy.bash"
+
+
 # Platform specific scripts
 if [ Linux = `uname` ]; then
   source "${HOME}/.profile-linux"
@@ -67,10 +70,6 @@ if [ Darwin = `uname` ]; then
 fi
 
 eval "$(zoxide init zsh --cmd zd)"
-
-alias open=xdg-open
-alias l='ls -la'
-
 
 export PATH=$PATH:/var/home/aeases/.spicetify
 

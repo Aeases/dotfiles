@@ -8,6 +8,7 @@ alias venv="python -m venv"
 alias lg="lazygit"
 alias gst="git status"
 alias host="distrobox-host-exec bash"
+alias l='ls -la'
 # something a little like cargo watch, but for wasm-pack.
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 alias d2b='python ~/Dev/PDI/binaryConversion.py -d2b'
@@ -20,6 +21,7 @@ if which bat > /dev/null 2>&1; then
 fi
 
 
+gifMe () {mkdir -p /tmp/gifMeImages/; rm /tmp/gifMeImages/*.png; ffmpeg -i $1 -vf scale=320:-1 -r 30 /tmp/gifMeImages/ffout%3d.png && magick convert -delay 2 -loop 0 /tmp/gifMeImages/ffout*.png ./${1:t:r}.gif; }
 # ZSH-autcomplete settings
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#d19a66"
 
