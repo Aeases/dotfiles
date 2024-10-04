@@ -1,6 +1,6 @@
 
 # INFO: ARCH PACKAGES
-#   pacman -Syu zoxide ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat
+#   pacman -Syu base-devel paru zsh neovim lazygit zoxide ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow lf
 #
 #
 
