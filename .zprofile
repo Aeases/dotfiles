@@ -1,5 +1,7 @@
 
-
+#command for switching default audio track in mkv
+#for i in ./*; do mkvpropedit $i --edit track:a1 --set flag-default=0 --edit track:a2 --set flag-default=1; done
+#command for disabling signs and songs
 alias v="nvim"
 alias nvide="neovide"
 alias nv="neovide"
@@ -9,6 +11,7 @@ alias lg="lazygit"
 alias gst="git status"
 alias host="distrobox-host-exec bash"
 alias l='ls -la'
+alias o='open'
 # something a little like cargo watch, but for wasm-pack.
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 alias d2b='python ~/Dev/PDI/binaryConversion.py -d2b'
