@@ -1,8 +1,9 @@
 
 # INFO: ARCH PACKAGES
-#   pacman -Syu base-devel paru zsh neovim lazygit zoxide eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow lf
+#   pacman -Syu base-devel zsh neovim lazygit zoxide eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow lf ibus ibus-anthy
 # nvidia_drm.modeset=1 nvidia_drm.fbdev=1
 #
+# lspci -k -d ::03xx
 #sort output.csv | uniq -cd | sort -nr | wc -l
 # this command gets the number of duplicate lines in a file
 alias open=xdg-open

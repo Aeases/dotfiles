@@ -13,10 +13,42 @@ HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history # Persist history
 HISTSIZE=1000000
 SAVEHIST=1000000
 setopt appendhistory autocd autopushd pushdminus pushdsilent pushdtohome
-# Disable highlighting pasted text
-zle_highlight=('paste:none')
-# Disable Autocorrect
-unsetopt correct_all BEEP
+
+# DIV: > Compinit Setup <
+autoload -Uz compinit
+zstyle ':completion:*' menu select # Tab goes into the list of options.
+zmodload zsh/complist
+compinit
+_comp_options+=(globdots) # Ensure hidden files are listed in completions
+zle_highlight=('paste:none') # Disable highlighting pasted text
+unsetopt correct_all BEEP # Disable Autocorrect
+
+# DIV: >>> MY CUSTOM KEYBINDS <<<
+
+# Makes Ctrl+a accept zsh completions
+bindkey '^[a' autosuggest-accept 
+
+# Edit line in vim buffer
+autoload -U edit-command-line; zle -N edit-command-line
+bindkey '^e' edit-command-line
+
+# vi mode (NOT NEEDED WITH VI MODE PLUGIN)
+# bindkey -v
+# export KEYTIMEOUT=1
+
+# Use vim keybinds to select stuff in the autocomplete menujk
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -v '^?' backward-delete-char
+
+# Opens lfcd on alt+o
+lfcd () {cd "$(command lf -print-last-dir "$@")"}
+bindkey -s '^[o' 'lfcd\n' 
+
+
+source "${HOME}/.zprofile"
 
 DHOME=$HOME/dotfiles
 # Plugins manager
@@ -35,14 +67,13 @@ if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
   git clone https://github.com/tmux-plugins/tpm $TMUX_TPM && $TMUX_TPM/tpm && $TMUX_TPM/bin/install_plugins
 fi
 
-source "${HOME}/.zprofile"
 
-# Init Completions
-autoload -Uz compinit
-compinit
+# DIV: ZINIT STUFF
+
 # Load powerlevel10k theme
 zinit ice depth"1" # git clone depth
 zinit light romkatv/powerlevel10k
+zinit light jeffreytse/zsh-vi-mode
 # Load pure theme
 # zinit ice pick"async.zsh" src"pure.zsh" # with zsh-async library that's bundled with it.
 # zinit light sindresorhus/pure
@@ -54,7 +85,6 @@ export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 export ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|ls *|zd *|xdg-open *|nautilus *|open *"
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
 zinit light zdharma/fast-syntax-highlighting
-# zinit snippet "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/shrink-path/shrink-path.plugin.zsh"
 
 source "${HOME}/.scriptsyFripsy.bash"
 
@@ -62,7 +92,8 @@ source "${HOME}/.scriptsyFripsy.bash"
 # Platform specific scripts
 if [ Linux = `uname` ]; then
   source "${HOME}/.profile-linux"
-	source "$XDG_CONFIG_HOME/wezterm/wezterm.sh"
+  source "${HOME}/.config/wezterm/wezterm.sh"
+  # WARNING: ^^^^ if i ever use mac, A: be ashamed, B: add this to the profile-mac too.
 fi
 
 if [ Darwin = `uname` ]; then

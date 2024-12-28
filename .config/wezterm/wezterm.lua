@@ -3,7 +3,7 @@ local wezterm = require("wezterm")
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
-config.enable_wayland = true
+config.enable_wayland = false
 config.warn_about_missing_glyphs = false
 local function tab_title(tab_info)
 	local title = tab_info.tab_title
@@ -18,7 +18,7 @@ local function tab_title(tab_info)
 	-- local paneCurrDir = "/var/home/aeases/"
 	local PathStringlen = string.len(paneCurrDir)
 	local paneCD = string.sub(paneCurrDir, 0, PathStringlen - 1)
-	return basename(paneCD) .. " ❴" .. paneCurrProcess .. "❵"
+	return basename(paneCD) .. "「" .. paneCurrProcess .. "」"
 end
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
@@ -87,15 +87,15 @@ config.tab_max_width = 100
 config.hide_tab_bar_if_only_one_tab = true
 config.tab_bar_at_bottom = true
 config.show_tab_index_in_tab_bar = false
-config.window_decorations = "RESIZE"
-config.font_size = 26
-config.font = wezterm.font_with_fallback({ "M PLUS 1 Code", "JetBrains Mono", "DengXian" })
+-- config.window_decorations = "RESIZE"
+config.font_size = 14
+config.font = wezterm.font('M+1Code Nerd Font', {weight = 'Regular', italic = false})
 --config.font = wezterm.font_with_fallback {'Noto Sans Mono Medium', 'JetBrains Mono', 'M PLUS 2 Medium', 'DengXian' }
 --config.font = wezterm.font_with_fallback {'JetBrains Mono', {family = 'M PLUS 1 Code', weight = 'Medium'}, 'DengXian'}
 local f = "一回"
 config.window_frame = {
 	-- font = wezterm.font { family = 'Hack', weight = 'Bold' },
-	font = wezterm.font_with_fallback({ "M PLUS 2 Medium", "Hack", "DengXian" }),
+	font = wezterm.font_with_fallback({ "M+2 Nerd", "Hack", "DengXian" }),
 	-- The size of the font in the tab bar.
 	-- Default to 10.0 on Windows but 12.0 on other systems
 

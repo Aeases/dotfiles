@@ -12,6 +12,7 @@ alias gst="git status"
 alias host="distrobox-host-exec bash"
 alias l='ls -la'
 alias o='open'
+alias dart="dart --disable-analytics"
 # something a little like cargo watch, but for wasm-pack.
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 alias d2b='python ~/Dev/PDI/binaryConversion.py -d2b'
@@ -44,11 +45,9 @@ export HOMEBREW_NO_ANALYTICS=1
 
 
 
-# >>> MY CUSTOM KEYBINDS <<<
-bindkey '^[a' autosuggest-accept # Makes Ctrl+a accept zsh completions
 
 
-# >>> ZSH KEYBINDS STOLEN FROM OMZ <<< 
+# DIV: >>> ZSH KEYBINDS STOLEN FROM OMZ <<< 
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
   function zle-line-init() {
     echoti smkx
@@ -66,7 +65,7 @@ fi
 # Stolen from oh my zsh below;
 
 # Use emacs key bindings
-bindkey -e
+# bindkey -e
 
 # [PageUp] - Up a line of history
 if [[ -n "${terminfo[kpp]}" ]]; then
@@ -160,10 +159,6 @@ bindkey '^r' history-incremental-search-backward      # [Ctrl-r] - Search backwa
 bindkey ' ' magic-space                               # [Space] - don't do history expansion
 
 
-# Edit the current command line in $EDITOR
-autoload -U edit-command-line
-zle -N edit-command-line
-bindkey '\C-x\C-e' edit-command-line
 
 # file rename magick
 bindkey "^[m" copy-prev-shell-word
