@@ -25,7 +25,7 @@ return {
           },
           sections = {
             lualine_a = {'mode'},
-            lualine_b = {'branch', 'diff', 'diagnostics'},
+            lualine_b = {{'datetime', style="%H:%M"}, 'branch', 'diff', 'diagnostics'},
             lualine_c = { {'filename', file_status = true, newfile_status = true, symbols = {
               modified = '●',
               readonly = '🔒',
@@ -33,7 +33,7 @@ return {
               newfile = '新',
         } } },
             lualine_x = {'encoding', 'fileformat', 'filetype'},
-            lualine_y = {{'datetime', style="%H時%M分"}},
+            lualine_y = {'progress'},
             lualine_z = {'location'},
           },
           inactive_sections = {

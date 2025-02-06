@@ -8,6 +8,16 @@
 # this command gets the number of duplicate lines in a file
 alias open=xdg-open
 
+# Migaku but cheap
+go run /home/zane/repos/asbplayer/scripts/web-socket-server/main.go > /dev/null &
+# Runs web socket server from asbplayer that you point yomitan towards, it acts as a
+# middleman between yomitan's anki calls that are meant to create anki cards. Asbplayer
+# uses these to inject the sentence audio, and ENGLISH SUBTITLES AS WELL IF YOU HAVE THEM
+# ITS ACTUALYL SO FUCKING COOL I LOVE THIS. allows for in one click an anki card to have
+# Regualr Sentence, Translation (English Sub), and Sentence Audio. alongside all of yomitans
+# regularstuff like furigana varients of the sentence, defintions, and all that.
+
+
 # Fix for nodejs "ERR_OSSL_EVP_UNSUPPORTED
 #export NODE_OPTIONS=--openssl-legacy-provider
 export PROJECT_DIR="$HOME/Dev/"

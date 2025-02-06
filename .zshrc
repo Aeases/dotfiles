@@ -13,7 +13,6 @@ HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history # Persist history
 HISTSIZE=1000000
 SAVEHIST=1000000
 setopt appendhistory autocd autopushd pushdminus pushdsilent pushdtohome
-a
 # DIV: > Compinit Setup <
 autoload -Uz compinit
 zstyle ':completion:*' menu select # Tab goes into the list of options.
@@ -22,7 +21,6 @@ compinit
 _comp_options+=(globdots) # Ensure hidden files are listed in completions
 zle_highlight=('paste:none') # Disable highlighting pasted text
 unsetopt correct_all BEEP # Disable Autocorrect
-fkgjfkg
 # DIV: >>> MY CUSTOM KEYBINDS <<<
 
 # Makes Ctrl+a accept zsh completions
