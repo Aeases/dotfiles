@@ -1,192 +1,221 @@
- 
-@define-color base           #1e242f ;
-@define-color urgent         #b02c36 ;
-@define-color primary_orange #fe9000 ;
-@define-color primary_yellow #ffdd4a ;
-@define-color primary_red    #da1b2b ;
-@define-color primary_blue   #afd2e9 ;
-@define-color primary_blue_2 #6fadd6 ;
- 
-@keyframes blink-warning {
-    70% {
-        color: white;
-    }
- 
-    to {
-        color: white;
-        background-color: orange;
-    }
-}
- 
-@keyframes blink-critical {
-    70% {
-      color: white;
-    }
- 
-    to {
-        color: white;
-        background-color: red;
-    }
-}
- 
-/* -----------------------------------------------------------------------------
- * Base styles
- * -------------------------------------------------------------------------- */
- 
-/* Reset all styles */
+/* Everforest Dark Color Pallete */
+
+@define-color black #100F0F;
+@define-color red #D14D41;
+@define-color green #879A39;
+@define-color yellow #D0A215;
+@define-color blue #4385BE;
+@define-color magenta #CE5D97;
+@define-color cyan #3AA99F;
+@define-color white #FFFCF0;
+@define-color bright-black #414B50;
+@define-color bright-red #E67E80;
+@define-color bright-green #A7C080;
+@define-color bright-yellow #DBBC7F;
+@define-color bright-blue #7FBBB3;
+@define-color bright-magenta #D699B6;
+@define-color bright-cyan #83C092;
+@define-color bright-white #D3C6AA;
+@define-color text-white #CECDC3;
+
+/* Misc Colors */
+@define-color empty rgba(0,0,0,0);
+
+
+/* Define for each module */
+@define-color bg @black;
+@define-color fg @text-white;
+@define-color workspaces-focused @green;
+@define-color mode @cyan;
+@define-color mode-fg @bg;
+@define-color workspaces-focused-fg @bg;
+@define-color pulseaudio @blue;
+@define-color network @bright-green;
+@define-color cpu @cyan;
+@define-color memory @bright-magenta;
+@define-color backlight @yellow;
+@define-color battery @red;
+@define-color clock @bright-blue;
+@define-color tray @empty;
+
+
+
 * {
+    font-family: "M+1Code Nerd Font Med";
+    font-size: 14px;
+}
+
+window#waybar {
+    background-color: @bg;
+    color: @fg;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+window#waybar > box {
+    padding: 4px;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+button {
+    box-shadow: inset 0 -3px transparent;
     border: none;
     border-radius: 0;
-    min-height: 0;
-    margin: 1px;
-    padding: 0;
 }
- 
-/* The whole bar */
-#waybar {
-    background: transparent;
-    color: @primary_blue;
-    background-color: @base;
-    font-family: "Overpass Nerd Font";
-    font-size: 16px;
-    border-radius: 15px;
+
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+button:hover {
+    background: inherit;
+    box-shadow: inset 0 -3px @fg;
 }
- 
-/* Every modules */
-#battery,
+
+#workspaces button {
+    padding: 0 0px;
+    background-color: transparent;
+    color: @fg;
+    border-radius: 4px;
+}
+
+
+#workspaces button:hover {
+    background: alpha(@bg, 0.5);
+}
+
+#workspaces button.active {
+    background-color: @workspaces-focused;
+    color: @workspaces-focused-fg;
+}
+
+#workspaces button.urgent {
+    background-color: @bright-red;
+}
+
+
 #clock,
-#backlight,
+#battery,
 #cpu,
-#custom-keyboard-layout,
 #memory,
-#mode,
-#custom-weather,
+#disk,
+#temperature,
+#backlight,
 #network,
 #pulseaudio,
-#temperature,
+#wireplumber,
+#custom-media,
 #tray,
+#mode,
 #idle_inhibitor,
-#custom-PBPbattery {
-    padding:0.5rem 0.6rem;
-    margin: 1px 0px;
+#scratchpad,
+#power-profiles-daemon,
+#mpd {
+    padding: 0 10px;
+    color: @fg;
+    border-radius: 4px;
 }
- 
-/* -----------------------------------------------------------------------------
- * Modules styles
- * -------------------------------------------------------------------------- */
- 
-#battery {
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
- 
-#battery.warning {
-    color: @primary_orange;
-}
- 
-#battery.critical {
-    color: @primary_red;
-}
- 
-#battery.warning.discharging {
-    animation-name: blink-warning;
-    animation-duration: 3s;
-}
- 
-#battery.critical.discharging {
-    animation-name: blink-critical;
-    animation-duration: 2s;
-}
- 
-#cpu.warning {
-    color: @primary_orange;
-}
- 
-#cpu.critical {
-    color: @primary_red;
-}
- 
-#memory {
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
- 
-#memory.warning {
-    color: @primary_orange;
- }
- 
-#memory.critical {
-    color: red;
-    animation-name: blink-critical;
-    animation-duration: 2s;
-    padding-left:5px;
-    padding-right:5px;
-}
- 
+
+
 #mode {
-    background: @primary_yellow;
-    border-bottom: 3px @primary_blue;
-    color: @base;
-    margin-left: 5px;
-    padding: 7px;
+    background-color: @mode;
+    color: @mode-fg;
+    box-shadow: none;
 }
- 
-#network.disconnected {
-    color: @primary_orange;
-}
- 
-#pulseaudio {
-    padding-top:6px;
-}
- 
-#pulseaudio.muted {
-    color: @primary_yellow;
-}
- 
-#temperature.critical {
-    color: red;
-}
- 
-#window {
-    font-weight: bold;
-}
- 
+
+#window,
 #workspaces {
-    font-size:13px;
+    margin: 0 4px;
 }
- 
-#workspaces button {
-    border-bottom: 3px solid @primary_blue_2;
-    margin-bottom: 0px;
-    padding:0px;
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
 }
- 
-#workspaces button.focused {
-    border-bottom: 3px solid  @primary_yellow;
-    margin-bottom: 0px;
-    padding-left:0;
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right > widget:last-child > #workspaces {
+    margin-right: 0;
 }
- 
-#workspaces button.urgent {
-    border-color: @primary_red;
-    color: @primary_red;
+
+#clock {
+    background-color: @clock;
+    color: @bg;
 }
- 
-#custom-power {
-    margin-left:15px;
-    margin-right:15px;
-    font-size:15px;
+
+#battery {
+    background-color: @battery;
+    color: @bg;
 }
- 
-#custom-launcher {
-    font-size:15px;
-    margin-left:15px;
-    margin-right:10px;
+
+#battery.charging, #battery.plugged {
+    background-color: @battery;
 }
- 
-#backlight.icon {
-    padding-right:1px;
-    font-size: 13px;
+
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}
+
+/* Using steps() instead of linear as a timing function to limit cpu usage */
+#battery.critical:not(.charging) {
+    background-color: @red;
+    color: @fg;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#cpu {
+    background-color: @cpu;
+    color: @bg;
+}
+
+#memory {
+    background-color: @memory;
+    color: @bg;
+}
+
+
+#backlight {
+    background-color: @backlight;
+    color: @bg;
+}
+
+#network {
+    background-color: @network;
+    color: @bg;
+}
+
+#network.disconnected {
+    background-color: @red;
+}
+
+#pulseaudio {
+    background-color: @pulseaudio;
+    color: @bg;
+}
+
+#pulseaudio.muted {
+    background-color: @cyan;
+    color: @bg;
+}
+
+
+#tray {
+    background-color: @tray;
+    color: @bg;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: @red;
 }

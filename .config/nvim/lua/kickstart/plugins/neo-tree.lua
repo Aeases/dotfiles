@@ -24,13 +24,12 @@ return {
 
       git_status = {
         symbols = {
-          unstaged = "󰄱",
-          staged = "󰱒",
+          unstaged = "未追加",
+          staged = "既追加",
         },
       },
-
       modified = {
-        symbol = "[変]",
+        symbol = "未保存",
         highlight = "NeoTreeModified",
       },
     },

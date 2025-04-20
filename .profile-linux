@@ -1,6 +1,6 @@
 
 # INFO: ARCH PACKAGES
-#   pacman -Syu base-devel zsh neovim lazygit zoxide eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow lf ibus ibus-anthy
+#   pacman -Syu base-devel zsh neovim lazygit zoxide eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow lf ibus ibus-anthy mkvtoolnix networkmanager-openconnect
 # nvidia_drm.modeset=1 nvidia_drm.fbdev=1
 #
 # lspci -k -d ::03xx
@@ -9,7 +9,7 @@
 alias open=xdg-open
 
 # Migaku but cheap
-go run /home/zane/repos/asbplayer/scripts/web-socket-server/main.go > /dev/null &
+#go run /home/zane/repos/asbplayer/scripts/web-socket-server/main.go > /dev/null &
 # Runs web socket server from asbplayer that you point yomitan towards, it acts as a
 # middleman between yomitan's anki calls that are meant to create anki cards. Asbplayer
 # uses these to inject the sentence audio, and ENGLISH SUBTITLES AS WELL IF YOU HAVE THEM

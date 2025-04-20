@@ -3,7 +3,7 @@ local wezterm = require("wezterm")
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
-config.enable_wayland = false
+config.enable_wayland = true
 config.warn_about_missing_glyphs = false
 local function tab_title(tab_info)
 	local title = tab_info.tab_title
@@ -20,6 +20,11 @@ local function tab_title(tab_info)
 	local paneCD = string.sub(paneCurrDir, 0, PathStringlen - 1)
 	return basename(paneCD) .. "「" .. paneCurrProcess .. "」"
 end
+
+wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
+  return tab.active_pane.title
+end)
+
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 	local title = tab_title(tab)

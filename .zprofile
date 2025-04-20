@@ -13,6 +13,8 @@ alias host="distrobox-host-exec bash"
 alias l='ls -la'
 alias o='open'
 alias dart="dart --disable-analytics"
+alias fixgpu="sudo cat /sys/kernel/debug/dri/1/amdgpu_gpu_recover"
+alias fixspicetify="sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify; sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify"
 # something a little like cargo watch, but for wasm-pack.
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 alias d2b='python ~/Dev/PDI/binaryConversion.py -d2b'

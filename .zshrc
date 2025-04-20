@@ -122,3 +122,9 @@ export PATH=$PATH:/var/home/zane/.spicetify
 # unset __conda_setup
 # # <<< conda initialize <<<
 
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/zane/.dart-cli-completion/zsh-config.zsh ]] && . /home/zane/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
