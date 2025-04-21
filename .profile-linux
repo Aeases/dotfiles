@@ -20,6 +20,9 @@ alias open=xdg-open
 
 # Fix for nodejs "ERR_OSSL_EVP_UNSUPPORTED
 #export NODE_OPTIONS=--openssl-legacy-provider
+
+# add scripts to path
+export PATH=$PATH:/home/zane/.scripts/
 export PROJECT_DIR="$HOME/Dev/"
 # Added by Toolbox App
 # export PATH="$PATH:/var/home/aeases/.local/share/JetBrains/Toolbox/scripts"

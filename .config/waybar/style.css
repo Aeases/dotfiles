@@ -17,6 +17,8 @@
 @define-color bright-cyan #83C092;
 @define-color bright-white #D3C6AA;
 @define-color text-white #CECDC3;
+@define-color bg-3 #1c1b1a;
+@define-color tx-2 #878580;
 
 /* Misc Colors */
 @define-color empty rgba(0,0,0,0);
@@ -25,10 +27,10 @@
 /* Define for each module */
 @define-color bg @black;
 @define-color fg @text-white;
-@define-color workspaces-focused @green;
+@define-color workspaces-focused @bg-3;
 @define-color mode @cyan;
 @define-color mode-fg @bg;
-@define-color workspaces-focused-fg @bg;
+@define-color workspaces-focused-fg @fg;
 @define-color pulseaudio @blue;
 @define-color network @bright-green;
 @define-color cpu @cyan;
@@ -53,7 +55,7 @@ window#waybar {
 }
 
 window#waybar > box {
-    padding: 4px;
+    padding: 0 4px;
 }
 
 window#waybar.hidden {
@@ -69,11 +71,13 @@ button {
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
     background: inherit;
-    box-shadow: inset 0 -3px @fg;
+    box-shadow: inherit;
+    text-shadow: inherit;
 }
 
 #workspaces button {
-    padding: 0 0px;
+    padding: 0 4px;
+    margin: 4 1px;
     background-color: transparent;
     color: @fg;
     border-radius: 4px;
@@ -113,7 +117,9 @@ button:hover {
 #mpd {
     padding: 0 10px;
     color: @fg;
-    border-radius: 4px;
+    border-radius: 0px;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
 }
 
 
@@ -139,17 +145,17 @@ button:hover {
 }
 
 #clock {
-    background-color: @clock;
-    color: @bg;
+    border-bottom-color: @clock;
+    color: @fg;
 }
 
 #battery {
-    background-color: @battery;
-    color: @bg;
+    border-bottom-color: @battery;
+    color: @fg;
 }
 
 #battery.charging, #battery.plugged {
-    background-color: @battery;
+    border-bottom-color: @battery;
 }
 
 @keyframes blink {
@@ -171,38 +177,41 @@ button:hover {
 }
 
 #cpu {
-    background-color: @cpu;
-    color: @bg;
+    border-bottom-color: @cpu;
+    color: @fg;
 }
 
+
 #memory {
-    background-color: @memory;
-    color: @bg;
+    border-bottom-color: @memory;
+    color: @fg;
 }
 
 
 #backlight {
-    background-color: @backlight;
-    color: @bg;
+    border-bottom-color: @backlight;
+    color: @fg;
 }
+
 
 #network {
-    background-color: @network;
-    color: @bg;
+    border-bottom-color: @network;
+    color: @fg;
 }
 
+
 #network.disconnected {
-    background-color: @red;
+    border-bottom-color: @red;
 }
 
 #pulseaudio {
-    background-color: @pulseaudio;
-    color: @bg;
+    border-bottom-color: @pulseaudio;
+    color: @fg;
 }
 
 #pulseaudio.muted {
     background-color: @cyan;
-    color: @bg;
+    color: @fg;
 }
 
 

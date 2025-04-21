@@ -1,6 +1,6 @@
 anchor = top
 width = 100%
-height = 30
+height = 32
 horizontal = true
 font-size = 12
 prompt-text = ""
@@ -8,7 +8,8 @@ font = /usr/share/fonts/M+1CodeNerdFont-Regular.ttf
 outline-width = 0
 border-width = 0
 text-color = #CECDC3
-selection-color = #879A39
+default-result-color = #878580
+selection-color = #CECDC3
 background-color = #100F0F
 min-input-width = 120
 result-spacing = 15
