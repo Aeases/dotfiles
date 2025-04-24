@@ -34,7 +34,7 @@
 @define-color pulseaudio @blue;
 @define-color network @bright-green;
 @define-color cpu @cyan;
-@define-color memory @bright-magenta;
+@define-color memory @yellow;
 @define-color backlight @yellow;
 @define-color battery @red;
 @define-color clock @bright-blue;
@@ -210,8 +210,8 @@ button:hover {
 }
 
 #pulseaudio.muted {
-    background-color: @cyan;
-    color: @fg;
+    color: @red;
+    border-bottom-color: @red;
 }
 
 
