@@ -62,6 +62,8 @@ return {
 
         ['<A-k>'] = { 'select_prev', 'fallback' },
         ['<C-p>'] = { 'select_prev', 'fallback' },
+        ['<Tab>'] = { 'accept', 'fallback' },
+        ['<C-Enter>'] = { 'accept', 'fallback' },
         --
         ['<A-j>'] = { 'select_next', 'fallback' },
         ['<C-n>'] = { 'select_next', 'fallback' },
