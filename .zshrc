@@ -25,7 +25,6 @@ unsetopt correct_all BEEP # Disable Autocorrect
 
 # Makes Ctrl+a accept zsh completions
 bindkey '^[a' autosuggest-accept 
-
 # Edit line in vim buffer
 autoload -U edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
@@ -42,11 +41,22 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
 
 # Opens lfcd on alt+o
-lfcd () {cd "$(command lf -print-last-dir "$@")"}
-bindkey -s '^[o' 'lfcd\n' 
-
-
+# lfcd () {cd "$(command lf -print-last-dir "$@")"}
+# bindkey -s '^[o' 'lfcd\n' 
 source "${HOME}/.zprofile"
+
+export NNN_BMS="u:$HOME/Documents/Engram/University/;e:$HOME/Documents/Engram;p:$HOME/Dev/Uni/;c:$HOME/.config/"
+export NNN_PLUG='p:preview-tui'
+#export NNN_OPENER="$HOME/.config/nnn/open-swallower"
+nnn_cd() {
+    if ! [ -z "$NNN_PIPE" ]; then
+        printf "%s\0" "0c${PWD}" > "${NNN_PIPE}" !&
+    fi  
+}
+trap nnn_cd EXIT
+
+bindkey -s '^[o' 'ncd\n' 
+
 
 DHOME=$HOME/dotfiles
 # Plugins manager
@@ -56,14 +66,14 @@ ZINIT_HOME="${HOME}/.config/zinit/zinit.git"
 source "${ZINIT_HOME}/zinit.zsh"
 
 # Ensure tpm is installed
-TMUX_PLUGIN_MANAGER_PATH="${DHOME}/.config/tmux/plugins"
-TMUX_TPM="${TMUX_PLUGIN_MANAGER_PATH}/tpm"
+# TMUX_PLUGIN_MANAGER_PATH="${DHOME}/.config/tmux/plugins"
+# TMUX_TPM="${TMUX_PLUGIN_MANAGER_PATH}/tpm"
 # TODO: Make tmux check if ANY folder from the plugins directory is entirely empty, if so rmdir it, and do a plugin install.
-if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
-  echo "Tmux Plugin Manager is not installed, installing now."
-  rmdir ${TMUX_PLUGIN_MANAGER_PATH}/*
-  git clone https://github.com/tmux-plugins/tpm $TMUX_TPM && $TMUX_TPM/tpm && $TMUX_TPM/bin/install_plugins
-fi
+# if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
+#   echo "Tmux Plugin Manager is not installed, installing now."
+#   rmdir ${TMUX_PLUGIN_MANAGER_PATH}/*
+#   git clone https://github.com/tmux-plugins/tpm $TMUX_TPM && $TMUX_TPM/tpm && $TMUX_TPM/bin/install_plugins
+# fi
 
 
 # DIV: ZINIT STUFF
@@ -85,7 +95,6 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
 zinit light zdharma/fast-syntax-highlighting
 
 source "${HOME}/.scriptsyFripsy.bash"
-
 
 # Platform specific scripts
 if [ Linux = `uname` ]; then

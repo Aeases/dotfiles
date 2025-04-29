@@ -21,10 +21,9 @@ local function tab_title(tab_info)
 	return basename(paneCD) .. "「" .. paneCurrProcess .. "」"
 end
 
-wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
-  return tab.active_pane.title
+wezterm.on("format-window-title", function(tab, pane, tabs, panes, config)
+	return tab.active_pane.title
 end)
-
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 	local title = tab_title(tab)
@@ -94,7 +93,7 @@ config.tab_bar_at_bottom = true
 config.show_tab_index_in_tab_bar = false
 -- config.window_decorations = "RESIZE"
 config.font_size = 14
-config.font = wezterm.font('M+1Code Nerd Font', {weight = 'Regular', italic = false})
+config.font = wezterm.font("M+1Code Nerd Font", { weight = "Regular", italic = false })
 --config.font = wezterm.font_with_fallback {'Noto Sans Mono Medium', 'JetBrains Mono', 'M PLUS 2 Medium', 'DengXian' }
 --config.font = wezterm.font_with_fallback {'JetBrains Mono', {family = 'M PLUS 1 Code', weight = 'Medium'}, 'DengXian'}
 local f = "一回"
@@ -254,7 +253,7 @@ config.keys = {
 	{ key = "v", mods = "LEADER", action = wezterm.action({ SplitHorizontal = { domain = "CurrentPaneDomain" } }) },
 	-- { key = "o", mods = "LEADER",       action="TogglePaneZoomState" },
 	-- { key = "z", mods = "LEADER",       action="TogglePaneZoomState" },
-	{ key = "m", mods = "LEADER", action = "TogglePaneZoomState" },
+	{ key = "f", mods = "LEADER", action = "TogglePaneZoomState" },
 	{ key = "t", mods = "LEADER", action = wezterm.action({ SpawnTab = "CurrentPaneDomain" }) },
 	-- move between split panes
 	split_nav("move", "h"),
