@@ -246,6 +246,15 @@ config.skip_close_confirmation_for_processes_named = {
 config.leader = { key = "a", mods = "CTRL" }
 config.disable_default_key_bindings = true
 config.keys = {
+
+	-- bashrc has the kill-backward commands now which covers us in most terminals. Should not be made specific to wezterm. The shortcuts are here incase needed in future.
+	-- Use one of these
+	-- { key = 'Backspace', mods = 'CTRL', action = act.SendKey {key = 'Backspace', mods = 'ALT'}
+	-- most Linux shells use Alt + backspace instead for word backspace
+	-- { key = 'Backspace', mods = 'CTRL', action = act.SendKey {key = 'w', mods = 'CTRL'},
+	-- most Linux shells use Ctrl + w instead for word delete
+	{ key = "Backspace", mods = "CTRL", action = wezterm.action.SendKey({ key = "Backspace", mods = "ALT" }) },
+	{ key = "Backspace", mods = "CTRL", action = wezterm.action.SendKey({ key = "w", mods = "CTRL" }) },
 	{ key = "a", mods = "LEADER|CTRL", action = wezterm.action({ SendString = "\x01" }) },
 	{ key = "-", mods = "LEADER", action = wezterm.action({ SplitVertical = { domain = "CurrentPaneDomain" } }) },
 	{ key = "\\", mods = "LEADER", action = wezterm.action({ SplitHorizontal = { domain = "CurrentPaneDomain" } }) },
