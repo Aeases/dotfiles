@@ -3,8 +3,8 @@
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
+--
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
@@ -23,7 +23,6 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-
 -- move/drag functions in visual mode
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
@@ -32,21 +31,17 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 vim.keymap.set('i', 'kj', '<Esc>')
 vim.keymap.set('i', 'jk', '<Esc>')
 
--- -- Make kj exit to visual mode.
--- vim.keymap.set('v', 'kj', '<Esc>')
--- vim.keymap.set('v', 'jk', '<Esc>')
-
 -- Remap to center page when going up / down
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 
 -- Make leader p not repalce the register when pasting over something
-vim.keymap.set({ 'n', 'v' }, '<leader>p', '"_dP')
+vim.keymap.set({ 'n', 'v' }, 'P', '"_dP', { desc = 'Paste ' })
 
 vim.opt_local.formatoptions:remove { 'r', 'o' }
 
 vim.api.nvim_create_user_command('W', 'write', {})
 vim.api.nvim_create_user_command('Q', 'quit', {})
--- [[ Basic Autocommands ]]
+
 --  See `:help lua-guide-autocommands`
 
 -- Highlight when yanking (copying) text
@@ -57,6 +52,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'c', 'cpp' }, -- For some reason this matches .h files too
+  desc = 'Register switching command for .c and .h files',
+  callback = function(event)
+    local huh = 'to header'
+    if vim.bo[event.buf].filetype == 'c' then
+      huh = 'to source'
+    end
+    vim.keymap.set('n', '<Leader>S', ':ClangdSwitchSourceHeader<CR>', { buffer = event.buf, desc = 'Source File' .. huh .. ' file' })
   end,
 })
 

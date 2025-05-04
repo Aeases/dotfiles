@@ -62,6 +62,7 @@ return {
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>a', desc = 'which_key_ignore' }, -- idk where this is defined but it shows as an empty option in the list
       },
     },
   },
