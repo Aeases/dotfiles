@@ -1,6 +1,6 @@
 
 # INFO: ARCH PACKAGES
-#   pacman -Syu base-devel zsh neovim lazygit zoxide eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow lf ibus ibus-anthy mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config
+#   pacman -Syu base-devel zsh neovim lazygit zoxide eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow lf ibus ibus-anthy mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf
 #yay -Syu fcitx5 fcitx5-mozc-ut
 # nvidia_drm.modeset=1 nvidia_drm.fbdev=1
 #

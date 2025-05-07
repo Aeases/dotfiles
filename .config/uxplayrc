@@ -1,0 +1,5 @@
+nh
+n Framework
+fps 60
+h265
+# avahi-daemon must be started for uxplay to work
