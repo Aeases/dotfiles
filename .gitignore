@@ -1,2 +1,4 @@
 .ssh/*
 !.ssh/config
+.config/keyd/app.log
+.config/keyd/app.lock
