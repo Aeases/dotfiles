@@ -1,9 +1,9 @@
 @define-color cc-bg rgba(46, 46, 46, 0.7);
 @define-color noti-border-color rgba(255, 255, 255, 0.15);
-@define-color noti-bg rgba(16, 15, 15, 0.8);
+@define-color noti-bg rgba(16, 15, 15, 1);
 @define-color noti-bg-opaque rgb(48, 48, 48);
 @define-color noti-bg-darker rgb(38, 38, 38);
-@define-color noti-bg-hover rgb(40, 39, 38);
+@define-color noti-bg-hover rgb(56, 56, 56);
 @define-color noti-bg-hover-opaque rgb(56, 56, 56);
 @define-color noti-bg-focus rgba(68, 68, 68, 0.6);
 @define-color noti-close-bg rgba(255, 255, 255, 0.1);
@@ -20,7 +20,8 @@
 }
 
 .notification-row .notification-background {
-  padding: 6px 12px;
+  /* padding: 6px 12px; */
+  padding: 0px 0px;
 }
 
 .notification-row .notification-background .close-button {
@@ -41,16 +42,17 @@
 .notification-row .notification-background .close-button:hover {
   box-shadow: none;
   background: @noti-close-bg-hover;
-  transition: background 0.15s ease-in-out;
+  /* transition: background 0.15s ease-in-out; */
   border: none;
 }
 
 .notification-row .notification-background .notification {
   /* The actual notification */
-  border-radius: 12px;
-  border: 1px solid @noti-border-color;
+  border-radius: 0px;
+  /* border: 1px solid @noti-border-color; */
+  border: none;
   padding: 0;
-  transition: background 0.15s ease-in-out;
+  /* transition: background 0.15s ease-in-out; */
   background: @noti-bg;
 }
 
@@ -73,7 +75,7 @@
   background: transparent;
   border: none;
   color: @text-color;
-  transition: background 0.15s ease-in-out;
+  /* transition: background 0.15s ease-in-out; */
 }
 
 .notification-row .notification-background .notification .notification-action:hover, .notification-row .notification-background .notification .notification-default-action:hover {
@@ -83,7 +85,7 @@
 
 .notification-row .notification-background .notification .notification-default-action {
   /* The large action that also displays the notification summary and body */
-  border-radius: 12px;
+  /* border-radius: 12px; */
 }
 
 .notification-row .notification-background .notification .notification-default-action:not(:only-child) {
@@ -94,7 +96,7 @@
 
 .notification-row .notification-background .notification .notification-default-action .notification-content {
   background: transparent;
-  border-radius: 12px;
+  /* border-radius: 12px; */
   padding: 4px;
 }
 
@@ -183,7 +185,7 @@
 }
 
 .notification-row .notification-background .notification .notification-default-action .notification-content .inline-reply .inline-reply-button:hover {
-  background: @noti-bg-hover;
+  /* background: @noti-bg-hover; */
 }
 
 .notification-row .notification-background .notification .notification-action {
@@ -241,7 +243,7 @@
 }
 
 .notification-group.collapsed .notification-row .notification {
-  background-color: @noti-bg-opaque;
+  /* background-color: @noti-bg-opaque; */
 }
 
 .notification-group.collapsed .notification-row:not(:last-child) {
@@ -255,7 +257,7 @@
 }
 
 .notification-group.collapsed:hover .notification-row:not(:only-child) .notification {
-  background-color: @noti-bg-hover-opaque;
+  /* background-color: @noti-bg-hover-opaque; */
 }
 
 .control-center {
@@ -281,7 +283,7 @@
 
 .control-center .control-center-list .notification .notification-default-action,
 .control-center .control-center-list .notification .notification-action {
-  transition: opacity 400ms ease-in-out, background 0.15s ease-in-out;
+  /* transition: opacity 400ms ease-in-out, background 0.15s ease-in-out; */
 }
 
 .control-center .control-center-list .notification .notification-default-action:hover,
