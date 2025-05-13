@@ -3,23 +3,23 @@
 #for i in ./*; do mkvpropedit $i --edit track:a1 --set flag-default=0 --edit track:a2 --set flag-default=1; done
 #command for disabling signs and songs
 alias v="nvim"
+alias open=xdg-open
 alias nvide="neovide"
 alias nv="neovide"
-alias rebuild="sudo -E -s nvim /etc/nixos/configuration.nix && sudo nixos-rebuild switch"
-alias venv="python -m venv"
+#alias venv="python -m venv"
 alias lg="lazygit"
 alias gst="git status"
-alias host="distrobox-host-exec bash"
+#alias host="distrobox-host-exec bash"
 alias l='ls -la'
 alias o='open'
 alias dart="dart --disable-analytics"
-alias fixgpu="sudo cat /sys/kernel/debug/dri/1/amdgpu_gpu_recover"
+#alias fixgpu="sudo cat /sys/kernel/debug/dri/1/amdgpu_gpu_recover"
 alias fixspicetify="sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify; sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify"
 alias userctl="systemctl --user"
 alias refreshWaybar="pkill waybar && hyprctl dispatch exec waybar"
-# something a little like cargo watch, but for wasm-pack.
+alias watchmeboogie="while true; do make -q || make; sleep 0.5; done"
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
-alias d2b='python ~/Dev/PDI/binaryConversion.py -d2b'
+alias d2b='python ~/Dev/Uni/PDI/binaryConversion.py -d2b'
 lwhich () { which $1 | xargs dirname | xargs eza --color=always -l | grep $1 }
 if which eza > /dev/null 2>&1; then
   alias ls="eza --icons=auto"
