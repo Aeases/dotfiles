@@ -1,7 +1,7 @@
 
 # INFO: ARCH PACKAGES
 
-# base-devel zsh neovim lazygit zoxide eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow lf ibus ibus-anthy mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth
+# base-devel zsh neovim lazygit zoxide eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow lf ibus ibus-anthy mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth pciutils usbutils
 
 # note for plymouth, place it into /etc/mkinitcpio.conf, just before the encrypt one in the hooks array
 
