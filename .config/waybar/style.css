@@ -1,6 +1,6 @@
 /* Everforest Dark Color Pallete */
 
-@define-color black #100F0F;
+@define-color black rgba(16, 15, 15, 1);
 @define-color red #D14D41;
 @define-color green #879A39;
 @define-color yellow #D0A215;
@@ -117,6 +117,7 @@ button:hover {
     color: @fg;
     border-radius: 0px;
     border-bottom: 2px solid transparent;
+    border-top: 2px solid transparent;
     background-color: transparent;
 }
 
@@ -143,17 +144,17 @@ button:hover {
 }
 
 #clock {
-    border-bottom-color: @clock;
+    border-top-color: @clock;
     color: @fg;
 }
 
 #battery {
-    border-bottom-color: @battery;
+    border-top-color: @battery;
     color: @fg;
 }
 
 #battery.charging, #battery.plugged {
-    border-bottom-color: @battery;
+    border-top-color: @battery;
 }
 
 @keyframes blink {
@@ -175,41 +176,41 @@ button:hover {
 }
 
 #cpu {
-    border-bottom-color: @cpu;
+    border-top-color: @cpu;
     color: @fg;
 }
 
 
 #memory {
-    border-bottom-color: @memory;
+    border-top-color: @memory;
     color: @fg;
 }
 
 
 #backlight {
-    border-bottom-color: @backlight;
+    border-top-color: @backlight;
     color: @fg;
 }
 
 
 #network {
-    border-bottom-color: @network;
+    border-top-color: @network;
     color: @fg;
 }
 
 
 #network.disconnected {
-    border-bottom-color: @red;
+    border-top-color: @red;
 }
 
 #pulseaudio {
-    border-bottom-color: @pulseaudio;
+    border-top-color: @pulseaudio;
     color: @fg;
 }
 
 #pulseaudio.muted {
     color: @red;
-    border-bottom-color: @red;
+    border-top-color: @red;
 }
 
 
