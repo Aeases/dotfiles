@@ -11,6 +11,7 @@ alias lg="lazygit"
 alias gst="git status"
 #alias host="distrobox-host-exec bash"
 alias l='ls -la'
+alias hcf='cd ~/.config/hypr/'
 alias o='open'
 alias dart="dart --disable-analytics"
 #alias fixgpu="sudo cat /sys/kernel/debug/dri/1/amdgpu_gpu_recover"

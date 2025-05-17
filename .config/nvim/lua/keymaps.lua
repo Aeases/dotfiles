@@ -36,6 +36,7 @@ vim.keymap.set('n', '<C-d>', '<C-d>zz')
 
 -- Make leader p not repalce the register when pasting over something
 vim.keymap.set({ 'n', 'v' }, 'P', '"_dP', { desc = 'Paste ' })
+vim.keymap.set({ 'n', 'v' }, '<leader>p', '"_dP', { desc = 'Paste ' })
 
 vim.opt_local.formatoptions:remove { 'r', 'o' }
 

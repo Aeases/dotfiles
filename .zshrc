@@ -41,21 +41,21 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
 
 # Opens lfcd on alt+o
-# lfcd () {cd "$(command lf -print-last-dir "$@")"}
-# bindkey -s '^[o' 'lfcd\n' 
+lfcd () {cd "$(command lf -print-last-dir "$@")"}
+bindkey -s '^[o' 'lfcd\n' 
 source "${HOME}/.zprofile"
 
-export NNN_BMS="u:$HOME/Documents/Engram/University/;e:$HOME/Documents/Engram;p:$HOME/Dev/Uni/;c:$HOME/.config/"
-export NNN_PLUG='p:preview-tui'
+# export NNN_BMS="u:$HOME/Documents/Engram/University/;e:$HOME/Documents/Engram;p:$HOME/Dev/Uni/;c:$HOME/.config/"
+# export NNN_PLUG='p:preview-tui'
 #export NNN_OPENER="$HOME/.config/nnn/open-swallower"
-nnn_cd() {
-    if ! [ -z "$NNN_PIPE" ]; then
-        printf "%s\0" "0c${PWD}" > "${NNN_PIPE}" !&
-    fi  
-}
-trap nnn_cd EXIT
-
-bindkey -s '^[o' 'ncd\n' 
+# nnn_cd() {
+#     if ! [ -z "$NNN_PIPE" ]; then
+#         printf "%s\0" "0c${PWD}" > "${NNN_PIPE}" !&
+#     fi  
+# }
+# trap nnn_cd EXIT
+#
+# bindkey -s '^[o' 'ncd\n' 
 
 
 DHOME=$HOME/dotfiles
