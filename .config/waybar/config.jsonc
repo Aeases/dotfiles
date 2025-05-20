@@ -51,18 +51,16 @@
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
     "battery": {
+        "interval": 2,
         "states": {
-            // "good": 95,
+            "full": 100,
             "warning": 30,
             "critical": 15
         },
         "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
         "format-charging": "{capacity}% 󱐋",
         "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
+        "format-plugged-full": "",
         "format-icons": ["", "", "", "", ""]
     },
     "network": {
@@ -105,12 +103,12 @@
         "rewrite": {
             // Desktop
             "": 
-            "<span foreground='#89b4fa'> </span> Hyprland",
+            "",
 
             // Terminal
             "~": "  Terminal",
             "zsh": "  Terminal",
-            "kitty": "  Terminal",
+            "wezterm": "  Terminal",
 
             "tmux(.*)": 
             "<span foreground='#a6e3a1'> </span> Tmux",
