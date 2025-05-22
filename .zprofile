@@ -3,6 +3,7 @@
 #for i in ./*; do mkvpropedit $i --edit track:a1 --set flag-default=0 --edit track:a2 --set flag-default=1; done
 #command for disabling signs and songs
 alias v="nvim"
+# MPV but it plays two audio tracks simultaneously
 alias open=xdg-open
 alias nvide="neovide"
 alias nv="neovide"
@@ -21,6 +22,9 @@ alias refreshWaybar="pkill waybar && hyprctl dispatch exec waybar"
 alias watchmeboogie="while true; do make -q || make; sleep 0.5; done"
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 alias d2b='python ~/Dev/Uni/PDI/binaryConversion.py -d2b'
+
+alias dun='cd ~/Dev/Uni/'
+
 lwhich () { which $1 | xargs dirname | xargs eza --color=always -l | grep $1 }
 if which eza > /dev/null 2>&1; then
   alias ls="eza --icons=auto"
