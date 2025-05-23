@@ -41,8 +41,15 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
 
 # Opens lfcd on alt+o
-lfcd () {cd "$(command lf -print-last-dir "$@")"}
-bindkey -s '^[o' 'lfcd\n' 
+# lfcd () {cd "$(command lf -print-last-dir "$@")"}
+function yazicd() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+bindkey -s '^[o' 'yazicd\n' 
 source "${HOME}/.zprofile"
 
 # export NNN_BMS="u:$HOME/Documents/Engram/University/;e:$HOME/Documents/Engram;p:$HOME/Dev/Uni/;c:$HOME/.config/"
