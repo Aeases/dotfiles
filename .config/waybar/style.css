@@ -39,6 +39,7 @@
 @define-color battery @red;
 @define-color clock @bright-blue;
 @define-color tray @empty;
+@define-color spotify #1DB954;
 
 
 
@@ -106,7 +107,7 @@ button:hover {
 #network,
 #pulseaudio,
 #wireplumber,
-#custom-media,
+#custom-spotify,
 #tray,
 #mode,
 #idle_inhibitor,
@@ -121,6 +122,11 @@ button:hover {
     background-color: transparent;
 }
 
+#custom-spotify {
+    border-top-color: @spotify;
+    padding: 0 10px;
+    margin: 0 4px;
+}
 
 #mode {
     background-color: @mode;

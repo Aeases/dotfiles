@@ -1,7 +1,7 @@
 
 # INFO: ARCH PACKAGES
 
-# base-devel zsh neovim lazygit eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth pciutils usbutils jupyter-server jupyter-notebook yazi
+# base-devel zsh neovim lazygit eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth pciutils usbutils jupyter-server jupyter-notebook yazi playerctl
 
 # note for plymouth, place it into /etc/mkinitcpio.conf, just before the encrypt one in the hooks array
 

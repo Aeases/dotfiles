@@ -8,7 +8,8 @@
 // Choose the order of the modules
     "modules-left": [
         "hyprland/workspaces",
-        "hyprland/submap"
+        "hyprland/submap",
+        "custom/spotify",
     ],
     "modules-center": [
         "hyprland/window"
@@ -16,8 +17,8 @@
     "modules-right": [
         "pulseaudio",
         "network",
-        "cpu",
-        "memory",
+        // "cpu",
+        // "memory",
         // "backlight",
         "battery",
         "clock",
@@ -37,6 +38,14 @@
         // "timezone": "America/New_York",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
+    },
+    "custom/spotify": {
+    "exec": "$HOME/.config/waybar/custom_modules/mediaplayer.py --player spotify",
+    "format": "{}",
+    "return-type": "json",
+    "on-click": "playerctl play-pause -p spotify",
+    "on-scroll-up": "playerctl next -p spotify",
+    "on-scroll-down": "playerctl previous -p spotify"
     },
     "cpu": {
         "format": "{usage}% ",
