@@ -242,7 +242,18 @@ config.skip_close_confirmation_for_processes_named = {
 	"powershell.exe",
 	"lf",
 }
-
+config.mouse_bindings = {
+	{
+		event = { Down = { streak = 1, button = { WheelUp = 1 } } },
+		mods = "NONE",
+		action = wezterm.action.ScrollByLine(-3),
+	},
+	{
+		event = { Down = { streak = 1, button = { WheelDown = 1 } } },
+		mods = "NONE",
+		action = wezterm.action.ScrollByLine(3),
+	},
+}
 config.leader = { key = "a", mods = "CTRL" }
 config.disable_default_key_bindings = true
 config.keys = {

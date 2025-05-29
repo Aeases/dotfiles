@@ -1,7 +1,11 @@
 
 # INFO: ARCH PACKAGES
 
-# base-devel zsh neovim lazygit eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth pciutils usbutils jupyter-server jupyter-notebook yazi playerctl
+# base-devel zsh neovim lazygit eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth pciutils usbutils jupyter-server jupyter-notebook yazi playerctl swww satty
+#
+# for some things XDG_CURRENT_DESKTOP="gnome" gnome-bluetooth-3.0 gnome-control-center
+
+# blueberry brightnessctl coreutils  grim slurp upower wl-clipboard
 
 # note for plymouth, place it into /etc/mkinitcpio.conf, just before the encrypt one in the hooks array
 
