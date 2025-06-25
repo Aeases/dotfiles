@@ -1,6 +1,6 @@
 /* Everforest Dark Color Pallete */
 
-@define-color black rgba(16, 15, 15, 0);
+@define-color black rgba(16, 15, 15, 0.99);
 @define-color red #D14D41;
 @define-color green #879A39;
 @define-color yellow #D0A215;

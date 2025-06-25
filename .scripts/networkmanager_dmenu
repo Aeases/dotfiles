@@ -918,7 +918,7 @@ def get_selection(all_actions):
     """Spawn dmenu for selection and execute the associated action."""
     command = shlex.split(CONF.get("dmenu", "dmenu_command", fallback="dmenu"))
     cmd_base = basename(command[0])
-    active_chars = CONF.get("dmenu", "active_chars", fallback="==")
+    active_chars = CONF.get("dmenu", "active_chars", fallback="==") + " "
     highlight = CONF.getboolean("dmenu", "highlight", fallback=False)
     inp = []
 

@@ -5,9 +5,14 @@
 alias v="nvim"
 # MPV but it plays two audio tracks simultaneously
 alias open=xdg-open
+alias daa="cd ~/Documents/Engram/University/DAA・COMP3001/"
+alias ia="cd ~/Dev/Uni/IA/Assignment3/"
+alias china="cd ~/Documents/Engram/Resources/Chinese/"
 alias nvide="neovide"
+alias watchtex='function _watchtex(){ while inotifywait -e close_write "$1"; do pdflatex "$1"; done }; _watchtex'
 alias nv="neovide"
 #alias venv="python -m venv"
+source "${HOME}/.zprofilebruh"
 alias lg="lazygit"
 alias gst="git status"
 #alias host="distrobox-host-exec bash"
