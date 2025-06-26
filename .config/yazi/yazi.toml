@@ -22,11 +22,14 @@ open = [
 	{ run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
 	{ run = 'termux-open "$1"',             desc = "Open", for = "android" },
 ]
+view = [
+	{ run = 'oculante "$@"', orphan = true, for = "unix" },
+]
 [open]
 rules = [
 	{ mime = "application/pdf", use = ["pdf", "reveal"] },
 	{ mime = "text/*", use = [ "edit", "reveal" ] },
 	{ mime = "{audio,video}/*", use = [ "play", "reveal" ] },
-	{ mime = "image/*", use = [ "open", "reveal" ] },
+	{ mime = "image/*", use = [ "view", "open", "reveal" ] },
 ]
 

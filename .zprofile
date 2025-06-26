@@ -8,6 +8,9 @@ alias open=xdg-open
 alias daa="cd ~/Documents/Engram/University/DAA・COMP3001/"
 alias ia="cd ~/Dev/Uni/IA/Assignment3/"
 alias china="cd ~/Documents/Engram/Resources/Chinese/"
+alias hcf='cd ~/.config/hypr/'
+alias eng='cd ~/Documents/Engram/'
+alias dun='cd ~/Dev/Uni/'
 alias nvide="neovide"
 alias watchtex='function _watchtex(){ while inotifywait -e close_write "$1"; do pdflatex "$1"; done }; _watchtex'
 alias nv="neovide"
@@ -17,7 +20,6 @@ alias lg="lazygit"
 alias gst="git status"
 #alias host="distrobox-host-exec bash"
 alias l='ls -la'
-alias hcf='cd ~/.config/hypr/'
 alias o='open'
 alias dart="dart --disable-analytics"
 #alias fixgpu="sudo cat /sys/kernel/debug/dri/1/amdgpu_gpu_recover"
@@ -28,7 +30,6 @@ alias watchmeboogie="while true; do make -q || make; sleep 0.5; done"
 alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
 alias d2b='python ~/Dev/Uni/PDI/binaryConversion.py -d2b'
 
-alias dun='cd ~/Dev/Uni/'
 
 lwhich () { which $1 | xargs dirname | xargs eza --color=always -l | grep $1 }
 if which eza > /dev/null 2>&1; then
