@@ -29,6 +29,8 @@ view = [
 rules = [
 	{ mime = "application/pdf", use = ["pdf", "reveal"] },
 	{ mime = "text/*", use = [ "edit", "reveal" ] },
+	{ mime = "text/plain", use = [ "edit", "reveal" ] },
+	{ mime = "application/javascript", use = [ "edit", "reveal" ] },
 	{ mime = "{audio,video}/*", use = [ "play", "reveal" ] },
 	{ mime = "image/*", use = [ "view", "open", "reveal" ] },
 ]
