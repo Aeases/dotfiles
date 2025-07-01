@@ -93,7 +93,10 @@ config.tab_bar_at_bottom = true
 config.show_tab_index_in_tab_bar = false
 -- config.window_decorations = "RESIZE"
 config.font_size = 14
-config.font = wezterm.font("M+1Code Nerd Font", { weight = "Regular", italic = false })
+config.font = wezterm.font_with_fallback({
+	{ family = "M+1Code Nerd Font", weight = "Regular", italic = false },
+	{ family = "Noto Sans SC", weight = "Regular", italic = false },
+})
 --config.font = wezterm.font_with_fallback {'Noto Sans Mono Medium', 'JetBrains Mono', 'M PLUS 2 Medium', 'DengXian' }
 --config.font = wezterm.font_with_fallback {'JetBrains Mono', {family = 'M PLUS 1 Code', weight = 'Medium'}, 'DengXian'}
 local f = "一回"
@@ -241,6 +244,7 @@ config.skip_close_confirmation_for_processes_named = {
 	"pwsh.exe",
 	"powershell.exe",
 	"lf",
+	"yazi",
 }
 config.mouse_bindings = {
 	{
