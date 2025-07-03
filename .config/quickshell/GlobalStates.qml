@@ -11,7 +11,7 @@ Singleton {
     property bool sidebarLeftOpen: false
     property bool sidebarRightOpen: false
     property bool overviewOpen: false
-    property bool workspaceShowNumbers: true
+    property bool workspaceShowNumbers: false
     property bool superReleaseMightTrigger: true
 
     // When user is not reluctant while pressing super, they probably don't need to see workspace numbers
@@ -21,7 +21,7 @@ Singleton {
 
     Timer {
         id: workspaceShowNumbersTimer
-        interval: ConfigOptions.bar.workspaces.showNumberDelay
+        interval: Config.options.bar.workspaces.showNumberDelay
         // interval: 0
         repeat: false
         onTriggered: {
