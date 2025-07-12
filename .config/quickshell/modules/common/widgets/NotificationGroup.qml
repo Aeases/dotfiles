@@ -147,7 +147,7 @@ Item { // Notification group area
             NotificationAppIcon { // Icons
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: false
-                image: root?.multipleNotifications ? "" : notificationGroup?.notifications[0]?.image ?? ""
+                image: notificationGroup?.notifications[0]?.image
                 appIcon: notificationGroup?.appIcon
                 summary: notificationGroup?.notifications[root.notificationCount - 1]?.summary
             }

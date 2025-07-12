@@ -108,17 +108,17 @@ Singleton {
     function groupsForList(list) {
         const groups = {};
         list.forEach((notif) => {
-            if (!groups[notif.appName]) {
-                groups[notif.appName] = {
+            if (!groups[notif.id]) {
+                groups[notif.id] = {
                     appName: notif.appName,
                     appIcon: notif.appIcon,
                     notifications: [],
                     time: 0
                 };
             }
-            groups[notif.appName].notifications.push(notif);
+            groups[notif.id].notifications.push(notif);
             // Always set to the latest time in the group
-            groups[notif.appName].time = latestTimeForApp[notif.appName] || notif.time;
+            groups[notif.id].time = latestTimeForApp[notif.appName] || notif.time;
         });
         return groups;
     }
@@ -208,7 +208,7 @@ Singleton {
         const index = root.list.findIndex((notif) => notif.id === id);
         if (root.list[index] != null)
             root.list[index].popup = false;
-        root.timeout(id);
+        // root.timeout(id);
     }
 
     function timeoutAll() {
