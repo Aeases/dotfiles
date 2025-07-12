@@ -30,8 +30,10 @@ Singleton {
         property string image: notification?.image ?? ""
         property string summary: notification?.summary ?? ""
         property double time
-        property string urgency: notification?.urgency.toString() ?? "normal"
+        property string urgency: notification?.urgency.toString() ?? "invalid bruh"
         property Timer timer
+        
+        readonly property bool isValid: urgency !== "invalid bruh"
     }
 
     function notifToJSON(notif) {
@@ -77,7 +79,8 @@ Singleton {
     }
 
     function stringifyList(list) {
-        return JSON.stringify(list.map((notif) => notifToJSON(notif)), null, 2);
+        const validNotifs = list.filter(notif => notif.isValid);
+        return JSON.stringify(validNotifs.map((notif) => notifToJSON(notif)), null, 2);
     }
     
     onListChanged: {
@@ -150,9 +153,16 @@ Singleton {
             notification.tracked = true
             const newNotifObject = notifComponent.createObject(root, {
                 "id": notification.id + root.idOffset,
-                "notification": notification,
+                "notification": notification, // This contains the image URL from Quickshell
                 "time": Date.now(),
             });
+            
+            // Only add notification if it has valid urgency
+            if (!newNotifObject.isValid) {
+                newNotifObject.destroy();
+                return;
+            }
+
 			root.list = [...root.list, newNotifObject];
 
             // Popup
@@ -240,19 +250,21 @@ Singleton {
         path: Qt.resolvedUrl(filePath)
         onLoaded: {
             const fileContents = notifFileView.text()
-            root.list = JSON.parse(fileContents).map((notif) => {
+            const loadedNotifs = JSON.parse(fileContents).map((notif) => {
                 return notifComponent.createObject(root, {
                     "id": notif.id,
-                    "actions": [], // Notification actions are meaningless if they're not tracked by the server or the sender is dead
+                    "actions": [],
                     "appIcon": notif.appIcon,
                     "appName": notif.appName,
                     "body": notif.body,
-                    "image": notif.image,
+                    "image": notif.image, // This restores the qsimage URL from saved data
                     "summary": notif.summary,
                     "time": notif.time,
                     "urgency": notif.urgency,
                 });
-            });
+            }).filter(notif => notif.isValid);
+            
+            root.list = loadedNotifs;
             // Find largest id
             let maxId = 0
             root.list.forEach((notif) => {
