@@ -42,9 +42,11 @@ Scope {
                 right: parent.right
                 rightMargin: 4
                 topMargin: 4
+                bottomMargin: 4
             }
-            implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
+            implicitWidth: parent.width - Appearance.sizes.elevationMargin * 1
             popup: true
+            verticalLayoutDirection: ListView.BottomToTop
         }
     }
 }

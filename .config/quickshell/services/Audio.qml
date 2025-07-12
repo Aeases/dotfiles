@@ -26,7 +26,7 @@ Singleton {
         property bool lastReady: false
         property real lastVolume: 0
         function onVolumeChanged() {
-            if (!Config.options.audio.protection.enable) return;
+            if (Config.options.audio.protection.enable) return;
             if (!lastReady) {
                 lastVolume = sink.audio.volume;
                 lastReady = true;
