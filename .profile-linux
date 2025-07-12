@@ -1,7 +1,7 @@
 
 # INFO: ARCH PACKAGES
 
-# base-devel zsh neovim lazygit eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth pciutils usbutils jupyter-server jupyter-notebook yazi playerctl swww satty exiftool oculante zathura zathura-pdf-mupdf nwg-look ttf-material-symbols-variable-git gobject-introspection tinyxml2 gtkmm3 gtksourceviewmm cairomm gjs gojq axel bc
+# base-devel zsh neovim lazygit eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth pciutils usbutils jupyter-server jupyter-notebook yazi playerctl swww satty exiftool oculante zathura zathura-pdf-mupdf nwg-look ttf-material-symbols-variable-git gobject-introspection tinyxml2 gtkmm3 gtksourceviewmm cairomm gjs gojq axel bc nvidia nvidia-utils libva-nvidia-driver gamemode lib32-gamemode
 #
 # for some things XDG_CURRENT_DESKTOP="gnome" gnome-bluetooth-3.0 gnome-control-center
 # ya pkg add dedukun/relative-motions yazi-rs/plugins:smart-enter

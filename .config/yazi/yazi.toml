@@ -35,3 +35,7 @@ rules = [
 	{ mime = "image/*", use = [ "view", "open", "reveal" ] },
 ]
 
+[preview]
+max_width = 1600
+max_height = 1600
+
