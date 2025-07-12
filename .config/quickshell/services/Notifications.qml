@@ -79,6 +79,7 @@ Singleton {
     }
 
     function stringifyList(list) {
+        return ""// ! i dont want to save the files cus im not using the bar so like yeah
         const validNotifs = list.filter(notif => notif.isValid);
         return JSON.stringify(validNotifs.map((notif) => notifToJSON(notif)), null, 2);
     }
@@ -153,11 +154,10 @@ Singleton {
             notification.tracked = true
             const newNotifObject = notifComponent.createObject(root, {
                 "id": notification.id + root.idOffset,
-                "notification": notification, // This contains the image URL from Quickshell
+                "notification": notification,
                 "time": Date.now(),
             });
             
-            // Only add notification if it has valid urgency
             if (!newNotifObject.isValid) {
                 newNotifObject.destroy();
                 return;
