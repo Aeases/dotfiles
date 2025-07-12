@@ -208,7 +208,7 @@ Singleton {
         const index = root.list.findIndex((notif) => notif.id === id);
         if (root.list[index] != null)
             root.list[index].popup = false;
-        // root.timeout(id);
+        root.timeout(id);
     }
 
     function timeoutAll() {
