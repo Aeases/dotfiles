@@ -150,7 +150,7 @@ Scope {
                         id: sessionReboot
                         buttonIcon: "restart_alt"
                         buttonText: qsTr("Reboot")
-                        onClicked:  { Hyprland.dispatch("exec systemctl reboot || loginctl reboot"); sessionRoot.hide() }
+                        onClicked:  { Quickshell.execDetached(["bash", "-c", `reboot || loginctl reboot`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionShutdown
                         KeyNavigation.right: sessionFirmwareReboot

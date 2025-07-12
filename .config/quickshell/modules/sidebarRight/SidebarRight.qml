@@ -20,7 +20,7 @@ Scope {
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 15
-    property string settingsQmlPath: FileUtils.trimFileProtocol(`${Directories.config}/quickshell/settings.qml`)
+    property string settingsQmlPath: Quickshell.configPath("settings.qml")
 
     PanelWindow {
         id: sidebarRoot
@@ -89,6 +89,8 @@ Scope {
                     implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                     implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
                     color: Appearance.colors.colLayer0
+                    border.width: 1
+                    border.color: Appearance.m3colors.m3outlineVariant
                     radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
                     ColumnLayout {
@@ -177,6 +179,7 @@ Scope {
                             NightLight {}
                             GameMode {}
                             IdleInhibitor {}
+                            CloudflareWarp {}
                         }
 
                         // Center widget group

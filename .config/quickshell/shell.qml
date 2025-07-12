@@ -29,7 +29,7 @@ import "./services/"
 ShellRoot {
     // Enable/disable modules here. False = not loaded at all, so rest assured
     // no unnecessary stuff will take up memory if you decide to only use, say, the overview.
-    property bool enableBar: false
+    property bool enableBar: true
     property bool enableBackgroundWidgets: true
     property bool enableCheatsheet: true
     property bool enableDock: true
