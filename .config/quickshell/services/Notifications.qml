@@ -79,7 +79,7 @@ Singleton {
     }
 
     function stringifyList(list) {
-        return ""// ! i dont want to save the files cus im not using the bar so like yeah
+        // return ""// ! i dont want to save the files cus im not using the bar so like yeah
         const validNotifs = list.filter(notif => notif.isValid);
         return JSON.stringify(validNotifs.map((notif) => notifToJSON(notif)), null, 2);
     }
@@ -109,17 +109,16 @@ Singleton {
     function groupsForList(list) {
         const groups = {};
         list.forEach((notif) => {
-            if (!groups[notif.id]) {
-                groups[notif.id] = {
-                    appName: notif.appName,
-                    appIcon: notif.appIcon,
-                    notifications: [],
-                    time: 0
-                };
-            }
-            groups[notif.id].notifications.push(notif);
+            groups[notif.id] = {
+                appName: notif.appName,
+                appIcon: notif.appIcon,
+                notifications: [notif],
+                time: notif.time,
+            };
+
+            console.log(notifToString(notif));
             // Always set to the latest time in the group
-            groups[notif.id].time = latestTimeForApp[notif.appName] || notif.time;
+            // groups[notif.id].time = latestTimeForApp[notif.appName] || notif.time;
         });
         return groups;
     }
@@ -152,6 +151,8 @@ Singleton {
 
         onNotification: (notification) => {
             notification.tracked = true
+
+
             const newNotifObject = notifComponent.createObject(root, {
                 "id": notification.id + root.idOffset,
                 "notification": notification,
@@ -165,8 +166,9 @@ Singleton {
 
 			root.list = [...root.list, newNotifObject];
 
+            console.log(notifToString(newNotifObject));
             // Popup
-            if (!root.popupInhibited) {
+            if (!root.popupInhibited || true) {
                 newNotifObject.popup = true;
                 newNotifObject.timer = notifTimerComponent.createObject(root, {
                     "id": newNotifObject.id,
@@ -175,8 +177,8 @@ Singleton {
             }
 
             root.notify(newNotifObject);
-            // console.log(notifToString(newNotifObject));
-            notifFileView.setText(stringifyList(root.list));
+
+            // notifFileView.setText(stringifyList(root.list));
         }
     }
 
@@ -192,6 +194,7 @@ Singleton {
             notifServer.trackedNotifications.values[notifServerIndex].dismiss()
         }
         root.discard(id);
+
     }
 
     function discardAllNotifications() {

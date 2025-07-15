@@ -23,7 +23,8 @@ Scope {
 
         anchors {
             top: true
-            right: true
+            right: false
+            left: true
             bottom: true
         }
 
@@ -42,11 +43,9 @@ Scope {
                 right: parent.right
                 rightMargin: 4
                 topMargin: 4
-                bottomMargin: 4
             }
-            implicitWidth: parent.width - Appearance.sizes.elevationMargin * 1
+            implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
             popup: true
-            verticalLayoutDirection: ListView.BottomToTop
         }
     }
 }

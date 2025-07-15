@@ -1,18 +1,3 @@
-# "cursor.style" = "Block"
-# "debug.render_timer" = false
-
-
-import = [
-  # uncomment the flavour you want below:
-  # "~/.config/alacritty/catppuccin-latte.toml"
-  # "~/.config/alacritty/catppuccin-frappe.toml"
-  # "~/.config/alacritty/catppuccin-macchiato.toml"
-  # "~/.config/alacritty/catppuccin-mocha.toml"
-  #"~/.config/alacritty/themes/onedark.toml"
-  "~/.config/alacritty/themes/flexoki.toml"
-]
-
-live_config_reload = true
 
 [bell]
 animation = "EaseOutExpo"
@@ -79,3 +64,20 @@ lines = 80
 [window.padding]
 x = 4
 y = 4
+
+[general]
+
+live_config_reload = true
+# "cursor.style" = "Block"
+# "debug.render_timer" = false
+
+
+import = [
+  # uncomment the flavour you want below:
+  # "~/.config/alacritty/catppuccin-latte.toml"
+  # "~/.config/alacritty/catppuccin-frappe.toml"
+  # "~/.config/alacritty/catppuccin-macchiato.toml"
+  # "~/.config/alacritty/catppuccin-mocha.toml"
+  #"~/.config/alacritty/themes/onedark.toml"
+  "~/.config/alacritty/themes/flexoki.toml"
+]
