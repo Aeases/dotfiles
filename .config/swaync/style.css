@@ -20,8 +20,8 @@
 }
 
 .notification-row .notification-background {
-  /* padding: 6px 12px; */
-  padding: 0px 0px;
+  padding: 6px 12px;
+  /* padding: 0px 0px; */
 }
 
 .notification-row .notification-background .close-button {
@@ -48,9 +48,9 @@
 
 .notification-row .notification-background .notification {
   /* The actual notification */
-  border-radius: 0px;
-  /* border: 1px solid @noti-border-color; */
-  border: none;
+  border-radius: 10px;
+  border: 1px solid @noti-border-color;
+  /* border: none; */
   padding: 0;
   /* transition: background 0.15s ease-in-out; */
   background: @noti-bg;
@@ -103,7 +103,7 @@
 .notification-row .notification-background .notification .notification-default-action .notification-content .image {
   /* Notification Primary Image */
   -gtk-icon-effect: none;
-  border-radius: 100px;
+  border-radius: 10px;
   /* Size in px */
   margin: 4px;
 }
