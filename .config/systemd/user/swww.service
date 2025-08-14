@@ -1,0 +1,15 @@
+[Unit]
+Description=A Solution to your Wayland Wallpaper Woes
+# The target may not be what you need, change it accordingly
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/swww-daemon
+# Choose a random wallpaper if you want
+#ExecStartPost=/path/to/your/random_wallpaper_script
+
+[Install]
+WantedBy=graphical-session.target
