@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Name=LocalSend
+Comment=An open source cross-platform alternative to AirDrop
+Exec=env GTK_CSD=0 localsend
+Icon=localsend
+Terminal=false
+Categories=Utility;Network;
+Name[en]=LocalSend
+Name[en_US]=LocalSend
+Name[en_US.UTF-8]=LocalSend
+Comment[en]=An open source cross-platform alternative to AirDrop
+Comment[en_US]=An open source cross-platform alternative to AirDrop
+Comment[en_US.UTF-8]=An open source cross-platform alternative to AirDrop
+Hidden=false
+NoDisplay=false
+StartupNotify=true
+
