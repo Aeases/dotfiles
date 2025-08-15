@@ -15,7 +15,7 @@ alias nvide="neovide"
 alias watchtex='function _watchtex(){ while inotifywait -e close_write "$1"; do pdflatex "$1"; done }; _watchtex'
 alias nv="neovide"
 #alias venv="python -m venv"
-source "${HOME}/.zprofilebruh"
+# source "${HOME}/.zprofilebruh"
 alias lg="lazygit"
 alias gst="git status"
 #alias host="distrobox-host-exec bash"
@@ -165,6 +165,8 @@ if [[ -n "${terminfo[kcbt]}" ]]; then
   bindkey -M vicmd "${terminfo[kcbt]}" reverse-menu-complete
 fi
 
+
+
 # [Backspace] - delete backward
 bindkey -M emacs '^?' backward-delete-char
 bindkey -M viins '^?' backward-delete-char
@@ -183,6 +185,11 @@ else
   bindkey -M viins "^[3;5~" delete-char
   bindkey -M vicmd "^[3;5~" delete-char
 fi
+
+
+
+export WORDCHARS='*?_-[]~&;!#$%^(){}<>'
+
 
 # [Ctrl-Delete] - delete whole forward-word
 bindkey -M emacs '^[[3;5~' kill-word
