@@ -13,6 +13,12 @@ alias eng='cd ~/Documents/Engram/'
 alias dun='cd ~/Dev/Uni/'
 alias nvide="neovide"
 alias watchtex='function _watchtex(){ while inotifywait -e close_write "$1"; do pdflatex "$1"; done }; _watchtex'
+
+# Convert audio of any file to mp3, I use for mkv's that come encoded in a audio format chrome cannot read.
+function convertaudio() {
+  ffmpeg -i $1 -c:v copy -c:a mp3 -ab 192k /tmp/$1 && mv /tmp/$1 $1
+}
+
 alias nv="neovide"
 #alias venv="python -m venv"
 # source "${HOME}/.zprofilebruh"
