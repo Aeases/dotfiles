@@ -11,6 +11,7 @@ alias china="cd ~/Documents/Engram/Resources/Chinese/"
 alias hcf='cd ~/.config/hypr/'
 alias eng='cd ~/Documents/Engram/'
 alias dun='cd ~/Dev/Uni/'
+alias prep='cd ~/repos/asbplayer/scripts/web-socket-server/; go run main.go & anki'
 alias nvide="neovide"
 alias watchtex='function _watchtex(){ while inotifywait -e close_write "$1"; do pdflatex "$1"; done }; _watchtex'
 
