@@ -45,9 +45,14 @@ return {
 
       git_status = {
         symbols = {
-          unstaged = '未追加',
-          staged = '既追加',
-          untracked = '未登録',
+          unstaged = '未準備',
+          staged = '準備済',
+          untracked = '未追跡',
+          tracked = '追跡済',
+          added = '追加済',
+          -- modified = '変更済',
+          deleted = '削除済',
+          renamed = '改名済',
         },
       },
       modified = {
@@ -56,6 +61,7 @@ return {
       },
     },
     filesystem = {
+      hijack_netrw_behavior = 'open_default',
       filtered_items = {
         always_show = {
           '.gitignore',
@@ -63,6 +69,9 @@ return {
           '.zshrc',
           '.profile-linux',
         },
+        visible = true,
+        hide_dotfiles = false,
+        hide_gitignored = true,
       },
       window = {
         mappings = {
