@@ -1,184 +1,230 @@
+/* Everforest Dark Color Pallete */
 
-/*base background color*/
-@define-color bg_main rgba(255, 255, 255, 0.65);
-@define-color bg_main_tooltip rgba(0, 0, 0, 0.7);
+@define-color black rgba(16, 15, 15, 0.8);
+@define-color red #D14D41;
+@define-color green #879A39;
+@define-color yellow #D0A215;
+@define-color blue #4385BE;
+@define-color magenta #CE5D97;
+@define-color cyan #3AA99F;
+@define-color white #FFFCF0;
+@define-color bright-black #414B50;
+@define-color bright-red #E67E80;
+@define-color bright-green #A7C080;
+@define-color bright-yellow #DBBC7F;
+@define-color bright-blue #7FBBB3;
+@define-color bright-magenta #D699B6;
+@define-color bright-cyan #83C092;
+@define-color bright-white #D3C6AA;
+@define-color text-white #CECDC3;
+@define-color bg-3 rgba(28, 27, 26, 0.4);
+@define-color tx-2 #878580;
+
+/* Misc Colors */
+@define-color empty rgba(0, 0, 0, 0);
 
 
-/*base background color of selections */
-@define-color bg_hover rgba(0, 0, 0, 0.3);
-/*base background color of active elements */
-@define-color bg_active rgba(100, 100, 100, 0.5);
+/* Define for each module */
+@define-color bg @black;
+@define-color fg @text-white;
+@define-color workspaces-focused @bg-3;
+@define-color mode @cyan;
+@define-color mode-fg @bg;
+@define-color workspaces-focused-fg @fg;
+@define-color pulseaudio @blue;
+@define-color network @bright-green;
+@define-color cpu @cyan;
+@define-color memory @yellow;
+@define-color backlight @yellow;
+@define-color battery @red;
+@define-color clock @bright-blue;
+@define-color tray @empty;
 
-/*base border color*/
-@define-color border_main rgba(255, 255, 255, 0.2);
 
-/*text color for entries, views and content in general */
-@define-color content_main black;
-/*text color for entries that are unselected */
-@define-color content_inactive rgba(0, 0, 0, 0.25);
 
 * {
-	text-shadow: none;
-	box-shadow: none;
-  border: none;
-  border-radius: 0;
-	font-family: "Segoe UI", "Ubuntu";
-  font-weight: 600;
-  font-size: 12.7px;
-	
-	
+    font-family: "M+1Code Nerd Font Med";
+    font-size: 14px;
 }
 
 window#waybar {
-  background:  @bg_main;
-  border-top: 1px solid @border_main;
-  color: @content_main;
+    background-color: @bg;
+    color: @fg;
 }
 
-tooltip {
-  background: @bg_main_tooltip;
-  border-radius: 5px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: @border_main;
-}
-tooltip label{
-  color: @content_main;
+window#waybar>box {
+    padding: 0 4px;
 }
 
-#custom-os_button {
-	font-family: "JetBrainsMono Nerd Font";
-  font-size: 24px;
-	padding-left: 12px;
-	padding-right: 20px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#custom-os_button:hover {
-  background:  @bg_hover;
-	color: @content_main;
+window#waybar.hidden {
+    opacity: 0.2;
 }
 
-#workspaces {
-  color: transparent;
-	margin-right: 1.5px;
-	margin-left: 1.5px;
+button {
+    box-shadow: inset 0 -3px transparent;
+    border: none;
+    border-radius: 0;
 }
+
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+button:hover {
+    background: inherit;
+    box-shadow: inherit;
+    text-shadow: inherit;
+}
+
 #workspaces button {
-  padding: 3px;
-  color: @content_inactive;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    padding: 0 4px;
+    margin: 4 1px;
+    background-color: transparent;
+    color: @fg;
+    border-radius: 4px;
 }
-#workspaces button.active {
-	color: @content_main;
-	border-bottom: 3px solid white;
-}
-#workspaces button.focused {
-  color: @bg_active;
-}
-#workspaces button.urgent {
-	background:  rgba(255, 200, 0, 0.35);
-	border-bottom: 3px dashed @warning_color;
-	color: @warning_color;
-}
+
+
 #workspaces button:hover {
-  background: @bg_hover;
-	color: @content_main;
+    background: alpha(@bg, 0.5);
 }
 
-#taskbar {
+#workspaces button.active {
+    background-color: @workspaces-focused;
+    color: @workspaces-focused-fg;
 }
 
-#taskbar button {
-	min-width: 130px;
-	border-bottom: 3px solid rgba(255, 255, 255, 0.3);
-	margin-left: 2px;
-	margin-right: 2px;
-  padding-left: 8px;
-  padding-right: 8px;
-  color: @content_main;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+#workspaces button.urgent {
+    background-color: @bright-red;
 }
 
-#taskbar button.active {
-	border-bottom: 3px solid @content_main;
-  background: @bg_active;
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon,
+#mpd {
+    padding: 0 10px;
+    color: @fg;
+    border-radius: 0px;
+    border-bottom: 2px solid transparent;
+    border-top: 2px solid transparent;
+    background-color: transparent;
 }
 
-#taskbar button:hover {
-	border-bottom: 3px solid @content_main;
-  background: @bg_hover;
-	color: @content_main;
+
+#mode {
+    background-color: @mode;
+    color: @mode-fg;
+    box-shadow: none;
 }
 
-#cpu, #disk, #memory {
-	padding:3px;
+#window,
+#workspaces {
+    margin: 0 4px;
 }
 
-#temperature {
-	color: transparent;
-	font-size: 0px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#temperature.critical {
-	padding-right: 3px;
-	color: @warning_color;
-	font-size: initial;
-	border-bottom: 3px dashed @warning_color;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left>widget:first-child>#workspaces {
+    margin-left: 0;
 }
 
-#window {
-  border-radius: 10px;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
-#tray{
-  margin-left: 5px;
-  margin-right: 5px;
-  color: @content_main;
-}
-#tray > .passive {
-	border-bottom: none;
-}
-#tray > .active {
-	border-bottom: 3px solid white;
-}
-#tray > .needs-attention {
-	border-bottom: 3px solid @warning_color;
-}
-#tray > widget {
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#tray > widget:hover {
-	background: @bg_hover;
-}
-
-#pulseaudio {
-	font-family: "JetBrainsMono Nerd Font";
-	padding-left: 3px;
-  padding-right: 3px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#pulseaudio:hover {
- 	background: @bg_hover;
-}
-
-#network {
-	padding-left: 3px;
-  padding-right: 3px;
-}
-
-#language {
-  padding-left: 5px;
-  padding-right: 5px;
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right>widget:last-child>#workspaces {
+    margin-right: 0;
 }
 
 #clock {
-  padding-right: 5px;
-  padding-left: 5px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border-top-color: @clock;
+    color: @fg;
 }
-#clock:hover {
-	background: @bg_hover;
+
+#battery {
+    border-top-color: @battery;
+    color: @fg;
+}
+
+#battery.charging,
+#battery.plugged {
+    border-top-color: @battery;
+}
+
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}
+
+/* Using steps() instead of linear as a timing function to limit cpu usage */
+#battery.critical:not(.charging) {
+    background-color: @red;
+    color: @fg;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#cpu {
+    border-top-color: @cpu;
+    color: @fg;
+}
+
+
+#memory {
+    border-top-color: @memory;
+    color: @fg;
+}
+
+
+#backlight {
+    border-top-color: @backlight;
+    color: @fg;
+}
+
+
+#network {
+    border-top-color: @network;
+    color: @fg;
+}
+
+
+#network.disconnected {
+    border-top-color: @red;
+}
+
+#pulseaudio {
+    border-top-color: @pulseaudio;
+    color: @fg;
+}
+
+#pulseaudio.muted {
+    color: @red;
+    border-top-color: @red;
+}
+
+
+#tray {
+    background-color: @tray;
+    color: @bg;
+}
+
+#tray>.passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray>.needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: @red;
 }

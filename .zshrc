@@ -5,9 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-DISABLE_AUTO_TITLE="true" # Disable auto-setting terminal title.
-COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
-DISABLE_UNTRACKED_FILES_DIRTY="true" # Disable marking untracked files
 INC_APPEND_HISTORY="true"
 HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history # Persist history
 HISTSIZE=1000000
