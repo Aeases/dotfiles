@@ -3,6 +3,8 @@ set statusbar-v-padding 0
 set page-padding 1
 map u scroll half-up
 map d scroll half-down
+map Up scroll half-up
+map Down scroll half-down
 map D toggle_page_mode
 map r reload
 map R rotate
