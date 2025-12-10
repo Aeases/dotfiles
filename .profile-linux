@@ -18,7 +18,7 @@
 #   HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole block plymouth sd-encrypt lvm2 filesystems fsck)
 #
 
-#yay -Syu fcitx5 fcitx5-mozc-ut fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl nautilus-open-any-terminal
+#yay -Syu fcitx5 fcitx5-mozc-ut fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl nautilus-open-any-terminal fcitx5-config-qt
 # nvidia_drm.modeset=1 nvidia_drm.fbdev=1
 #
 # lspci -k -d ::03xx

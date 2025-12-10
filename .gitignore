@@ -2,3 +2,5 @@
 !.ssh/config
 .config/keyd/app.log
 .config/keyd/app.lock
+.local/share/fcitx5/pinyin/user.dict
+.local/share/fcitx5/pinyin/user.history
