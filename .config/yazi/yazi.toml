@@ -39,3 +39,5 @@ rules = [
 max_width = 1600
 max_height = 1600
 
+[mgr]
+sort_by = "natural"

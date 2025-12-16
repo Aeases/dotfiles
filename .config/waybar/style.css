@@ -217,12 +217,12 @@ button:hover {
 
 #tray {
     background-color: @tray;
-    color: @bg;
+    color: @fg;
 }
 
-#tray>.passive {
-    -gtk-icon-effect: dim;
-}
+/* #tray>.passive { */
+/*     -gtk-icon-effect: dim; */
+/* } */
 
 #tray>.needs-attention {
     -gtk-icon-effect: highlight;

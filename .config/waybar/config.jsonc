@@ -31,7 +31,11 @@
     },
     "tray": {
         // "icon-size": 21,
-        "spacing": 10
+        "spacing": 10,
+        "show-passive-items": false,
+        "icons": {
+            "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/telegram.png"
+        }
     },
     "clock": {
         // "timezone": "America/New_York",
@@ -105,7 +109,7 @@
         "rewrite": {
             // Desktop
             "": 
-            "<span foreground='#89b4fa'> </span> Hyprland",
+            "",
 
             // Terminal
             "~": "  Terminal",

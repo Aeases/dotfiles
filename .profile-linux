@@ -17,6 +17,15 @@
 #   GRUB_CMDLINE_LINUX_DEFAULT="loglevel=2 quiet splash rd.luks.name=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX=encrypted_root rd.luks.options=discard root=UUID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 #   HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole block plymouth sd-encrypt lvm2 filesystems fsck)
 #
+#   AFTER RE-INSTALL (in /boot/loader/entries/arch.conf)
+#   title ArcLinux
+# linux /vmlinuz-linux
+# initrd /initramfs-linux.img
+# options rd.luks.name=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX=drive rd.luks.options=discard root=UUID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX 
+# AFTER REINSTALL the /etc/default/grub folder only had this on grud_cmdline_linux_default
+# GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet" (i think i moved the luks names over to the new file)
+# UPDATE: ^^^ I definently moved it into the new file, because I set up the new system from scratch with system-d boot (duh)
+#
 
 #yay -Syu fcitx5 fcitx5-mozc-ut fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl nautilus-open-any-terminal fcitx5-config-qt
 # nvidia_drm.modeset=1 nvidia_drm.fbdev=1
