@@ -1,7 +1,7 @@
 
 # INFO: ARCH PACKAGES
 
-# base-devel arduino-cli arduino-language-server zsh neovim lazygit eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth pciutils usbutils jupyter-server jupyter-notebook yazi playerctl swww satty exiftool oculante zathura zathura-pdf-mupdf nwg-look ttf-material-symbols-variable-git gobject-introspection tinyxml2 gtkmm3 gtksourceviewmm cairomm gjs gojq axel bc nvidia nvidia-utils libva-nvidia-driver gamemode lib32-gamemode nautilus-image-converter nautilus libimobiledevice ifuse engrampa f3d
+# base-devel arduino-cli arduino-language-server zsh neovim lazygit eza ripgrep fzf luarocks wezterm git jdk17-openjdk fd bat man-pages stow mkvtoolnix networkmanager-openconnect cmake meson cpio pkg-config handlr pipewire pipewire-zeroconf plymouth pciutils usbutils jupyter-server jupyter-notebook yazi playerctl swww satty exiftool oculante zathura zathura-pdf-mupdf nwg-look ttf-material-symbols-variable-git gobject-introspection tinyxml2 gtkmm3 gtksourceviewmm cairomm gjs gojq axel bc nvidia nvidia-utils libva-nvidia-driver gamemode lib32-gamemode nautilus-image-converter nautilus libimobiledevice ifuse engrampa f3d v4l2loopback-utils v4l2loopback-dkms linux-headers
 #
 # for some things XDG_CURRENT_DESKTOP="gnome" gnome-bluetooth-3.0 gnome-control-center
 # ya pkg add dedukun/relative-motions yazi-rs/plugins:smart-enter
@@ -35,6 +35,8 @@
 # this command gets the number of duplicate lines in a file
 
 #go run /home/zane/repos/asbplayer/scripts/web-socket-server/main.go > /dev/null &
+
+# texlive-fontsextra texinfo texlive-basic texlive-bibtexextra texlive-bin texlive-binextra texlive-context texlive-fontsextra texlive-fontsrecommended texlive-fontutils texlive-formatsextra texlive-games texlive-humanities texlive-latex texlive-latexextra texlive-latexrecommended texlive-luatex texlive-mathscience texlive-metapost texlive-music texlive-pictures texlive-plaingeneric texlive-pstricks texlive-publishers texlive-xetex
 
 # add scripts to path
 export PATH=$PATH:/home/zane/.scripts/

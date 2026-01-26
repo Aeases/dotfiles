@@ -1,17 +1,17 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:no-status"
-rev = "63f9650"
+rev = "de33976"
 hash = "3e023d31f29201efdac2a6ae35fedb78"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "63f9650"
-hash = "a7ab702e1ef0c097defbc976ed34c186"
+rev = "de33976"
+hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
 [[plugin.deps]]
-use = "dedukun/relative-motions"
-rev = "9d26460"
-hash = "6c0568cfa966a5d4ac496c926975a613"
+use = "boydaihungst/relative-motions"
+rev = "d720b1c"
+hash = "cb389a36241ada4893796d89dd5da7a0"
 
 [flavor]
 deps = []
