@@ -16,11 +16,10 @@
     "modules-right": [
         "pulseaudio",
         "network",
-        "cpu",
-        "memory",
         // "backlight",
         "battery",
         "clock",
+        "custom/seperator",
         "tray"
     ],
     // Modules configuration
@@ -40,7 +39,8 @@
     "clock": {
         // "timezone": "America/New_York",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+        // "format-alt": "{:%Y-%m-%d}"
+        "format-alt": "{:%d/%m/%Y}"
     },
     "cpu": {
         "format": "{usage}% ",
@@ -62,23 +62,33 @@
         },
         "format": "{capacity}% {icon}",
         "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% 󱐋",
-        "format-plugged": "{capacity}% ",
+        "format-charging": "{capacity}% ●",
+        "format-plugged": "{capacity}% ◎",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": ["╳", "▂", "▄", "▆", "▉"]
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ",
+        "format-wifi": "≪{essid}≫",
         "format-ethernet": "{ipaddr}/{cidr} ",
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{essid} ",
+        "format-disconnected": "Disconnected ×",
+        "format-alt": "≪{essid}≫",
         // "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "on-click": "~/.scripts/networkmanager_dmenu"
+    },
+    "custom/seperator": {
+        "format": " |",
+        "interval": "once",
+        "tooltip": false
+    },
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float

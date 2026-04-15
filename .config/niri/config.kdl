@@ -8,6 +8,36 @@ debug {
     honor-xdg-activation-with-invalid-serial
 }
 
+recent-windows {
+    // off
+    debounce-ms 750
+
+    open-delay-ms 0
+
+    highlight {
+        active-color "#999999ff"
+        urgent-color "#ff9999ff"
+        padding 30
+        corner-radius 0
+    }
+
+    previews {
+        max-height 480
+        max-scale 0.5
+    }
+
+    binds {
+        Alt+Tab         { next-window; }
+        Alt+Shift+Tab   { previous-window; }
+
+        // Mod+Tab         { next-window; }
+        // Mod+Shift+Tab   { previous-window; }
+        // Mod+grave       { next-window     filter="app-id"; }
+        // Mod+Shift+grave { previous-window filter="app-id"; }
+    }
+}
+
+
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Input
@@ -113,7 +143,7 @@ output "eDP-1" {
 output "DP-2" {
     mode "3440x1440@144"
 
-    scale 1.6
+    scale 1.33
     transform "normal"
     position x=1280 y=0
 }
@@ -123,7 +153,7 @@ output "DP-2" {
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 10
+    gaps 8
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -351,12 +381,18 @@ window-rule {
 }
 
 window-rule {
+    match app-id="steam" title=r#"^notificationtoasts_\d+_desktop$"#
+    default-floating-position x=10 y=10 relative-to="bottom-right"
+}
+
+
+window-rule {
     // This app-id regular expression will work for both:
     // - host Firefox (app-id is "firefox")
     // - Flatpak Firefox (app-id is "org.mozilla.firefox")
     match app-id=r#"mpv$"#
-    min-width 1481
-    max-width 1481
+    // min-width 1481
+    // max-width 1481
 
 }
 
@@ -396,9 +432,11 @@ binds {
     // shows a list of important hotkeys.
     Mod+Shift+Slash { show-hotkey-overlay; }
 
+    Mod+Space { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+return hotkey-overlay-title="Open a Terminal:" { spawn "wezterm"; }
-    Mod+D hotkey-overlay-title="Run an Application: " { spawn "bash" "-c" "tofi-drun --drun-launch=true"; }
+    Mod+return hotkey-overlay-title="Open a Terminal:" { spawn "kitty"; }
+    Mod+w hotkey-overlay-title="Run an Application: " { spawn "bash" "-c" "tofi-drun --drun-launch=true"; }
     MOD+M hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
@@ -570,7 +608,6 @@ binds {
 
     // Switches focus between the current and the previous workspace.
     // Mod+Tab { focus-workspace-previous; }
-
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
     // If the window is already in a column, they will expel it out.
@@ -585,17 +622,19 @@ binds {
     Mod+R { switch-preset-column-width; }
     Mod+Shift+R { switch-preset-window-height; }
     Mod+Ctrl+R { reset-window-height; }
-    Mod+F { maximize-column; }
+    Mod+F { maximize-window-to-edges; }
+    Mod+Alt+F { toggle-windowed-fullscreen; }
+    Mod+Ctrl+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
 
     // Expand the focused column to space not taken up by other fully visible columns.
     // Makes the column "fill the rest of the space".
-    Mod+Ctrl+F { expand-column-to-available-width; }
+    // Mod+Ctrl+F { expand-column-to-available-width; }
 
-    Mod+G { center-column; }
+    Mod+T { center-column; }
 
     // Center all fully visible columns on screen.
-    Mod+Ctrl+G { center-visible-columns; }
+    Mod+Ctrl+T { center-visible-columns; }
 
     // Finer width adjustments.
     // This command can also:
@@ -619,7 +658,7 @@ binds {
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
-    Mod+W { toggle-column-tabbed-display; }
+    Mod+G { toggle-column-tabbed-display; }
 
     // Actions to switch layouts.
     // Note: if you uncomment these, make sure you do NOT have

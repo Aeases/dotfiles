@@ -40,11 +40,33 @@
 @define-color clock @bright-blue;
 @define-color tray @empty;
 
+#pulseaudio-slider {
+    padding: 0;
+    margin: 0;
+}
+
+#pulseaudio-slider slider {
+    opacity: 0;
+    background: transparent;
+}
+
+#pulseaudio-slider trough {
+    min-height: 10px;
+    min-width: 80px;
+    background: black;
+}
+
+#pulseaudio-slider highlight {
+    min-width: 10px;
+    border-radius: 0px;
+    background: red;
+}
 
 
 * {
-    font-family: "M+1Code Nerd Font Med";
-    font-size: 14px;
+    /*font-family: "M+1Code Nerd Font Med";*/
+    font-family: "Minecraft, M+1Code Nerd Font Med";
+    font-size: 16px;
 }
 
 window#waybar {
