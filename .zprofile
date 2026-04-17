@@ -5,6 +5,9 @@
 alias v="nvim"
 # MPV but it plays two audio tracks simultaneously
 alias open=xdg-open
+function psh() {
+    podman exec -it "$1" ${2:-/bin/bash}
+}
 alias daa="cd ~/Documents/Engram/University/DAA・COMP3001/"
 alias ia="cd ~/Dev/Uni/IA/Assignment3/"
 alias china="cd ~/Documents/Engram/Resources/Chinese/"

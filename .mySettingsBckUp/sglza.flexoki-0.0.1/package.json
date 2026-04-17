@@ -1,0 +1,23 @@
+{
+	"name": "flexoki",
+	"displayName": "Flexoki",
+	"icon": "images/wIum4L8I_400x400.jpg",
+	"description": "",
+	"version": "0.0.1",
+	"publisher": "sglza, aeases",
+	"engines": {
+		"vscode": "^1.83.0"
+	},
+	"categories": [
+		"Themes"
+	],
+	"contributes": {
+		"themes": [
+			{
+				"label": "Flexoki",
+				"uiTheme": "vs-dark",
+				"path": "./themes/Flexoki-color-theme.json"
+			}
+		]
+	}
+}
