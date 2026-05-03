@@ -4,7 +4,7 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
+eval "$(fnm env --use-on-cd)"
 INC_APPEND_HISTORY="true"
 HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history # Persist history
 HISTSIZE=1000000
@@ -99,7 +99,7 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
 zinit light zdharma/fast-syntax-highlighting
 
 source "${HOME}/.scriptsyFripsy.bash"
-
+source "${HOME}/.apikeys"
 # Platform specific scripts
 if [ Linux = `uname` ]; then
   source "${HOME}/.profile-linux"
@@ -141,3 +141,11 @@ export PATH=$PATH:/var/home/zane/.spicetify
 [[ -f /home/zane/.dart-cli-completion/zsh-config.zsh ]] && . /home/zane/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
+
+# pnpm
+export PNPM_HOME="/home/zane/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

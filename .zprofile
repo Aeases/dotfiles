@@ -21,6 +21,11 @@ alias prep='cd ~/repos/asbplayer/scripts/web-socket-server/; go run main.go & an
 alias nvide="neovide"
 alias watchtex='function _watchtex(){ while inotifywait -e close_write "$1"; do pdflatex "$1"; done }; _watchtex'
 
+# in ~/.zshrc
+venv() {
+  source ~/.envs/$1/bin/activate
+}
+
 # Convert audio of any file to mp3, I use for mkv's that come encoded in a audio format chrome cannot read.
 function convertaudio() {
   ffmpeg -i $1 -c:v copy -c:a mp3 -ab 192k /tmp/$1 && mv /tmp/$1 $1

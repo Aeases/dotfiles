@@ -4,7 +4,8 @@
 	"icon": "images/wIum4L8I_400x400.jpg",
 	"description": "",
 	"version": "0.0.1",
-	"publisher": "sglza, aeases",
+	"publisher": "sglza-aeases",
+    "repository": "https://github.com/aeases/dotfiles",
 	"engines": {
 		"vscode": "^1.83.0"
 	},
