@@ -15,6 +15,7 @@
     ],
     "modules-right": [
         "pulseaudio",
+        "network#bt-tether",
         "network",
         // "backlight",
         "battery",
@@ -69,10 +70,17 @@
         // "format-full": "",
         "format-icons": ["╳", "▂", "▄", "▆", "▉"]
     },
+    "network#bt-tether": {
+        "interface": "enp193s0f3u5",
+        // "format-ethernet": " Tether",
+        "format-ethernet": "TETHER",
+        "format-disconnected": "",
+        "tooltip-format": "Bluetooth tether via {gwaddr}",
+    },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "≪{essid}≫",
-        "format-ethernet": "{ipaddr}/{cidr} ",
+        "format-ethernet": "{ipaddr}/{cidr}≫",
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ×",

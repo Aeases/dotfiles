@@ -33,6 +33,7 @@
 @define-color workspaces-focused-fg @fg;
 @define-color pulseaudio @blue;
 @define-color network @bright-green;
+@define-color network-bt-tether @blue;
 @define-color cpu @cyan;
 @define-color memory @yellow;
 @define-color backlight @yellow;
@@ -220,6 +221,12 @@ button:hover {
     border-top-color: @network;
     color: @fg;
 }
+
+#network.bt-tether {
+    border-top-color: @network-bt-tether;
+    color: @fg;
+}
+
 
 
 #network.disconnected {
