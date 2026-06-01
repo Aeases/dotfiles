@@ -18,7 +18,7 @@ rehash
 # for some things XDG_CURRENT_DESKTOP="gnome" gnome-bluetooth-3.0 gnome-control-center
 # ya pkg add dedukun/relative-motions yazi-rs/plugins:smart-enter
 # blueberry brightnessctl coreutils  grim slurp upower wl-clipboard
-
+# download discover-overlay from aur put on autostart
 # note for plymouth, place it into /etc/mkinitcpio.conf, just before the encrypt one in the hooks array
 # note drkonqi does crash alerts
 

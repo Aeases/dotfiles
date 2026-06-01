@@ -4,15 +4,24 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+if [ -n "$HOME" ]; then
+  [ -d "$HOME/.local/bin" ] && append_path "$HOME/.local/bin"
+  [ -d "$HOME/bin" ] && append_path "$HOME/bin"
+fi
+eval "$(dircolors -b)"
 eval "$(fnm env --use-on-cd)"
 INC_APPEND_HISTORY="true"
 HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history # Persist history
 HISTSIZE=1000000
 SAVEHIST=1000000
 setopt appendhistory autocd autopushd pushdminus pushdsilent pushdtohome
+setopt SHARE_HISTORY
+
 # DIV: > Compinit Setup <
 autoload -Uz compinit
 zstyle ':completion:*' menu select # Tab goes into the list of options.
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # Color-coded completions
 zmodload zsh/complist
 compinit
 _comp_options+=(globdots) # Ensure hidden files are listed in completions
@@ -49,36 +58,12 @@ function yazicd() {
 bindkey -s '^[o' 'yazicd\n' 
 source "${HOME}/.zprofile"
 
-# export NNN_BMS="u:$HOME/Documents/Engram/University/;e:$HOME/Documents/Engram;p:$HOME/Dev/Uni/;c:$HOME/.config/"
-# export NNN_PLUG='p:preview-tui'
-#export NNN_OPENER="$HOME/.config/nnn/open-swallower"
-# nnn_cd() {
-#     if ! [ -z "$NNN_PIPE" ]; then
-#         printf "%s\0" "0c${PWD}" > "${NNN_PIPE}" !&
-#     fi  
-# }
-# trap nnn_cd EXIT
-#
-# bindkey -s '^[o' 'ncd\n' 
-
-
 DHOME=$HOME/dotfiles
 # Plugins manager
 ZINIT_HOME="${HOME}/.config/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
-
-# Ensure tpm is installed
-# TMUX_PLUGIN_MANAGER_PATH="${DHOME}/.config/tmux/plugins"
-# TMUX_TPM="${TMUX_PLUGIN_MANAGER_PATH}/tpm"
-# TODO: Make tmux check if ANY folder from the plugins directory is entirely empty, if so rmdir it, and do a plugin install.
-# if [[ -z "$(ls -A $TMUX_TPM)" ]]; then
-#   echo "Tmux Plugin Manager is not installed, installing now."
-#   rmdir ${TMUX_PLUGIN_MANAGER_PATH}/*
-#   git clone https://github.com/tmux-plugins/tpm $TMUX_TPM && $TMUX_TPM/tpm && $TMUX_TPM/bin/install_plugins
-# fi
-
 
 # DIV: ZINIT STUFF
 
@@ -91,6 +76,7 @@ zinit light jeffreytse/zsh-vi-mode
 # zinit light sindresorhus/pure
 zinit load zdharma/history-search-multi-word
 zinit light zsh-users/zsh-completions
+zinit light hlissner/zsh-autopair
 #zinit light marlonrichert/zsh-autocomplete
 zinit light zsh-users/zsh-autosuggestions
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
@@ -100,11 +86,10 @@ zinit light zdharma/fast-syntax-highlighting
 
 source "${HOME}/.scriptsyFripsy.bash"
 source "${HOME}/.apikeys"
-# Platform specific scripts
+
+# OS specific scripts
 if [ Linux = `uname` ]; then
   source "${HOME}/.profile-linux"
-  source "${HOME}/.config/wezterm/wezterm.sh"
-  # WARNING: ^^^^ if i ever use mac, A: be ashamed, B: add this to the profile-mac too.
 fi
 
 if [ Darwin = `uname` ]; then
@@ -113,37 +98,18 @@ fi
 
 eval "$(zoxide init zsh --cmd zd)"
 
-export PATH=$PATH:/var/home/aeases/.spicetify
+export PATH=$PATH:$HOME/.spicetify
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-export PATH=$PATH:/var/home/zane/.spicetify
-
-# # >>> conda initialize >>>
-# # !! Contents within this block are managed by 'conda init' !!
-# __conda_setup="$('/opt/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "/opt/miniconda3/etc/profile.d/conda.sh" ]; then
-#         . "/opt/miniconda3/etc/profile.d/conda.sh"
-#     else
-#         export PATH="/opt/miniconda3/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
-# # <<< conda initialize <<<
-
-
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
-[[ -f /home/zane/.dart-cli-completion/zsh-config.zsh ]] && . /home/zane/.dart-cli-completion/zsh-config.zsh || true
+[[ -f "$HOME/.dart-cli-completion/zsh-config.zsh" ]] && . "$HOME/.dart-cli-completion/zsh-config.zsh" || true
 ## [/Completion]
 
-
 # pnpm
-export PNPM_HOME="/home/zane/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -156,5 +122,5 @@ esac
 #   - the correct directories to the PATH
 #   - auto-completion for the opam binary
 # This section can be safely removed at any time if needed.
-[[ ! -r '/home/zane/.opam/opam-init/init.zsh' ]] || source '/home/zane/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+[[ ! -r '$HOME/.opam/opam-init/init.zsh' ]] || source '$HOME/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
 # END opam configuration

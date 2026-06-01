@@ -34,6 +34,7 @@
 @define-color pulseaudio @blue;
 @define-color network @bright-green;
 @define-color network-bt-tether @blue;
+@define-color custom-egpu @magenta;
 @define-color cpu @cyan;
 @define-color memory @yellow;
 @define-color backlight @yellow;
@@ -134,6 +135,7 @@ button:hover {
 #mode,
 #idle_inhibitor,
 #scratchpad,
+#custom-egpu,
 #power-profiles-daemon,
 #mpd {
     padding: 0 10px;
@@ -227,6 +229,9 @@ button:hover {
     color: @fg;
 }
 
+#custom-egpu {
+    border-top-color: @custom-egpu;
+}
 
 
 #network.disconnected {

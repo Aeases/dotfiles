@@ -1,3 +1,3 @@
 #!/bin/sh
 
-awww img --transition-type wave --transition-fps 60 "$(ls ${HOME}/.config/hypr/wallpapers/ | tofi | xargs -I {} echo "${HOME}/.config/hypr/wallpapers/{}")"
+waypaper --wallpaper "$(ls ${HOME}/.config/hypr/wallpapers/ | tofi | xargs -I {} echo "${HOME}/.config/hypr/wallpapers/{}")"

@@ -15,6 +15,7 @@
     ],
     "modules-right": [
         "pulseaudio",
+        "custom/egpu",
         "network#bt-tether",
         "network",
         // "backlight",
@@ -92,6 +93,13 @@
         "format": " |",
         "interval": "once",
         "tooltip": false
+    },
+    "custom/egpu": {
+        "exec": "~/.config/waybar/custom_modules/egpu-status.sh",
+        "return-type": "json",
+        "interval": 5,
+        "format": "{}",
+        "on-click": "switcherooctl list | notify-send 'GPUs' \"$(switcherooctl list)\""
     },
     "pulseaudio/slider": {
         "min": 0,
