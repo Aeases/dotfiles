@@ -228,7 +228,7 @@ hl.workspace_rule({
 
 hl.workspace_rule({
 	workspace = "special:discord",
-	on_created_empty = "vesktop",
+	on_created_empty = "discord",
 })
 
 hl.workspace_rule({
@@ -281,7 +281,8 @@ hl.window_rule({
 	["hyprbars:no_bar"] = false,
 	move = { "monitor_w - window_w*1.05", "monitor_h - window_h*1.05" },
 	persistent_size = true,
-	border_size = -1,
+	rounding = 8,
+	border_size = 2,
 })
 
 hl.window_rule({ match = { title = "ControlWindow", fullscreen = true }, ["hyprbars:no_bar"] = true })

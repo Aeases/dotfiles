@@ -43,6 +43,7 @@ hl.bind("SUPER + n", hl.dsp.layout("addmaster"))
 hl.bind("SUPER + SHIFT + n", hl.dsp.layout("removemaster"))
 
 --Generic
+hl.bind("SUPER + V", hl.dsp.window.float())
 hl.bind("SUPER + G", hl.dsp.group.toggle())
 hl.bind("SUPER + A", hl.dsp.group.prev())
 hl.bind("SUPER + D", hl.dsp.group.next())

@@ -204,7 +204,8 @@ hl.config({
 			range = 20,
 			offset = "0 2",
 			render_power = 4,
-			color = "rgba(00000020)",
+			color = "rgba(00000028)",
+			color_inactive = "rgba(00000012)",
 		},
 	},
 })
@@ -339,12 +340,15 @@ hl.config({
 	plugin = {
 		hyprbars = {
 			bar_height = 28,
-			bar_color = "rgb(2b2b2b)",
-			col = { text = "rgb(ffffff)" },
+			bar_color = "rgb(ececec)",
+			col = { text = "rgb(1a1a1a)" },
 			bar_text_size = 14,
+			bar_padding = 10,
 			bar_text_font = "Minecraft",
+			bar_text_align = "left",
 			bar_part_of_window = true,
 			bar_precedence_over_border = true,
+			inactive_button_color = "rgb(d1d1d1)",
 		},
 	},
 })
