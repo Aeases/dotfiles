@@ -293,7 +293,6 @@ hl.config({
 			height = 28,
 			gradient_rounding = 16,
 			gradient_rounding_power = 3.0,
-			gradients = 1,
 			-- gradient_rounding = 0
 			indicator_height = 0,
 			indicator_gap = 0,

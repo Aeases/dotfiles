@@ -1,11 +1,16 @@
 -- Highlight todo, notes, etc in comments
+---@module 'lazy'
+---@type LazySpec
 return {
   {
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = {
-      signs = true,
+    ---@module 'todo-comments'
+    ---@type TodoOptions
+    ---@diagnostic disable-next-line: missing-fields
+    opts = { 
+      signs = false,
       keywords = {
         DIV = { icon = '分', color = '#FF0000' },
         EXPLANATION = { icon = '※', color = '#3AA99F', alt = { 'E', '？', 'PURPOSE' } },

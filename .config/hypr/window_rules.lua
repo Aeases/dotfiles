@@ -284,5 +284,4 @@ hl.window_rule({
 	rounding = 8,
 	border_size = 2,
 })
-
 hl.window_rule({ match = { title = "ControlWindow", fullscreen = true }, ["hyprbars:no_bar"] = true })

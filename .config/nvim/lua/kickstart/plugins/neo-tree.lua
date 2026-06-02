@@ -1,6 +1,8 @@
 -- Neo-tree is a Neovim plugin to browse the file system
 -- https://github.com/nvim-neo-tree/neo-tree.nvim
 
+---@module 'lazy'
+---@type LazySpec
 return {
   'nvim-neo-tree/neo-tree.nvim',
   version = '*',
@@ -14,11 +16,14 @@ return {
   keys = {
     { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
   },
+
   config = function(_, opts)
     opts.nesting_rules = require('neotree-file-nesting-config').nesting_rules
     require('neo-tree').setup(opts)
   end,
 
+  ---@module 'neo-tree'
+  ---@type neotree.Config
   opts = {
     close_if_last_window = true,
     sort_case_insensitive = false, -- used when sorting files and directories in the tree
@@ -46,13 +51,13 @@ return {
       git_status = {
         symbols = {
           unstaged = '未準備',
-          staged = '準備済',
+          staged = '準備',
           untracked = '未追跡',
-          tracked = '追跡済',
-          added = '追加済',
-          -- modified = '変更済',
-          deleted = '削除済',
-          renamed = '改名済',
+          tracked = '追跡',
+          added = '追加',
+          modified = '変更',
+          deleted = '削除',
+          renamed = '改名',
         },
       },
       modified = {

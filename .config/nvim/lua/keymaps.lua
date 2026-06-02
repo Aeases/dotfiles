@@ -5,7 +5,48 @@
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Diagnostic keymaps
+local s = vim.diagnostic.severity
+
+local icons = {
+  [s.ERROR] = '󰅚',
+  [s.WARN] = '󰀪',
+  [s.INFO] = '󰋽',
+  [s.HINT] = '󰌶',
+}
+
+local high = { min = s.WARN }
+local low = { s.INFO, s.HINT }
+
+-- Diagnostic Config & Keymaps
+-- See :help vim.diagnostic.Opts
+vim.diagnostic.config {
+  update_in_insert = false,
+  severity_sort = true,
+
+  signs = {
+    severity = { min = s.WARN },
+    text = vim.g.have_nerd_font and {
+      [s.ERROR] = icons[s.ERROR],
+      [s.WARN] = icons[s.WARN],
+    } or {},
+  },
+
+  virtual_text = {
+    severity = low,
+    source = false,
+    spacing = 2,
+    format = function(x)
+      return (vim.g.have_nerd_font and icons[x.severity] .. ' ' or '') .. x.message
+    end,
+  },
+
+  virtual_lines = { severity = high },
+  underline = { severity = high },
+
+  float = { border = 'rounded', source = 'if_many' },
+  jump = { float = true },
+}
+
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier

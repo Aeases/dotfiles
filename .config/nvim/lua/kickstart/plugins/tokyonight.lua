@@ -1,3 +1,5 @@
+---@module 'lazy'
+---@type LazySpec
 return {
   {
     'nuvic/flexoki-nvim',
@@ -11,6 +13,18 @@ return {
         transparent = vim.g.transparent_enabled,
       }
       vim.cmd.hi 'Comment gui=none'
+      local colors = {
+        Error = '#D14D41',
+        Warn = '#DA702C',
+        Info = '#3AA99F',
+        Hint = '#D0A215',
+      }
+      for name, color in pairs(colors) do
+        vim.api.nvim_set_hl(0, 'Diagnostic' .. name, { fg = color })
+        vim.api.nvim_set_hl(0, 'DiagnosticSign' .. name, { fg = color })
+        vim.api.nvim_set_hl(0, 'DiagnosticVirtualText' .. name, { fg = color })
+        vim.api.nvim_set_hl(0, 'DiagnosticVirtualLines' .. name, { fg = color })
+      end
     end,
   },
 }
