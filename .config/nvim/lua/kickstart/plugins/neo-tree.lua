@@ -47,7 +47,6 @@ return {
         expander_expanded = '',
         expander_highlight = 'NeoTreeExpander',
       },
-
       git_status = {
         symbols = {
           unstaged = '未準備',
@@ -55,7 +54,7 @@ return {
           untracked = '未追跡',
           tracked = '追跡',
           added = '追加',
-          modified = '変更',
+          modified = '',
           deleted = '削除',
           renamed = '改名',
         },
@@ -66,6 +65,34 @@ return {
       },
     },
     filesystem = {
+      components = {
+        git_status = function(config, node, state)
+          if node.type == 'message' or not node.path then
+            return {}
+          end
+
+          local git = require 'neo-tree.git'
+          local builtins = require 'neo-tree.sources.common.components'
+          local highlights = require 'neo-tree.ui.highlights'
+
+          local status = git.find_existing_status_code(node.path, state.git_base_by_worktree)
+
+          if type(status) == 'table' then
+            status = status[1]
+          end
+
+          -- staged modification + unstaged modification
+          if status == 'MM' then
+            return {
+              text = '未/準備',
+              highlight = highlights.GIT_MODIFIED,
+            }
+          end
+
+          return builtins.git_status(config, node, state)
+        end,
+      },
+
       hijack_netrw_behavior = 'open_default',
       filtered_items = {
         always_show = {

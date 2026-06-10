@@ -1,6 +1,6 @@
 /* Everforest Dark Color Pallete */
 
-@define-color black rgba(16, 15, 15, 0.8);
+@define-color black rgba(16, 15, 15, 0.93);
 @define-color red #D14D41;
 @define-color green #879A39;
 @define-color yellow #D0A215;
@@ -17,7 +17,7 @@
 @define-color bright-cyan #83C092;
 @define-color bright-white #D3C6AA;
 @define-color text-white #CECDC3;
-@define-color bg-3 rgba(28, 27, 26, 0.4);
+@define-color bg-3 rgba(40, 39, 38, 0.95);
 @define-color tx-2 #878580;
 
 /* Misc Colors */
@@ -41,6 +41,11 @@
 @define-color battery @red;
 @define-color clock @bright-blue;
 @define-color tray @empty;
+
+window#waybar {
+    /* Add this line to remove the shadow */
+    box-shadow: none; 
+}
 
 #pulseaudio-slider {
     padding: 0;
@@ -107,7 +112,7 @@ button:hover {
 
 
 #workspaces button:hover {
-    background: alpha(@bg, 0.5);
+    background: alpha(@workspaces-focused, 0.9);
 }
 
 #workspaces button.active {

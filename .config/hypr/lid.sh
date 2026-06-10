@@ -2,7 +2,7 @@
 
 if [[ "$(hyprctl monitors)" =~ "\sDP-[0-9]+" ]]; then
   if [[ $1 == "open" ]]; then
-    hyprctl eval 'hl.monitor({output = "eDP-1", mode = "2256x1504@59.99900", position = "auto", scale = 1.33, disabled=false})'
+    hyprctl eval 'hl.monitor({output = "eDP-1", mode = "2256x1504@59.99900", position = "auto-left", scale = 1.33, disabled=false})'
   else
     hyprctl eval 'hl.monitor({ output = "eDP-1", disabled = true })'
   fi

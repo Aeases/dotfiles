@@ -21,9 +21,6 @@ hl.layer_rule({
 	blur = true,
 })
 
-hl.workspace_rule({ workspace = "3", no_rounding = true, decorate = false })
-
--- no shadow on tiled windows
 hl.window_rule({ match = { float = false }, no_shadow = true })
 
 local kittyfloat = hl.window_rule({
@@ -69,6 +66,14 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	match = {
+		initial_class = "steam",
+		initial_title = "Friends List",
+	},
+	float = true,
+})
+
+hl.window_rule({
 	name = "PictureInPicture",
 	match = {
 		initial_title = "Picture-in-picture",
@@ -108,7 +113,14 @@ hl.window_rule({
 
 -- SMART GAPS
 hl.workspace_rule({ workspace = "w[tv1]s[false]", gaps_out = 0, gaps_in = 0 })
-hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
+hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0 })
+hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })
+
+-- hl.workspace_rule({ workspace = "4", decorate = false, no_shadow = true, gaps_in = 0, gaps_out = 0 })
+-- hl.window_rule({ match = { workspace = "4" }, border_size = 0, rounding = 0, no_shadow = true })
 hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0, rounding = 0 })
 
 -- Special Workspace appearance
@@ -168,12 +180,30 @@ hl.window_rule({
 
 -- cam
 hl.window_rule({
+	name = "guvcview-camera",
 	match = {
-		initial_class = "guvcview",
+		initial_class = "^guvcview$",
+		initial_title = [[^Guvcview  \(.* fps\)$]],
 	},
-	-- keep_aspect_ratio = true,
+	keep_aspect_ratio = true,
+	float = true,
 	pin = true,
-	border_color = { colors = { "rgb(FDFC47)", "rgb(24FE41)" }, angle = 45 },
+	pseudo = true,
+	size = "692 389",
+	move = { "monitor_w - window_w*1.2", "monitor_h - window_h*0.93" },
+	border_color = "rgb(FDFC47) rgb(FDFC47)",
+})
+
+hl.window_rule({
+	name = "guvcview-controls-to-scratchpad",
+
+	match = {
+		initial_class = "^guvcview$",
+		initial_title = "^Guvcview$",
+	},
+
+	workspace = "special:scratchpad silent",
+	no_initial_focus = true,
 })
 
 -- satty
@@ -184,7 +214,6 @@ hl.window_rule({
 	border_color = "rgb(FDFC47)",
 	keep_aspect_ratio = true,
 	no_shadow = true,
-	animation = "fadeOut",
 	no_anim = true,
 	float = true,
 	immediate = true,
@@ -251,12 +280,6 @@ hl.window_rule({
 	no_focus = true,
 })
 
--- no bars for everything
-hl.window_rule({
-	match = { initial_class = ".*" },
-	["hyprbars:no_bar"] = true,
-})
-
 hl.window_rule({
 	name = "godot game windows",
 	match = {
@@ -274,14 +297,12 @@ hl.window_rule({
 	immediate = true,
 })
 
--- only exception, has bars.
 hl.window_rule({
 	match = { title = "ControlWindow" },
 	float = 1,
-	["hyprbars:no_bar"] = false,
 	move = { "monitor_w - window_w*1.05", "monitor_h - window_h*1.05" },
 	persistent_size = true,
+	pin = 1,
 	rounding = 8,
 	border_size = 2,
 })
-hl.window_rule({ match = { title = "ControlWindow", fullscreen = true }, ["hyprbars:no_bar"] = true })

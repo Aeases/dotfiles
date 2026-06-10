@@ -40,7 +40,7 @@ rehash
 # UPDATE: ^^^ I definently moved it into the new file, because I set up the new system from scratch with system-d boot (duh)
 #
 
-#yay -Syu fcitx5 fcitx5-mozc-ut fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl nautilus-open-any-terminal fcitx5-config-qt
+#yay -Syu fcitx5 fcitx5-mozc-ut fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl nautilus-open-any-terminal fcitx5-config-qt game-devices-udev
 # nvidia_drm.modeset=1 nvidia_drm.fbdev=1
 #
 # lspci -k -d ::03xx

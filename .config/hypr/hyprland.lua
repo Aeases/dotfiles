@@ -20,7 +20,7 @@ hl.monitor({
 hl.monitor({
 	output = "desc:AOC U34G2G4R3 0x00002828",
 	mode = "3440x1440@144",
-	position = "auto",
+	position = "auto-left",
 	scale = 1.33,
 })
 
@@ -33,6 +33,13 @@ hl.monitor({
 	scale = 1.67,
 })
 
+hl.monitor({
+	output = "ipad-1",
+	mode = "1366x1024@60",
+	position = "auto-right",
+	scale = 1,
+})
+
 -- --- Workspaces ---
 
 hl.workspace_rule({
@@ -40,10 +47,10 @@ hl.workspace_rule({
 	monitor = "eDP-1",
 })
 
-hl.workspace_rule({
-	workspace = "2",
-	monitor = "eDP-1",
-})
+-- hl.workspace_rule({
+--	workspace = "2",
+--	monitor = "eDP-1",
+-- })
 
 -- workspace = 1, layout:scrolling
 
@@ -52,15 +59,18 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprpm reload")
 	hl.exec_cmd("vicinae server")
 	hl.exec_cmd("waybar")
-	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_CLASS")
+	-- ^^^ Sync hyprland env variables to systemd so services started know about them
 	hl.exec_cmd("/lib/xdg-desktop-portal-gnome")
 	hl.exec_cmd("awww-daemon")
 	hl.exec_cmd("waypaper --restore")
 	hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 	hl.exec_cmd("hypridle")
+	hl.exec_cmd("wl-clip-persist --clipboard regular")
+	-- ^^^ fixes borderline retrded behaviour where clipboard information is deleted when app is closed (for 'security', no other os does this btw)
 	hl.exec_cmd("kdeconnectd")
-	-- Mute laptop speakers on boot
 	hl.exec_cmd("sleep 4; pactl set-sink-mute 'alsa_output.pci-0000_c1_00.6.analog-stereo' 1")
+	-- Mute laptop speakers on boot
 	hl.exec_cmd("fcitx5")
 	hl.exec_cmd(
 		"uxplay -fps 60 -h265 -n Framesmith -vs waylandsink -restrict -allow 62:24:42:81:F0:2A -allow FE:01:6B:2F:36:7F -allow 66:03:56:B5:04:A0"
@@ -314,7 +324,7 @@ hl.config({
 hl.config({
 	misc = {
 		-- See https://wiki.hyprland.org/Configuring/Variables/ for more
-		initial_workspace_tracking = 2,
+		initial_workspace_tracking = 1,
 		middle_click_paste = false,
 		enable_anr_dialog = false, -- dont tell me when apps not responding i can tell
 		render_unfocused_fps = 5,
@@ -335,48 +345,67 @@ local hconf = "~/.config/hypr/"
 require("keys")
 require("window_rules")
 
-hl.config({
-	plugin = {
-		hyprbars = {
-			bar_height = 28,
-			bar_color = "rgb(ececec)",
-			col = { text = "rgb(1a1a1a)" },
-			bar_text_size = 14,
-			bar_padding = 10,
-			bar_text_font = "Minecraft",
-			bar_text_align = "left",
-			bar_part_of_window = true,
-			bar_precedence_over_border = true,
-			inactive_button_color = "rgb(d1d1d1)",
-		},
-	},
-})
+function setup_hyprbars()
+	if hl.plugin.hyprbars ~= nil then
+		-- Close (red)
+		hl.plugin.hyprbars.add_button({
+			bg_color = "rgb(ff5f57)",
+			fg_color = "rgb(000000)",
+			size = 12,
+			icon = "",
+			action = "hyprctl dispatch killactive",
+		})
 
--- Close (red)
-hl.plugin.hyprbars.add_button({
-	bg_color = "rgb(ff5f57)",
-	fg_color = "rgb(000000)",
-	size = 12,
-	icon = "",
-	action = "hyprctl dispatch killactive",
-})
+		-- Minimize (yellow)
+		hl.plugin.hyprbars.add_button({
+			bg_color = "rgb(febc2e)",
+			fg_color = "rgb(000000)",
+			size = 12,
+			icon = "",
+			action = "hyprctl dispatch movetoworkspacesilent special",
+		})
 
--- Minimize (yellow)
-hl.plugin.hyprbars.add_button({
-	bg_color = "rgb(febc2e)",
-	fg_color = "rgb(000000)",
-	size = 12,
-	icon = "",
-	action = "hyprctl dispatch movetoworkspacesilent special",
-})
+		-- Maximize (green)
+		hl.plugin.hyprbars.add_button({
+			bg_color = "rgb(28c840)",
+			fg_color = "rgb(000000)",
+			size = 12,
+			icon = "",
+			action = "hyprctl dispatch fullscreen 1",
+		})
 
--- Maximize (green)
-hl.plugin.hyprbars.add_button({
-	bg_color = "rgb(28c840)",
-	fg_color = "rgb(000000)",
-	size = 12,
-	icon = "",
-	action = "hyprctl dispatch fullscreen 1",
-})
+		-- no bars for everything
+		hl.window_rule({
+			match = { initial_class = ".*" },
+			["hyprbars:no_bar"] = true,
+		})
+
+		-- only exception, has bars.
+		hl.window_rule({
+			match = { title = "ControlWindow" },
+			["hyprbars:no_bar"] = false,
+		})
+		hl.window_rule({ match = { title = "ControlWindow", fullscreen = true }, ["hyprbars:no_bar"] = true })
+
+		hl.config({
+			plugin = {
+				hyprbars = {
+					bar_height = 28,
+					bar_color = "rgb(ececec)",
+					col = { text = "rgb(1a1a1a)" },
+					bar_text_size = 14,
+					bar_padding = 10,
+					bar_text_font = "Minecraft",
+					bar_text_align = "left",
+					bar_part_of_window = true,
+					bar_precedence_over_border = true,
+					inactive_button_color = "rgb(d1d1d1)",
+				},
+			},
+		})
+	end
+end
+
+setup_hyprbars()
 
 -- sources

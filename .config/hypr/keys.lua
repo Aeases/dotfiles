@@ -44,6 +44,7 @@ hl.bind("SUPER + SHIFT + n", hl.dsp.layout("removemaster"))
 
 --Generic
 hl.bind("SUPER + V", hl.dsp.window.float())
+hl.bind("SUPER + P", hl.dsp.window.pseudo())
 hl.bind("SUPER + G", hl.dsp.group.toggle())
 hl.bind("SUPER + A", hl.dsp.group.prev())
 hl.bind("SUPER + D", hl.dsp.group.next())
@@ -124,7 +125,7 @@ hl.bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind("SUPER + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- TODO: figure out how to do this again
--- hl.bind("SUPER + K", hl.dsp.workspace.swap_monitors({ monitor1 = "-1", monitor2 = "+1" }))
+hl.bind("SUPER + K", hl.dsp.workspace.swap_monitors({ monitor1 = "current", monitor2 = "+1" }))
 
 -- QE switch workspaces
 hl.bind("SUPER + E", hl.dsp.focus({ workspace = "+1" }))

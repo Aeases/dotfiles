@@ -11,6 +11,7 @@ function psh() {
 alias daa="cd ~/Documents/Engram/University/DAA・COMP3001/"
 alias ia="cd ~/Dev/Uni/IA/Assignment3/"
 alias china="cd ~/Documents/Engram/Resources/Chinese/"
+function files() { nautilus "${1:-.}" &disown 2>/dev/null; }
 alias hcf='cd ~/.config/hypr/'
 alias eng='cd ~/Documents/Engram/'
 alias dun='cd ~/Dev/Uni/'

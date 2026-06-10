@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+OUT="ipad-1"
+PORT="${PORT:-5900}"
+
+start() {
+  if ! hyprctl monitors all | grep -q "Monitor ${OUT}"; then
+    hyprctl output create headless "$OUT"
+    sleep 1
+  fi
+
+  pkill -f "wayvnc.*${OUT}" 2>/dev/null || true
+  exec wayvnc -o "$OUT" -f 30 0.0.0.0:"$PORT"
+}
+
+stop() {
+  pkill -f "wayvnc.*${OUT}" 2>/dev/null || true
+  hyprctl output remove "$OUT" || true
+}
+
+case "${1:-start}" in
+  start) start ;;
+  stop) stop ;;
+  *) echo "Usage: ipad-second-monitor [start|stop]" >&2; exit 1 ;;
+esac

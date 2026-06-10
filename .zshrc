@@ -5,10 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if [ -n "$HOME" ]; then
-  [ -d "$HOME/.local/bin" ] && append_path "$HOME/.local/bin"
-  [ -d "$HOME/bin" ] && append_path "$HOME/bin"
-fi
 eval "$(dircolors -b)"
 eval "$(fnm env --use-on-cd)"
 INC_APPEND_HISTORY="true"
@@ -84,6 +80,18 @@ export ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|ls *|zd *|xdg-open *|nautilus *|open
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
 zinit light zdharma/fast-syntax-highlighting
 
+append_path() {
+  case ":$PATH:" in
+    *:"$1":*) ;;  # already present, skip
+    *) PATH="${PATH:+$PATH:}$1" ;;
+  esac
+}
+
+if [ -n "$HOME" ]; then
+  [ -d "$HOME/.local/bin" ] && append_path "$HOME/.local/bin"
+  [ -d "$HOME/bin" ] && append_path "$HOME/bin"
+fi
+
 source "${HOME}/.scriptsyFripsy.bash"
 source "${HOME}/.apikeys"
 
@@ -95,6 +103,8 @@ fi
 if [ Darwin = `uname` ]; then
   source "${HOME}/.profile-macos"
 fi
+
+
 
 eval "$(zoxide init zsh --cmd zd)"
 
