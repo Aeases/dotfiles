@@ -53,15 +53,14 @@ hl.monitor({
 
 -- --- Workspaces ---
 
--- hl.workspace_rule({
--- 	workspace = "1",
--- 	monitor = "eDP-1",
--- })
+local aoc = "desc:AOC U34G2G4R3 0x00002828"
 
--- hl.workspace_rule({
---	workspace = "2",
---	monitor = "eDP-1",
--- })
+if lid_closed() then
+	hl.workspace_rule({ workspace = "1", monitor = aoc, default = true })
+else
+	hl.workspace_rule({ workspace = "1", monitor = "eDP-1", default = true })
+	hl.workspace_rule({ workspace = "2", monitor = aoc, default = true })
+end
 
 -- workspace = 1, layout:scrolling
 

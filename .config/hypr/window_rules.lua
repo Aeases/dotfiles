@@ -389,12 +389,12 @@ hl.window_rule({
 hl.window_rule({
 	match = { class = "flameshot" },
 
-	animation = "fade",
+	no_anim = true,
 	rounding = 0,
 	border_size = 0,
 	fullscreen_state = "0 0",
 	float = true,
 	pin = true,
 	move = { "0", "0" },
-	size = { "monitor_w*2", "monitor_h" },
+	size = { "monitor_w", "monitor_h" },
 })
