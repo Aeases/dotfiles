@@ -1,5 +1,15 @@
 ---@module 'hl'
 
+local function lid_closed()
+	local f = io.open("/proc/acpi/button/lid/LID0/state", "r")
+	if not f then
+		return false
+	end
+	local state = f:read("*l")
+	f:close()
+	return state ~= nil and state:match("closed") ~= nil
+end
+
 -- Default
 hl.monitor({
 	output = "",
@@ -14,13 +24,14 @@ hl.monitor({
 	mode = "2256x1504@59.99900",
 	position = "auto",
 	scale = 1.33,
+	disabled = lid_closed(),
 })
 
 -- AOC Monitor
 hl.monitor({
 	output = "desc:AOC U34G2G4R3 0x00002828",
 	mode = "3440x1440@144",
-	position = "auto-left",
+	position = "auto-right",
 	scale = 1.33,
 })
 
@@ -42,10 +53,10 @@ hl.monitor({
 
 -- --- Workspaces ---
 
-hl.workspace_rule({
-	workspace = "1",
-	monitor = "eDP-1",
-})
+-- hl.workspace_rule({
+-- 	workspace = "1",
+-- 	monitor = "eDP-1",
+-- })
 
 -- hl.workspace_rule({
 --	workspace = "2",
@@ -60,6 +71,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("vicinae server")
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_CLASS")
+	hl.exec_cmd("systemctl --user start hyprland-session.target") -- add this
 	-- ^^^ Sync hyprland env variables to systemd so services started know about them
 	hl.exec_cmd("/lib/xdg-desktop-portal-gnome")
 	hl.exec_cmd("awww-daemon")
@@ -79,13 +91,10 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("keyd-application-mapper -d")
 	hl.exec_cmd("dex -a -s /etc/xdg/autostart/:~/.config/autostart/")
 	hl.exec_cmd("steam -silent")
-	hl.exec_cmd("grep -o \\w*$ /proc/acpi/button/lid/LID0/state| ~/.config/hypr/lid.sh")
 end)
 -- Exec (run every reload)
 hl.on("config.reloaded", function()
 	hl.exec_cmd("pkill waybar; waybar")
-	-- Check laptop lid status on hyprland reload & startup.
-	hl.exec_cmd("grep -o \\w*$ /proc/acpi/button/lid/LID0/state| ~/.config/hypr/lid.sh")
 end)
 
 -- exec-once = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
@@ -149,7 +158,7 @@ hl.config({
 			active_border = "rgba(4385BEee)",
 			inactive_border = "rgba(100F0Fee)",
 		},
-		resize_on_border = true,
+		resize_on_border = false,
 		no_focus_fallback = false,
 		layout = "master",
 		allow_tearing = true,
@@ -238,7 +247,7 @@ hl.curve("emphasizedDecel", { type = "bezier", points = { { 0.05, 0.7 }, { 0.1, 
 hl.curve("overshot", { type = "bezier", points = { { 0.05, 0.9 }, { 0.1, 1.1 } } })
 hl.curve("emphasizedAccel", { type = "bezier", points = { { 0.03, 0 }, { 0.8, 0.15 } } })
 
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "emphasizedDecel", style = "popin 80%" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "default" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 2, bezier = "emphasizedDecel", style = "popin 90%" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 2, bezier = "emphasizedDecel", style = "slide" })
 hl.animation({ leaf = "border", enabled = true, speed = 2, bezier = "default" })

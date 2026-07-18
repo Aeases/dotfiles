@@ -14,8 +14,10 @@ alias china="cd ~/Documents/Engram/Resources/Chinese/"
 function files() { nautilus "${1:-.}" &disown 2>/dev/null; }
 alias hcf='cd ~/.config/hypr/'
 alias eng='cd ~/Documents/Engram/'
+alias mp='mathypad'
 alias dun='cd ~/Dev/Uni/'
 alias hci='cd ~/Documents/Engram/University/HCI/'
+alias uni='cd ~/Documents/Engram/University/'
 alias gra='cd ~/Documents/Engram/University/Graphics/'
 alias noslep='systemd-inhibit --what=handle-lid-switch sleep infinity'
 alias prep='cd ~/repos/asbplayer/scripts/web-socket-server/; go run main.go & anki'

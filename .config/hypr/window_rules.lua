@@ -6,19 +6,58 @@ hl.layer_rule({
 	animation = "fade",
 }) -- ¯\_(ツ)_/¯
 
-hl.layer_rule({
-	match = { namespace = "swaync-notification-window" },
-	no_screen_share = true,
-})
+local swaync_screenshare = {
+	rule = hl.layer_rule({
+		name = "swaync_no_screenshare",
+		match = { namespace = "swaync-notification-window" },
+		no_screen_share = true,
+		enabled = false,
+	}),
+	active = 0,
+	confirmed = false,
+	generation = 0,
+}
+
+hl.on("screenshare.state", function(started)
+	local s = swaync_screenshare
+	local was_zero = s.active == 0
+	s.active = math.max(0, s.active + (started and 1 or -1))
+
+	if was_zero and s.active > 0 then
+		s.generation = s.generation + 1
+		local my_gen = s.generation
+		hl.timer(function()
+			if my_gen == s.generation and s.active > 0 then
+				s.confirmed = true
+				s.rule:set_enabled(true)
+			end
+		end, { timeout = 700, type = "oneshot" }) -- confirm
+	elseif s.active == 0 and s.confirmed then
+		s.generation = s.generation + 1
+		local my_gen = s.generation
+		hl.timer(function()
+			if my_gen == s.generation and s.active == 0 then
+				s.confirmed = false
+				s.rule:set_enabled(false)
+			end
+		end, { timeout = 500, type = "oneshot" }) -- Release
+	end
+end)
 
 hl.layer_rule({
-	match = { namespace = "launcher|selection|hyprpicker|vicinae|waybar|python3|oculante" },
+	match = { namespace = "launcher|selection|hyprpicker|vicinae|waybar|python3|oculante|wayscriber" },
 	no_anim = true,
 })
 
 hl.layer_rule({
-	match = { namespace = "vicinae|waybar" },
+	match = { namespace = "waybar" },
 	blur = true,
+})
+
+hl.layer_rule({
+	match = { namespace = "vicinae" },
+	blur = true,
+	ignore_alpha = 0,
 })
 
 hl.window_rule({ match = { float = false }, no_shadow = true })
@@ -74,6 +113,14 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	match = {
+		initial_class = "steam",
+		initial_title = "Steam Settings",
+	},
+	float = true,
+})
+
+hl.window_rule({
 	name = "PictureInPicture",
 	match = {
 		initial_title = "Picture-in-picture",
@@ -85,6 +132,20 @@ hl.window_rule({
 })
 
 -- windowrule = scrollmouse 3.0, initialClass:steam_app_3513350
+
+hl.window_rule({
+	name = "clipstudio-empty-title",
+	match = {
+		initial_class = "^clipstudiopaint.exe$",
+		initial_title = "^$",
+	},
+
+	rounding = 0,
+	border_size = 0,
+	no_anim = true,
+	stay_focused = true,
+	no_shadow = true,
+})
 
 hl.window_rule({
 	match = {
@@ -293,6 +354,15 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "blender file browser",
+	match = {
+		initial_title = "File Browser",
+		initial_class = "blender",
+	},
+	persistent_size = true,
+})
+
+hl.window_rule({
 	match = { initial_title = "Godot" },
 	immediate = true,
 })
@@ -305,4 +375,26 @@ hl.window_rule({
 	pin = 1,
 	rounding = 8,
 	border_size = 2,
+})
+
+hl.window_rule({
+	match = { title = "ColorWindow" },
+	float = 1,
+	persistent_size = true,
+	pin = 1,
+	rounding = 8,
+	border_size = 2,
+})
+
+hl.window_rule({
+	match = { class = "flameshot" },
+
+	animation = "fade",
+	rounding = 0,
+	border_size = 0,
+	fullscreen_state = "0 0",
+	float = true,
+	pin = true,
+	move = { "0", "0" },
+	size = { "monitor_w*2", "monitor_h" },
 })

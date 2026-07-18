@@ -93,12 +93,8 @@ hl.bind("SUPER + SHIFT + S", hl.dsp.window.move({ workspace = "special:scratchpa
 -- shadow realm.
 
 -- Screenshot Keybind
-hl.bind(
-	"PRINT",
-	hl.dsp.exec_cmd(
-		"grim -g \"$(slurp -c '#ff0000ff')\" -t ppm - | satty --filename - --fullscreen --output-filename ~/Pictures/Screenshots/satty-$(date '+%Y%m%d-%H:%M:%S').png"
-	)
-)
+hl.bind("PRINT", hl.dsp.exec_cmd("flameshot gui"))
+-- grim -g "$(slurp -c '#ff0000ff')" -t ppm - | satty --filename - --fullscreen --output-filename ~/Pictures/Screenshots/satty-$(date '+%Y%m%d-%H:%M:%S').png
 hl.bind("SUPER + PRINT", hl.dsp.exec_cmd("/home/zane/.scripts/grimblast copy output --notify"))
 -- bind = SUPER ALT, n, exec, grim -g "$(slurp -o -r -c '##ff0000ff')" -t ppm - | satty --filename - --fullscreen --output-filename ~/Pictures/Screenshots/satty-$(date '+%Y%m%d-%H:%M:%S').png
 -- grimblast uses hyprpicker to freeze the screen for screenshots. idk how this is the best way
@@ -179,3 +175,5 @@ end, { repeating = true, description = "Zoom Out" })
 hl.bind("SUPER + SHIFT + minus", function()
 	adjustZoom("reset")
 end, { description = "Reset Zoom" })
+
+hl.bind("SUPER + b", hl.dsp.exec_cmd("wayscriber --daemon-toggle"))
