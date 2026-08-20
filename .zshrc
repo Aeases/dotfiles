@@ -6,27 +6,36 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 eval "$(dircolors -b)"
-eval "$(fnm env --use-on-cd)"
-INC_APPEND_HISTORY="true"
 HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history # Persist history
 HISTSIZE=1000000
 SAVEHIST=1000000
-setopt appendhistory autocd autopushd pushdminus pushdsilent pushdtohome
+setopt autocd autopushd pushdminus pushdsilent pushdtohome
 setopt SHARE_HISTORY
+# setopt INC_APPEND_HISTORY # Not needed with SHARE_HISTORY
+unsetopt correct_all BEEP # Disable Autocorrect
 
 # DIV: > Compinit Setup <
 autoload -Uz compinit
 zstyle ':completion:*' menu select # Tab goes into the list of options.
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # Color-coded completions
 zmodload zsh/complist
-compinit
+
+# only runs the full compinit once every 24hrs. uses cached compinit otherwise.
+# needs EXTENDED_GLOB for (#qN.mh+24) to work.
+setopt EXTENDED_GLOB
+if [[ -n "${HOME}/.zcompdump"(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 _comp_options+=(globdots) # Ensure hidden files are listed in completions
 zle_highlight=('paste:none') # Disable highlighting pasted text
-unsetopt correct_all BEEP # Disable Autocorrect
+
 # DIV: >>> MY CUSTOM KEYBINDS <<<
 
 # Makes Ctrl+a accept zsh completions
 bindkey '^[a' autosuggest-accept 
+
 # Edit line in vim buffer
 autoload -U edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
@@ -52,9 +61,10 @@ function yazicd() {
 	rm -f -- "$tmp"
 }
 bindkey -s '^[o' 'yazicd\n' 
-source "${HOME}/.zprofile"
 
-DHOME=$HOME/dotfiles
+# source zprofile for non-login
+[[ -o login ]] || source "${HOME}/.zprofile"
+
 # Plugins manager
 ZINIT_HOME="${HOME}/.config/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
@@ -67,10 +77,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 zinit ice depth"1" # git clone depth
 zinit light romkatv/powerlevel10k
 zinit light jeffreytse/zsh-vi-mode
-# Load pure theme
-# zinit ice pick"async.zsh" src"pure.zsh" # with zsh-async library that's bundled with it.
-# zinit light sindresorhus/pure
-zinit load zdharma/history-search-multi-word
+zinit load zdharma-continuum/history-search-multi-word
 zinit light zsh-users/zsh-completions
 zinit light hlissner/zsh-autopair
 #zinit light marlonrichert/zsh-autocomplete
@@ -78,19 +85,11 @@ zinit light zsh-users/zsh-autosuggestions
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 export ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|ls *|zd *|xdg-open *|nautilus *|open *"
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
-zinit light zdharma/fast-syntax-highlighting
+zinit light zdharma-continuum/fast-syntax-highlighting
 
-append_path() {
-  case ":$PATH:" in
-    *:"$1":*) ;;  # already present, skip
-    *) PATH="${PATH:+$PATH:}$1" ;;
-  esac
-}
-
-if [ -n "$HOME" ]; then
-  [ -d "$HOME/.local/bin" ] && append_path "$HOME/.local/bin"
-  [ -d "$HOME/bin" ] && append_path "$HOME/bin"
-fi
+prepend_path "$HOME/bin"
+prepend_path "$HOME/.local/bin"
+append_path "$HOME/.scripts"
 
 source "${HOME}/.scriptsyFripsy.bash"
 source "${HOME}/.apikeys"
@@ -108,7 +107,7 @@ fi
 
 eval "$(zoxide init zsh --cmd zd)"
 
-export PATH=$PATH:$HOME/.spicetify
+append_path "$HOME/.spicetify"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -132,5 +131,37 @@ esac
 #   - the correct directories to the PATH
 #   - auto-completion for the opam binary
 # This section can be safely removed at any time if needed.
-[[ ! -r '$HOME/.opam/opam-init/init.zsh' ]] || source '$HOME/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+[[ ! -r "$HOME/.opam/opam-init/init.zsh" ]] || source "$HOME/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null
 # END opam configuration
+
+# >>> fnm initialize (lazy-loaded: real init deferred until first node/npm/npx/corepack/fnm call, saves ~28ms/shell) >>>
+# node/npm/npx also exist as system binaries, so each must be wrapped individually rather than
+# relying on a missing-command fallback, or you'd silently run the wrong (system) version.
+_fnm_lazy_load() {
+  unfunction node npm npx corepack fnm 2>/dev/null
+  eval "$(fnm env --use-on-cd --shell zsh)"
+}
+for _fnm_cmd in node npm npx corepack fnm; do
+  eval "${_fnm_cmd}() { _fnm_lazy_load; command ${_fnm_cmd} \"\$@\" }"
+done
+unset _fnm_cmd
+# <<< fnm initialize <<<
+
+# >>> conda initialize (lazy-loaded: real init deferred until first `conda` call, saves ~500ms/shell) >>>
+conda() {
+    unfunction conda
+    __conda_setup="$('/home/zane/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    else
+        if [ -f "/home/zane/miniconda3/etc/profile.d/conda.sh" ]; then
+            . "/home/zane/miniconda3/etc/profile.d/conda.sh"
+        else
+            export PATH="/home/zane/miniconda3/bin:$PATH"
+        fi
+    fi
+    unset __conda_setup
+    conda "$@"
+}
+# <<< conda initialize <<<
+

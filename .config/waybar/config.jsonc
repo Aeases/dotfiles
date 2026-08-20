@@ -25,11 +25,63 @@
         "tray"
     ],
     // Modules configuration
+    // "hyprland/workspaces": {
+    //     "format": "<span font-family='Monocraft'>{icon}</span>{windows}",
+    //     "workspace-taskbar": true,
+    //     "format-icons": {
+    //         "1": "I",
+    //         "2": "II",
+    //         "3": "III",
+    //         "4": "IV",
+    //         "5": "V",
+    //         "6": "VI",
+    //         "7": "VII",
+    //         "8": "IIX",
+    //         "9": "IX",
+    //         "10": "X",
+    //         "11": "XI",
+    //     },
+    //     "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+    //     "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+    // },
     "hyprland/workspaces": {
-        "format": "{icon}",
-        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "format": "<span >{icon}</span>{windows}",
+        "workspace-taskbar": true,
+        "format-icons": {
+            "1": " I ",
+            "2": "II",
+            "3": "III",
+            "4": "IV",
+            "5": " V ",
+            "6": "VI",
+            "7": "VII",
+            "8": "IIX",
+            "9": "IX",
+            "10": " X ",
+            "11": "XI",
+        },
+        "format-window-separator": "", // Unchanged.
+        "workspace-taskbar": {
+            // Enable the workspace taskbar. Default: false
+            "enable": true,
+            // If true, the active window will have an `active` class. Could cause higher CPU usage due to more frequent redraws. Default: false
+            "update-active-window": false,
+            // Format of the windows in the taskbar. Default: "{icon}". Allowed variables: {icon}, {title}
+            "format": "{icon}",
+            // Icon size in pixels. Default: 16
+            "icon-size": 16,
+            // Either the name of an installed icon theme or an array of themes (ordered by priority). If not set, the default icon theme is used.
+            // "icon-theme": "Pixora-dark",
+
+            // Orientation of the taskbar (see screenshots below). Default: "horizontal".
+            "orientation": "horizontal",
+            // List of regexes. A window will NOT be shown if its window class or title match one or more items. Default: []
+            // "ignore-list": [ "code", "Firefox - .*" ],
+            // Command to run when a window is clicked. Default: "" (switch to the workspace as usual). Allowed variables: {address}, {button}
+            "on-click-window": "/some/arbitrary/script {address} {button}"
+    }
     },
+
     "tray": {
         // "icon-size": 21,
         "spacing": 10,
@@ -85,6 +137,7 @@
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ×",
+        "format-disabled": "DISABLED ×",
         "format-alt": "≪{essid}≫",
         // "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "on-click": "~/.scripts/networkmanager_dmenu"
@@ -128,7 +181,7 @@
 
 
     "hyprland/window": {
-        "format": "{}",
+        "format": "{title}",
         "tooltip": false,
         "min-length": 5,
 
@@ -138,9 +191,10 @@
             "",
 
             // Terminal
-            "~": "  Terminal",
-            "zsh": "  Terminal",
-            "kitty": "  Terminal",
+            "~": "",
+            "zsh": "",
+            "kitty": "",
+            "Ghostty": "",
 
             "tmux(.*)": 
             "<span foreground='#a6e3a1'> </span> Tmux",
@@ -191,6 +245,9 @@
 
             "(.*) - mpv": 
             "<span foreground='#cba6f7'> </span> $1",
+
+            "(.*) - Helium": 
+            "",
 
             "qView": "  qView",
 

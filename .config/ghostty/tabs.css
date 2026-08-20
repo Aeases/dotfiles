@@ -1,0 +1,26 @@
+/* Match the tab bar background to the terminal's background-opacity (0.93) and theme bg (#100f0f),
+   instead of full transparency, so it blends with the rest of the window instead of looking like a hole. */
+window,
+headerbar,
+notebook,
+notebook > header,
+notebook > header > tabs,
+notebook > header > tabs > tab,
+tabbar,
+tabbox {
+    background: rgba(16, 15, 15, 0.93) !important;
+    background-color: rgba(16, 15, 15, 0.93) !important;
+    background-image: none !important;
+    border: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Optional: Keep active tab text bright, dim inactive ones so you can read them */
+notebook header tabs tab:checked label {
+    color: @theme_selected_fg_color !important;
+    opacity: 1.0 !important;
+}
+notebook header tabs tab:not(:checked) label {
+    opacity: 0.5 !important;
+}

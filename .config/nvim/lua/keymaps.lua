@@ -92,4 +92,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- in latex or markdown documents use graphical line jumping
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Move by display line instead of logical line in tex/md files',
+  group = vim.api.nvim_create_augroup('prose-graphical-motion', { clear = true }),
+  pattern = { 'tex', 'markdown' },
+  callback = function(event)
+    local opts = { buffer = event.buf, silent = true }
+    vim.keymap.set({ 'n', 'v' }, 'j', 'gj', opts)
+    vim.keymap.set({ 'n', 'v' }, 'k', 'gk', opts)
+  end,
+})
+
 -- vim: ts=2 sts=2 sw=2 et

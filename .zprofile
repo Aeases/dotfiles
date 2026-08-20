@@ -1,3 +1,19 @@
+append_path() {
+  if [ -d "$1" ]; then
+    case ":$PATH:" in
+      *:"$1":*) ;;  # already present, skip
+      *) PATH="${PATH:+$PATH:}$1" ;;
+    esac
+  fi
+}
+prepend_path() {
+  if [ -d "$1" ]; then
+    case ":$PATH:" in
+      *:"$1":*) ;;  # already present, skip
+      *) PATH="$1${PATH:+:$PATH}" ;;
+    esac
+  fi
+}
 
 #command for switching default audio track in mkv
 #for i in ./*; do mkvpropedit $i --edit track:a1 --set flag-default=0 --edit track:a2 --set flag-default=1; done
@@ -103,7 +119,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # Add installed bun binaries to path
 export BUN_INSTALL="$HOME/.bun"
-export PATH=$BUN_INSTALL/bin:$PATH
+prepend_path "$BUN_INSTALL/bin"
 
 
 

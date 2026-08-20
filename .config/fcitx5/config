@@ -37,7 +37,7 @@ ModifierOnlyKeyTimeout=250
 0=Control+Alt+P
 
 [Behavior]
-# Active By Default
+# Activate input method by default
 ActiveByDefault=False
 # Reset state on Focus In
 resetStateWhenFocusIn=No
@@ -53,7 +53,7 @@ showInputMethodInformationWhenFocusIn=False
 CompactInputMethodInformation=True
 # Show first input method information
 ShowFirstInputMethodInformation=True
-# Default page size
+# Default Candidates per page
 DefaultPageSize=7
 # Override XKB Option
 OverrideXkbOption=False
@@ -61,8 +61,6 @@ OverrideXkbOption=False
 CustomXkbOption=
 # Force Enabled Addons
 EnabledAddons=
-# Force Disabled Addons
-DisabledAddons=
 # Preload input method to be used by default
 PreloadInputMethod=True
 # Allow input method in the password field
@@ -71,4 +69,7 @@ AllowInputMethodForPassword=False
 ShowPreeditForPassword=False
 # Interval of saving user data in minutes
 AutoSavePeriod=30
+
+[Behavior/DisabledAddons]
+0=fcitx5imemojipicker
 

@@ -1,10 +1,17 @@
 
 theme="Flexoki Dark"
-font-size=16
-background-opacity=0.93
+window-theme = ghostty
+gtk-custom-css = ~/.config/ghostty/tabs.css
+font-size=17
+background-opacity=1.0
 cursor-color=#FFFFFF
 cursor-opacity=1
 cursor-text=#FF0000
+cursor-style=bar
+keybind = ctrl+backspace=text:\x17
+keybind = ctrl+c=copy_to_clipboard:mixed
+keybind = ctrl+v=paste_from_clipboard
+keybind = ctrl+shift+c=text:\x03
 
 # This is the configuration file for Ghostty.
 #
@@ -34,6 +41,9 @@ cursor-text=#FF0000
 # # The config file consists of simple key-value pairs,
 # # separated by equals signs.
 # font-family = Iosevka
+font-family = JetBrainsMono Nerd Font
+# font-family = BigBlueTermPlus Nerd Font Mono
+# font-family = Monocraft
 # window-padding-x = 2
 #
 # # Spacing around the equals sign does not matter.

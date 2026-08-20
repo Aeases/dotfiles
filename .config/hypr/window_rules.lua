@@ -83,11 +83,12 @@ hl.window_rule({
 
 hl.window_rule({
 	match = {
-		initial_class = "localsend",
+		initial_class = "org.localsend.localsend_app",
 	},
 	float = true,
 	size = "478 608",
 	animation = "gnomed",
+	rounding = 20,
 	center = 1,
 	dim_around = 1,
 	border_size = 0,
@@ -118,6 +119,16 @@ hl.window_rule({
 		initial_title = "Steam Settings",
 	},
 	float = true,
+})
+
+hl.window_rule({
+	match = {
+		initial_class = "chrome-nngceckbapebfimnlniiiahkandclblb-Default",
+	},
+	float = true,
+	persistent_size = true,
+	border_size = 0,
+	animation = "gnomed",
 })
 
 hl.window_rule({
@@ -179,6 +190,27 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border
 hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, rounding = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })
+-- float on maximized workspace
+hl.window_rule({
+	match = {
+		workspace = "f[0]",
+	},
+	float = true,
+})
+
+-- hl.window_rule({
+-- 	match = {
+-- 		workspace = "f[1]",
+-- 	},
+-- 	float = true,
+-- })
+--
+-- hl.window_rule({
+-- 	match = {
+-- 		workspace = "f[2]",
+-- 	},
+-- 	float = true,
+-- })
 
 -- hl.workspace_rule({ workspace = "4", decorate = false, no_shadow = true, gaps_in = 0, gaps_out = 0 })
 -- hl.window_rule({ match = { workspace = "4" }, border_size = 0, rounding = 0, no_shadow = true })
@@ -283,8 +315,14 @@ hl.window_rule({
 -- No Screensharing
 hl.window_rule({
 	match = {
-		initial_class = "org.telegram.desktop|Bitwarden",
 		title = "^(.*Bitwarden.*)$|^(.*Traveller Information.*)$|^(.*ATPI Profile.*)$",
+	},
+	no_screen_share = true,
+})
+
+hl.window_rule({
+	match = {
+		initial_class = "discord|org.telegram.desktop|Bitwarden",
 	},
 	no_screen_share = true,
 })
@@ -346,11 +384,15 @@ hl.window_rule({
 	match = {
 		title = "^(.*(DEBUG).*)$",
 	},
+
 	border_size = 1,
 	rounding = 0,
 	no_blur = true,
-	no_anim = true,
+	--no_anim = true,
 	no_shadow = true,
+	--no_follow_mouse = true,
+	render_unfocused = true,
+	--no_focus = true,
 })
 
 hl.window_rule({
@@ -362,28 +404,27 @@ hl.window_rule({
 	persistent_size = true,
 })
 
-hl.window_rule({
-	match = { initial_title = "Godot" },
-	immediate = true,
-})
+-- hl.window_rule({
+-- 	match = { initial_title = "Godot" },
+-- 	immediate = true,
+-- })
 
 hl.window_rule({
 	match = { title = "ControlWindow" },
 	float = 1,
 	move = { "monitor_w - window_w*1.05", "monitor_h - window_h*1.05" },
 	persistent_size = true,
-	pin = 1,
 	rounding = 8,
-	border_size = 2,
+	border_size = 0,
 })
 
 hl.window_rule({
 	match = { title = "ColorWindow" },
 	float = 1,
-	persistent_size = true,
-	pin = 1,
-	rounding = 8,
-	border_size = 2,
+	move = { "monitor_w - window_w*2", "monitor_h - window_h*2.85" },
+	size = "150 50",
+	rounding = 16,
+	border_size = 0,
 })
 
 hl.window_rule({
@@ -397,4 +438,10 @@ hl.window_rule({
 	pin = true,
 	move = { "0", "0" },
 	size = { "monitor_w", "monitor_h" },
+})
+
+hl.window_rule({
+	match = { title = "im-emoji-picker" },
+
+	no_focus = true,
 })

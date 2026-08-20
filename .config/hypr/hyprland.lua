@@ -64,12 +64,14 @@ end
 
 -- workspace = 1, layout:scrolling
 
+hl.workspace_rule({ workspace = "1", layout = "scrolling" })
+
 -- Autostart
 hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprpm reload")
-	hl.exec_cmd("vicinae server")
-	hl.exec_cmd("waybar")
-	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_CLASS")
+	hl.exec_cmd(
+		"dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_CLASS XDG_SESSION_TYPE"
+	)
 	hl.exec_cmd("systemctl --user start hyprland-session.target") -- add this
 	-- ^^^ Sync hyprland env variables to systemd so services started know about them
 	hl.exec_cmd("/lib/xdg-desktop-portal-gnome")
@@ -83,21 +85,16 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("sleep 4; pactl set-sink-mute 'alsa_output.pci-0000_c1_00.6.analog-stereo' 1")
 	-- Mute laptop speakers on boot
 	hl.exec_cmd("fcitx5")
-	hl.exec_cmd(
-		"uxplay -fps 60 -h265 -n Framesmith -vs waylandsink -restrict -allow 62:24:42:81:F0:2A -allow FE:01:6B:2F:36:7F -allow 66:03:56:B5:04:A0"
-	)
+	hl.exec_cmd("uxplay -fps 60 -h265 -n Framesmith -vs waylandsink")
 	-- Allow casting to linux from ipad for discord screenshare ^^^^
 	hl.exec_cmd("keyd-application-mapper -d")
 	hl.exec_cmd("dex -a -s /etc/xdg/autostart/:~/.config/autostart/")
 	hl.exec_cmd("steam -silent")
 end)
--- Exec (run every reload)
-hl.on("config.reloaded", function()
-	hl.exec_cmd("pkill waybar; waybar")
-end)
 
 -- exec-once = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
 
+hl.env("PATH", os.getenv("HOME") .. "/.local/bin:" .. os.getenv("PATH"))
 hl.env("QT_IM_MODULE", "fcitx")
 hl.env("XMODIFIERS", "@im=fcitx")
 hl.env("XCURSOR_SIZE", "24")
@@ -165,16 +162,19 @@ hl.config({
 	input = {
 		kb_layout = "us",
 		follow_mouse = 1,
+		-- don't let a window sliding under a stationary cursor steal focus
+		-- (scrolling layout shifts the viewport when a new column opens)
+		mouse_refocus = false,
 		focus_on_close = 1,
 		special_fallthrough = true,
 		touchpad = {
 			natural_scroll = true,
-			clickfinger_behavior = 1,
+			clickfinger_behavior = true,
 			-- tap-to-click = 0,
-			disable_while_typing = 1,
+			disable_while_typing = true,
 			scroll_factor = 0.3,
 		},
-		force_no_accel = 1,
+		force_no_accel = true,
 		sensitivity = -0.8,
 		-- -1.0 to 1.0, 0 means no modification.
 	},
@@ -194,10 +194,10 @@ hl.config({
 
 	scrolling = {
 		fullscreen_on_one_column = true,
-		column_width = 0.8,
+		column_width = 0.5,
 		focus_fit_method = 1,
 		follow_focus = true,
-		follow_min_visible = 0,
+		follow_min_visible = 0.1,
 		-- explicit_column_widths = { 0.25, 0.333, 0.5, 0.667, 0.75, 1.0 },
 	},
 

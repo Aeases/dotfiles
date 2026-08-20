@@ -1,3 +1,4 @@
+DHOME=$HOME/dotfiles
 export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:$HOME/.dotnet/tools"
 export ELECTRON_OZONE_PLATFORM_HINT=auto

@@ -1,6 +1,7 @@
 ---@module 'hl'
 
-hl.bind("SUPER + Return", hl.dsp.exec_cmd("kitty --class=kitty-spawn"))
+hl.bind("SUPER + SHIFT +Return", hl.dsp.exec_cmd("kitty --class=kitty-spawn"))
+hl.bind("SUPER + Return", hl.dsp.exec_cmd("ghostty +new-window"))
 hl.bind("SUPER + C", hl.dsp.window.close())
 
 hl.bind("SUPER + ALT + C", hl.dsp.exec_cmd("hyprpicker| wl-copy"))
@@ -28,6 +29,7 @@ hl.bind("SUPER + SHIFT + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 
 -- Tell window it is fullscreened when it is actually not, great for PIP
 hl.bind("SUPER + ALT + F", hl.dsp.window.fullscreen_state({ internal = 0, client = 2, action = "toggle" }))
+hl.bind("SUPER + ALT + SHIFT + F", hl.dsp.window.fullscreen_state({ internal = 3, client = 2, action = "toggle" }))
 hl.bind("SUPER + ALT + C", hl.dsp.exec_cmd("/home/zane/.scripts/camera.sh"))
 hl.bind("SUPER + ALT + P", hl.dsp.exec_cmd("/home/zane/.scripts/audio_sink.py"))
 
@@ -132,6 +134,10 @@ hl.bind("SUPER + CTRL + Q", hl.dsp.focus({ direction = "left" }))
 hl.bind("SUPER + CTRL + E", hl.dsp.focus({ direction = "right" }))
 hl.bind("SUPER + SHIFT + Q", hl.dsp.layout("swapcol l"))
 hl.bind("SUPER + SHIFT + E", hl.dsp.layout("swapcol r"))
+
+-- Scrolling left/right
+hl.bind("SUPER + A", hl.dsp.layout("move -col"))
+hl.bind("SUPER + D", hl.dsp.layout("move +col"))
 
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]

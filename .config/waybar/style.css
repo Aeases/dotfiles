@@ -1,6 +1,6 @@
 /* Everforest Dark Color Pallete */
 
-@define-color black rgba(16, 15, 15, 0.93);
+@define-color black rgba(16, 15, 15, 1.0);
 @define-color red #D14D41;
 @define-color green #879A39;
 @define-color yellow #D0A215;
@@ -71,7 +71,7 @@ window#waybar {
 
 
 * {
-    /*font-family: "M+1Code Nerd Font Med";*/
+    /* font-family: "M+1Code Nerd Font Med"; */
     font-family: "Minecraft, M+1Code Nerd Font Med";
     font-size: 16px;
 }
@@ -110,8 +110,18 @@ button:hover {
     border-radius: 4px;
 }
 
+#workspaces .taskbar-window {
+    border-top: 1px solid transparent;
+    font-weight: normal;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+#workspaces .taskbar-window image {
+    margin-bottom: 2px;
+}
 
-#workspaces button:hover {
+
+#workspaces .workspace-label:hover {
     background: alpha(@workspaces-focused, 0.9);
 }
 
