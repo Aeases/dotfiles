@@ -1,3 +1,7 @@
+/* Screenshare privacy overrides, rewritten live by ~/.scripts/screenshare-privacy.
+   Must stay at the top: GTK CSS requires @import before any rule. */
+@import "screenshare.css";
+
 /* Everforest Dark Color Pallete */
 
 @define-color black rgba(16, 15, 15, 1.0);
@@ -154,6 +158,10 @@ button:hover {
 #power-profiles-daemon,
 #mpd {
     padding: 0 10px;
+    /* The inter-module gap lives here rather than in the bar's `spacing`, so
+       that zero-sizing a module (see ~/.scripts/screenshare-privacy) collapses
+       its gap too. 2px a side == the 4px gap `spacing` used to draw. */
+    margin: 0 2px;
     color: @fg;
     border-radius: 0px;
     border-bottom: 2px solid transparent;
@@ -170,16 +178,22 @@ button:hover {
 
 #window,
 #workspaces {
-    margin: 0 4px;
+    /* 6px, not 4px: these used to get 4px here plus 4px of bar `spacing`, and
+       their neighbours now contribute 2px of their own margin instead. */
+    margin: 0 6px;
 }
 
-/* If workspaces is the leftmost module, omit left margin */
-.modules-left>widget:first-child>#workspaces {
+/* Whatever module is outermost sits flush against window#waybar>box's own
+   padding -- no module margin on the bar's outer edges.
+
+   The `window#waybar` prefix is load-bearing: without it these carry no id and
+   lose to `#workspaces` above, which would leave the workspace list floating
+   6px off the left edge. */
+window#waybar .modules-left>widget:first-child>* {
     margin-left: 0;
 }
 
-/* If workspaces is the rightmost module, omit right margin */
-.modules-right>widget:last-child>#workspaces {
+window#waybar .modules-right>widget:last-child>* {
     margin-right: 0;
 }
 

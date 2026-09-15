@@ -5,6 +5,14 @@
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+vim.keymap.set('n', '<leader>wq', function()
+  vim.cmd 'wq'
+end, { desc = 'save and quit' })
+
+vim.keymap.set('n', '<leader>qq!', function()
+  vim.cmd 'q!'
+end, { desc = 'quit' })
+
 local s = vim.diagnostic.severity
 
 local icons = {

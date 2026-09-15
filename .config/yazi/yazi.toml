@@ -1,29 +1,29 @@
 [opener]
 pdf = [
-	{ run = 'zathura "$@"', orphan = true, for = "unix" },
+	{ run = 'zathura "%s"', orphan = true, for = "unix" },
 ]
 edit = [
-	{ run = '$EDITOR "$@"', block = true, for = "unix" },
+	{ run = '$EDITOR "%s"', block = true, for = "linux" },
 ]
 play = [
-	{ run = 'mpv --force-window "$@"', orphan = true, for = "unix" },
-	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
+	{ run = 'mpv --force-window "%s"', orphan = true, for = "unix" },
+	{ run = '''mediainfo "%s1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
 reveal = [
-	{ run = 'xdg-open "$(dirname "$1")"',           desc = "Reveal", for = "linux" },
-	{ run = 'open -R "$1"',                         desc = "Reveal", for = "macos" },
-	{ run = 'explorer /select,"%1"', orphan = true, desc = "Reveal", for = "windows" },
-	{ run = 'termux-open "$(dirname "$1")"',        desc = "Reveal", for = "android" },
-	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
+	{ run = 'xdg-open "$(dirname "%s1")"',           desc = "Reveal", for = "linux" },
+	{ run = 'open -R "%s1"',                         desc = "Reveal", for = "macos" },
+	{ run = 'explorer /select,"%s1"', orphan = true, desc = "Reveal", for = "windows" },
+	{ run = 'termux-open "$(dirname "%s1")"',        desc = "Reveal", for = "android" },
+	{ run = '''clear; exiftool "%s1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
 ]
 open = [
-	{ run = 'xdg-open "$1"',                desc = "Open", for = "linux" },
-	{ run = 'open "$@"',                    desc = "Open", for = "macos" },
-	{ run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
-	{ run = 'termux-open "$1"',             desc = "Open", for = "android" },
+	{ run = 'xdg-open "%s1"',                desc = "Open", for = "linux" },
+	{ run = 'open "%s1"',                    desc = "Open", for = "macos" },
+	{ run = 'start "" "%s1"', orphan = true, desc = "Open", for = "windows" },
+	{ run = 'termux-open "%s1"',             desc = "Open", for = "android" },
 ]
 view = [
-	{ run = 'oculante "$@"', orphan = true, for = "unix" },
+	{ run = 'oculante "$s"', orphan = true, for = "unix" },
 ]
 [open]
 rules = [

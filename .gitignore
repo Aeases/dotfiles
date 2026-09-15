@@ -4,3 +4,11 @@
 .config/keyd/app.lock
 .local/share/fcitx5/pinyin/user.dict
 .local/share/fcitx5/pinyin/user.history
+**/fcitx5/**/user.*
+**/crash.log
+.config/fcitx5/profile_*
+.config/fcitx5/conf/cached_layouts
+.config/fcitx5/conf/*.conf_*
+.config/chrom_theme/Cached Theme.pak
+**/wallpapers/game.png
+**/wallpapers/Kirby.gif

@@ -2,6 +2,7 @@ DHOME=$HOME/dotfiles
 export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:$HOME/.dotnet/tools"
 export ELECTRON_OZONE_PLATFORM_HINT=auto
+export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock # Default to podman user socket
 export NVC="$HOME/.config/nvim/"
 export EDITOR='nvim'
 export BROWSER=nvim:vim:nano:firefox

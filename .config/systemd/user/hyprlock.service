@@ -1,0 +1,11 @@
+[Unit]
+Description=hyprlock screen locker (single-instance)
+Documentation=man:hyprlock(1)
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/hyprlock
+Restart=no
+TimeoutStopSec=5

@@ -6,20 +6,19 @@ hl.layer_rule({
 	animation = "fade",
 }) -- ¯\_(ツ)_/¯
 
-local swaync_screenshare = {
-	rule = hl.layer_rule({
-		name = "swaync_no_screenshare",
-		match = { namespace = "swaync-notification-window" },
-		no_screen_share = true,
-		enabled = false,
-	}),
+local screenshare = {
 	active = 0,
 	confirmed = false,
 	generation = 0,
 }
 
+local function set_privacy(on)
+	-- setsid -f detaches so this never blocks Hyprland's main loop.
+	os.execute("setsid -f /home/zane/.scripts/screenshare-privacy " .. (on and "on" or "off") .. " >/dev/null 2>&1")
+end
+
 hl.on("screenshare.state", function(started)
-	local s = swaync_screenshare
+	local s = screenshare
 	local was_zero = s.active == 0
 	s.active = math.max(0, s.active + (started and 1 or -1))
 
@@ -29,7 +28,7 @@ hl.on("screenshare.state", function(started)
 		hl.timer(function()
 			if my_gen == s.generation and s.active > 0 then
 				s.confirmed = true
-				s.rule:set_enabled(true)
+				set_privacy(true)
 			end
 		end, { timeout = 700, type = "oneshot" }) -- confirm
 	elseif s.active == 0 and s.confirmed then
@@ -38,7 +37,7 @@ hl.on("screenshare.state", function(started)
 		hl.timer(function()
 			if my_gen == s.generation and s.active == 0 then
 				s.confirmed = false
-				s.rule:set_enabled(false)
+				set_privacy(false)
 			end
 		end, { timeout = 500, type = "oneshot" }) -- Release
 	end
@@ -52,6 +51,12 @@ hl.layer_rule({
 hl.layer_rule({
 	match = { namespace = "waybar" },
 	blur = true,
+})
+
+hl.window_rule({
+	match = { initial_class = "mpv" },
+	float = true,
+	decorate = true,
 })
 
 hl.layer_rule({
@@ -69,7 +74,7 @@ local kittyfloat = hl.window_rule({
 	float = 1,
 })
 
-kittyfloat:set_enabled(true)
+kittyfloat:set_enabled(false)
 
 hl.window_rule({ match = { initial_class = "org.gnome.NautilusPreviewer" }, no_initial_focus = true, float = 1 })
 
@@ -223,12 +228,20 @@ hl.window_rule({
 		workspace = "s[1]",
 	},
 	rounding = 15,
-	border_color = { colors = { "rgba(f12711ee)", "rgba(f5af19ee)" }, angle = 0 },
+	border_color = { colors = { "rgba(3AA99Fee)", "rgba(4385BEee)" }, angle = 45 },
 	animation = "slide",
-	border_size = 3,
+	border_size = 6,
 })
 -- Special Workspace specific options
-hl.workspace_rule({ workspace = "s[1]", gaps_out = 15, no_rounding = false })
+hl.workspace_rule({ workspace = "s[1]", gaps_out = 30, no_rounding = false })
+
+hl.workspace_rule({ workspace = "special:discord",
+		gaps_out = { top = 40, right = 80, bottom = 40, left = 80 },
+ })
+hl.window_rule({match = {workspace = "special:discord"},
+	border_color = { colors = { "rgba(5865F2ee)", "rgba(7289DAee)" }, angle = 0 },
+	border_size = 8,
+})
 
 -- Make file portals, / file pickers / File properties nice
 hl.window_rule({
@@ -346,7 +359,7 @@ hl.window_rule({
 
 hl.workspace_rule({
 	workspace = "special:scratchpad",
-	on_created_empty = '[float; size 1000 800] kitty --class="kitty-spawn"',
+	on_created_empty = 'kitty --class="kitty-spawn" -o env=KITTY_SCRATCHPAD=1 -o env=POWERLEVEL9K_INSTANT_PROMPT=off',
 })
 
 hl.workspace_rule({
@@ -388,6 +401,7 @@ hl.window_rule({
 	border_size = 1,
 	rounding = 0,
 	no_blur = true,
+	float = true,
 	--no_anim = true,
 	no_shadow = true,
 	--no_follow_mouse = true,

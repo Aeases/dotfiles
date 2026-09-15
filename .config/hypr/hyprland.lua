@@ -41,7 +41,7 @@ hl.monitor({
 	output = "desc:Technical Concepts Ltd Beyond TV 0x00010000",
 	mode = "preferred",
 	position = "auto-up",
-	scale = 1.67,
+	scale = 2.5,
 })
 
 hl.monitor({
@@ -75,21 +75,20 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("systemctl --user start hyprland-session.target") -- add this
 	-- ^^^ Sync hyprland env variables to systemd so services started know about them
 	hl.exec_cmd("/lib/xdg-desktop-portal-gnome")
-	hl.exec_cmd("awww-daemon")
 	hl.exec_cmd("waypaper --restore")
+	-- hl.exec_cmd("linux-wallpaperengine --no-fullscreen-pause --screen-root eDP-1 --screen-root DP-2 2837297807")
 	hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
-	hl.exec_cmd("hypridle")
+	hl.exec_cmd("systemctl --user start hypridle.service") -- single instance; bare `hypridle` can stack up
 	hl.exec_cmd("wl-clip-persist --clipboard regular")
 	-- ^^^ fixes borderline retrded behaviour where clipboard information is deleted when app is closed (for 'security', no other os does this btw)
 	hl.exec_cmd("kdeconnectd")
 	hl.exec_cmd("sleep 4; pactl set-sink-mute 'alsa_output.pci-0000_c1_00.6.analog-stereo' 1")
 	-- Mute laptop speakers on boot
 	hl.exec_cmd("fcitx5")
-	hl.exec_cmd("uxplay -fps 60 -h265 -n Framesmith -vs waylandsink")
 	-- Allow casting to linux from ipad for discord screenshare ^^^^
 	hl.exec_cmd("keyd-application-mapper -d")
 	hl.exec_cmd("dex -a -s /etc/xdg/autostart/:~/.config/autostart/")
-	hl.exec_cmd("steam -silent")
+	hl.exec_cmd("/home/zane/.local/bin/volumixer --daemon")
 end)
 
 -- exec-once = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
@@ -110,13 +109,6 @@ hl.env("QT_QPA_PLATFORM", "wayland")
 hl.env("QT_QPA_PLATFORMTHEME", "hyprqt6engine")
 hl.env("ILLOGICAL_IMPULSE_VIRTUAL_ENV", "~/.local/state/quickshell/.venv")
 
--- NVIDIA (not needed replaced by using switcherooctl)
--- hl.env("LIBVA_DRIVER_NAME", "nvidia")
--- hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
--- hl.env("NVD_BACKEND", "direct")
--- hl.env("__NV_PRIME_RENDER_OFFLOAD", 1)
--- hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
-
 -- ############ Others #############
 
 -- Start Gnome desktop portal, it's only used for file picker
@@ -131,11 +123,6 @@ hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd("~/.config/hypr/lid.sh open"), 
 -- Lid is opened
 hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd("~/.config/hypr/lid.sh close"), { locked = true })
 -- Lid is closed
-
--- Set programs that you use
-local terminal = "kitty --class=kitty-spawn"
-local fileManager = "nautilus"
-local menu = "tofi-drun| xargs hyprctl dispatch exec --"
 
 hl.config({
 	debug = {
@@ -164,9 +151,9 @@ hl.config({
 		follow_mouse = 1,
 		-- don't let a window sliding under a stationary cursor steal focus
 		-- (scrolling layout shifts the viewport when a new column opens)
-		mouse_refocus = false,
+		mouse_refocus = true,
 		focus_on_close = 1,
-		special_fallthrough = true,
+		special_fallthrough = false,
 		touchpad = {
 			natural_scroll = true,
 			clickfinger_behavior = true,
@@ -245,6 +232,8 @@ hl.config({
 hl.curve("emphasizedDecel", { type = "bezier", points = { { 0.05, 0.7 }, { 0.1, 1 } } })
 hl.curve("overshot", { type = "bezier", points = { { 0.05, 0.9 }, { 0.1, 1.1 } } })
 hl.curve("emphasizedAccel", { type = "bezier", points = { { 0.03, 0 }, { 0.8, 0.15 } } })
+hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
+hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })
 
 hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "default" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 2, bezier = "emphasizedDecel", style = "popin 90%" })
@@ -254,14 +243,15 @@ hl.animation({ leaf = "borderangle", enabled = true, speed = 1, bezier = "emphas
 hl.animation({ leaf = "fade", enabled = true, speed = 3, bezier = "default" })
 hl.animation({ leaf = "workspaces", enabled = false, speed = 5, bezier = "default" })
 hl.animation({ leaf = "layers", enabled = true, speed = 5, bezier = "default" })
-hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 5, bezier = "overshot", style = "slidefadevert -50%" })
+hl.animation({ leaf = "specialWorkspaceIn", enabled = true, speed = 3, bezier = "easeOutQuint", style = "slide top" })
 hl.animation({
 	leaf = "specialWorkspaceOut",
 	enabled = true,
-	speed = 5,
-	bezier = "overshot",
-	style = "slidefadevert -50%",
+	speed = 2,
+	bezier = "easeInOutCubic",
+	style = "slide bottom",
 })
+
 hl.config({
 	dwindle = {
 		-- See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
@@ -330,6 +320,10 @@ hl.config({
 })
 
 hl.config({
+	binds = {
+		hide_special_on_workspace_change = true,
+	},
+
 	misc = {
 		-- See https://wiki.hyprland.org/Configuring/Variables/ for more
 		initial_workspace_tracking = 1,
@@ -352,6 +346,7 @@ local hconf = "~/.config/hypr/"
 
 require("keys")
 require("window_rules")
+require("dropdown")
 
 function setup_hyprbars()
 	if hl.plugin.hyprbars ~= nil then
@@ -361,7 +356,7 @@ function setup_hyprbars()
 			fg_color = "rgb(000000)",
 			size = 12,
 			icon = "",
-			action = "hyprctl dispatch killactive",
+			action = "hyprctl dispatch 'hl.dsp.window.kill(active)'",
 		})
 
 		-- Minimize (yellow)
@@ -393,14 +388,21 @@ function setup_hyprbars()
 			match = { title = "ControlWindow" },
 			["hyprbars:no_bar"] = false,
 		})
+
+		-- other exception, has bars.
+		hl.window_rule({
+			match = { initial_class = "mpv" },
+			["hyprbars:no_bar"] = false,
+		})
+
 		hl.window_rule({ match = { title = "ControlWindow", fullscreen = true }, ["hyprbars:no_bar"] = true })
 
 		hl.config({
 			plugin = {
 				hyprbars = {
 					bar_height = 28,
-					bar_color = "rgb(ececec)",
-					col = { text = "rgb(1a1a1a)" },
+					bar_color = "rgb(282726)",
+					col = { text = "rgb(CECDC3)" },
 					bar_text_size = 14,
 					bar_padding = 10,
 					bar_text_font = "Minecraft",
@@ -415,5 +417,3 @@ function setup_hyprbars()
 end
 
 setup_hyprbars()
-
--- sources

@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Screenshare privacy toggle.
+#
+# Called by the screenshare.state handler in ~/.config/hypr/window_rules.lua.
+#
+#   on   - pause notifications and hide the waybar SSID
+#   off  - restore both
+#
+# Why this exists instead of Hyprland's `no_screen_share` layer rule: that rule
+# blanks the whole layer surface, and swaync's notification window is a
+# full-height 500px column (measured 500x1096 -- not configurable, there is no
+# notification-window height option). So it blacked out the entire right side of
+# the screen AND you never saw the notification either. Pausing the daemon means
+# nothing is drawn at all, so there is nothing to blank, and the notification
+# waits in the control center until the share ends.
+
+set -uo pipefail
+
+WAYBAR_CSS="${XDG_CONFIG_HOME:-$HOME/.config}/waybar/screenshare.css"
+
+# Modules to hide while sharing. #network is the SSID (format-wifi is
+# "<<{essid}>>", which names the network you are on).
+#
+# Two non-obvious constraints:
+#   - The selector must be `window#waybar #network`, not plain `#network`. This
+#     file is @imported at the TOP of style.css, so style.css's own `#network`
+#     rule comes later and wins at equal specificity. Two ids beat one id
+#     regardless of order.
+#   - No `!important`: GTK3's CSS parser rejects it ("Junk at end of value"),
+#     and waybar turns that into an unhandled exception that drops the whole
+#     stylesheet, leaving the bar unstyled.
+#
+# Zero-sizing collapses the module out of the layout rather than just blanking
+# it: GTK3 CSS has no display:none, so the widget still exists, it just measures
+# 0x0 (which also means it takes no pointer events -- no tooltip, no hover).
+#
+# This only works while the bar is configured with `"spacing": 0` and the
+# inter-module gaps live as `margin` on the modules themselves in style.css.
+# `spacing` is GtkBox spacing, drawn by the container between children, so no
+# rule here can collapse it; put the gaps back into `spacing` and hiding a
+# module leaves a 4px hole where it used to be.
+HIDE_RULE='window#waybar #network { font-size: 0; min-width: 0; padding: 0; margin: 0; border-width: 0; }'
+
+notify_pause() {
+	# Daemon-agnostic on purpose: swaync and dunst both get used here and they
+	# cannot be installed at the same time (they conflict).
+	if command -v swaync-client >/dev/null 2>&1 && pgrep -x swaync >/dev/null 2>&1; then
+		swaync-client --dnd-"$1" >/dev/null 2>&1
+	elif command -v dunstctl >/dev/null 2>&1 && pgrep -x dunst >/dev/null 2>&1; then
+		[ "$1" = "on" ] && dunstctl set-paused true || dunstctl set-paused false
+	fi
+}
+
+write_css() {
+	# waybar has reload_style_on_change set, and it watches imported files too,
+	# so writing this file is enough -- no signal, no waybar restart.
+	printf '/* Toggled by ~/.scripts/screenshare-privacy. Empty = nothing hidden. */\n%s\n' "$1" >"$WAYBAR_CSS"
+}
+
+case "${1:-}" in
+on)
+	notify_pause on
+	write_css "$HIDE_RULE"
+	;;
+off)
+	notify_pause off
+	write_css ""
+	;;
+*)
+	echo "usage: ${0##*/} {on|off}" >&2
+	exit 2
+	;;
+esac

@@ -1,0 +1,12 @@
+[Unit]
+Description=Screenshot Utility
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+ExecStart=flameshot
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target

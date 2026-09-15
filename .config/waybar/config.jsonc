@@ -2,7 +2,8 @@
 {
      "layer": "top", // Waybar at top layer
      "height": 30, // Waybar height (to be removed for auto height)
-    "spacing": 4, // Gaps between modules (4px)
+    "spacing": 0, // Spacing is defined in css
+    "reload_style_on_change": true, // lets ~/.scripts/screenshare-privacy hide modules live
 
 
 // Choose the order of the modules
@@ -135,12 +136,10 @@
         "format-wifi": "≪{essid}≫",
         "format-ethernet": "{ipaddr}/{cidr}≫",
         "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
+        "format-linked": "≪{essid}≫",
         "format-disconnected": "Disconnected ×",
         "format-disabled": "DISABLED ×",
-        "format-alt": "≪{essid}≫",
         // "format-alt": "{ifname}: {ipaddr}/{cidr}",
-        "on-click": "~/.scripts/networkmanager_dmenu"
     },
     "custom/seperator": {
         "format": " |",
@@ -207,9 +206,9 @@
             "<span foreground='#f38ba8'>󰈹 </span> $1",
 
             "(.*)Zen Browser": 
-            "<span foreground='#fab387'>󰺕 </span> Zen Browser",
+            "",
             "(.*) — Zen Browser": 
-            "<span foreground='#fab387'>󰺕 </span> $1",
+            "",
 
             // Development
 

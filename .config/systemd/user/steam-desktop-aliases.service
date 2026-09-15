@@ -1,0 +1,15 @@
+[Unit]
+Description=Sync steam_app_<appid>.desktop aliases for waybar icon resolution
+# The script writes into the directory the .path unit watches, so every real
+# change costs one extra no-op run. Give the start limit enough headroom to
+# absorb a burst of Steam writes: tripping it fails the .path unit itself and
+# silently ends monitoring.
+StartLimitIntervalSec=30s
+StartLimitBurst=10
+
+[Service]
+Type=oneshot
+# Debounce: events arriving during the sleep coalesce into a single later run,
+# so a batch install becomes one run plus one no-op rather than one run per file.
+ExecStartPre=/usr/bin/sleep 5
+ExecStart=%h/.scripts/steam-desktop-aliases.sh
