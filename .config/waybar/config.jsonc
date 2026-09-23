@@ -110,6 +110,10 @@
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
     "battery": {
+        // Pin to the laptop battery: without this, waybar inotify-watches every
+        // /sys/class/power_supply node, and a wireless peripheral's node
+        // vanishing mid-refresh throws std::runtime_error -> terminate (SIGABRT).
+        "bat": "BAT1",
         "states": {
             // "good": 95,
             "warning": 30,

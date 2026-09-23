@@ -65,6 +65,12 @@ hl.layer_rule({
 	ignore_alpha = 0,
 })
 
+hl.layer_rule({
+	match = { namespace = "psst" },
+	blur = false,
+	ignore_alpha = 0,
+})
+
 hl.window_rule({ match = { float = false }, no_shadow = true })
 
 local kittyfloat = hl.window_rule({
@@ -99,32 +105,89 @@ hl.window_rule({
 	border_size = 0,
 })
 
+-- ######## Steam ########
 hl.window_rule({
-	name = "games",
+	name = "steam-dialogs",
 	match = {
-		class = "^(.*steam_app.*|gamescope)$",
+		initial_class = "^steam$",
+		initial_title = "negative:^Steam$",
 	},
-	animation = "gnomed",
-	border_size = 0,
-	rounding = 0,
+	float = true,
 	no_blur = true,
 })
 
 hl.window_rule({
-	match = {
-		initial_class = "steam",
-		initial_title = "Friends List",
-	},
-	float = true,
+	name = "steam-min-size",
+	match = { class = "^steam$", float = true },
+	min_size = { 400, 300 },
+	no_blur = true,
 })
 
 hl.window_rule({
+	name = "steam-no-blur",
+	match = { class = "^steam$" },
+	no_blur = true,
+})
+
+-- ######## Games ########
+hl.window_rule({
+	name = "game-content-type",
 	match = {
-		initial_class = "steam",
-		initial_title = "Steam Settings",
+		class = "^(.*steam_app.*|gamescope)$",
+		title = "negative:^$",
+	},
+	content = "game",
+})
+
+-- Stage 2, appearance and behaviour.
+hl.window_rule({
+	name = "games",
+	match = { content = "game" },
+
+	animation = "gnomed",
+	border_size = 0,
+	rounding = 0,
+	no_blur = true,
+	render_unfocused = true,
+	no_follow_mouse = true,
+	scrolling_width = 1.0,
+	idle_inhibit = "focus",
+	no_shortcuts_inhibit = true,
+})
+
+hl.window_rule({
+	name = "game-helper-windows",
+	match = {
+		class = "^(.*steam_app.*)$",
+		title = "^$",
 	},
 	float = true,
+	center = true,
 })
+
+
+-- scrolling not centered fix
+hl.on("window.fullscreen", function(w)
+	if not w or w.fullscreen ~= 0 then
+		return
+	end
+
+	local ws = w.workspace
+	if not ws or ws.tiled_layout ~= "scrolling" then
+		return
+	end
+
+	local addr = w.address
+
+	hl.timer(function()
+		pcall(function()
+			local cur = hl.get_active_window()
+			if cur and cur.address == addr then
+				hl.dispatch(hl.dsp.focus({ window = cur }))
+			end
+		end)
+	end, { timeout = 60, type = "oneshot" })
+end)
 
 hl.window_rule({
 	match = {
@@ -174,8 +237,11 @@ hl.window_rule({
 
 hl.window_rule({ match = { initial_class = "fr.handbrake.ghb" }, float = true })
 
--- windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
--- todo: make this only activate on fullscreenstate 2 windows (fake fullscreen windows)
+hl.window_rule({
+	name = "fake-fullscreen-windows",
+	match = { fullscreen_state_client = 2 },
+	suppress_event = "maximize",
+})
 
 -- Wechat Popup rules (wechat popup windows have a intialTitle of "wechat" whereas the main window is "Wechat")
 hl.window_rule({
@@ -203,22 +269,6 @@ hl.window_rule({
 	float = true,
 })
 
--- hl.window_rule({
--- 	match = {
--- 		workspace = "f[1]",
--- 	},
--- 	float = true,
--- })
---
--- hl.window_rule({
--- 	match = {
--- 		workspace = "f[2]",
--- 	},
--- 	float = true,
--- })
-
--- hl.workspace_rule({ workspace = "4", decorate = false, no_shadow = true, gaps_in = 0, gaps_out = 0 })
--- hl.window_rule({ match = { workspace = "4" }, border_size = 0, rounding = 0, no_shadow = true })
 hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0, rounding = 0 })
 
 -- Special Workspace appearance
@@ -235,13 +285,14 @@ hl.window_rule({
 -- Special Workspace specific options
 hl.workspace_rule({ workspace = "s[1]", gaps_out = 30, no_rounding = false })
 
-hl.workspace_rule({ workspace = "special:discord",
-		gaps_out = { top = 40, right = 80, bottom = 40, left = 80 },
- })
-hl.window_rule({match = {workspace = "special:discord"},
+hl.workspace_rule({ workspace = "special:discord", gaps_out = { top = 40, right = 80, bottom = 40, left = 80 } })
+hl.window_rule({
+	match = { workspace = "special:discord" },
 	border_color = { colors = { "rgba(5865F2ee)", "rgba(7289DAee)" }, angle = 0 },
 	border_size = 8,
 })
+
+require("special_sidebar")
 
 -- Make file portals, / file pickers / File properties nice
 hl.window_rule({
@@ -258,7 +309,6 @@ hl.window_rule({
 --    this will probably break with a gnome upadte or soemthing
 -- i also match the properties window as a file picker window so it looks nice when i open it.
 -- Make file portal open nice
-
 -- round the properties window, cus it looks ugly if u dont
 hl.window_rule({ match = { initial_title = "^(.*Properties.*)$" }, rounding = 10 })
 
@@ -268,7 +318,6 @@ hl.window_rule({ match = { class = "PacketTracer" }, render_unfocused = true })
 
 -- so the lyrics still scroll when spotify is not in view.
 hl.window_rule({
-	name = "render_unfocused_on",
 	match = {
 		workspace = "special:spotify",
 		class = "Spotify",
@@ -335,7 +384,7 @@ hl.window_rule({
 
 hl.window_rule({
 	match = {
-		initial_class = "discord|org.telegram.desktop|Bitwarden",
+		initial_class = "discord|org.telegram.desktop|Bitwarden|Beeper",
 	},
 	no_screen_share = true,
 })
@@ -355,6 +404,11 @@ hl.window_rule({
 	match = { class = "org.telegram.desktop" },
 	workspace = "special:telegram",
 })
+
+hl.window_rule({
+	match = { class = "Beeper" },
+	workspace = "special:beeper",
+})
 -- If special workspace opened without any apps in; spawn the apps.
 
 hl.workspace_rule({
@@ -370,11 +424,6 @@ hl.workspace_rule({
 hl.workspace_rule({
 	workspace = "special:discord",
 	on_created_empty = "discord",
-})
-
-hl.workspace_rule({
-	workspace = "special:telegram",
-	on_created_empty = "Telegram",
 })
 
 hl.window_rule({
@@ -402,11 +451,8 @@ hl.window_rule({
 	rounding = 0,
 	no_blur = true,
 	float = true,
-	--no_anim = true,
 	no_shadow = true,
-	--no_follow_mouse = true,
 	render_unfocused = true,
-	--no_focus = true,
 })
 
 hl.window_rule({
@@ -417,11 +463,6 @@ hl.window_rule({
 	},
 	persistent_size = true,
 })
-
--- hl.window_rule({
--- 	match = { initial_title = "Godot" },
--- 	immediate = true,
--- })
 
 hl.window_rule({
 	match = { title = "ControlWindow" },

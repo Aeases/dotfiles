@@ -1,6 +1,7 @@
 ---@module 'hl'
 
 local special = require("special")
+local layout = require("layout")
 
 hl.bind("SUPER + SHIFT +Return", hl.dsp.exec_cmd("kitty --class=kitty-spawn"))
 hl.bind("SUPER + Return", hl.dsp.exec_cmd("kitty --single-instance"))
@@ -20,7 +21,7 @@ hl.bind(
 -- Actually shutdown
 hl.bind(
 	"SUPER + SHIFT + M",
-	hl.dsp.exec_cmd("exec /home/zane/.scripts/lib/prompt.sh Are you sure you want to quit killall Hyprland")
+	hl.dsp.exec_cmd("/home/zane/.scripts/lib/prompt.sh 'Are you sure you want to quit' && pkill Hyprland")
 )
 
 -- fullscreen (hide other windows)
@@ -50,9 +51,7 @@ hl.bind("SUPER + SHIFT + n", hl.dsp.layout("removemaster"))
 hl.bind("SUPER + V", hl.dsp.window.float())
 hl.bind("SUPER + P", hl.dsp.window.pseudo())
 hl.bind("SUPER + G", hl.dsp.group.toggle())
-hl.bind("SUPER + A", hl.dsp.group.prev())
-hl.bind("SUPER + D", hl.dsp.group.next())
---
+
 -- Move focus with mainMod + hjkl
 hl.bind("SUPER + H", hl.dsp.focus({ direction = "left" }))
 hl.bind("SUPER + L", hl.dsp.focus({ direction = "right" }))
@@ -74,35 +73,23 @@ hl.bind("SUPER + SHIFT + J", hl.dsp.window.move({ direction = "d", group_aware =
 -- Special workspace for each app for easy access (e.g. tab+d = discord)
 hl.bind("MOD5 + S", special.toggle("spotify"))
 hl.bind("MOD5 + D", special.toggle("discord", special.WACKY))
-hl.bind("MOD5 + T", special.toggle("telegram"))
+hl.bind("MOD5 + T", special.toggle("telegram", special.RIGHT))
+hl.bind("MOD5 + B", special.toggle("beeper", special.RIGHT))
 hl.bind("MOD5 + Q", hl.dsp.exec_cmd("kitty"))
 hl.bind("MOD5 + Z", hl.dsp.exec_cmd("zen-browser"))
 hl.bind("MOD5 + E", hl.dsp.exec_cmd("nautilus -w"))
+
 -- MOD5 is the iso-level3-shift / alt grave key, used on international keyboards
 -- but i use it as another modifier key and bound it to holding down tab in keyd
-
--- Scratchpad Workspace Keybind (Win + S)
-
-hl.bind("SUPER + S", special.toggle("scratchpad"))
+hl.bind("SUPER + S", special.toggle_or_dismiss("scratchpad"))
 hl.bind("SUPER + CTRL + S", hl.dsp.window.move({ workspace = "special:scratchpad" }))
 hl.bind("SUPER + SHIFT + S", hl.dsp.window.move({ workspace = "special:scratchpad" }, { follow = false }))
--- "Scratchpad", just a special workspace with a terminal in it
--- plus some keybinds to send a window to that workspace in case u take it out
--- or just want easy access to it
 
--- TODO fix this script (dont really need it rn since i mainly added this one for packet tracer anyways)
--- hl.bind("SUPER" .. " + " .. "Escape", hl.dsp.exec_cmd("~/.config/hypr/close_special.sh"))
--- exit currrent special workspace
--- for situations where im in a special workspace i dont have a keybind for, e.g. spawning
--- packet tracer activity window in a workspace i then immediately exit to banish it to the
--- shadow realm.
+hl.bind("mouse:272", special.dismiss_on_outside_click, { non_consuming = true })
 
 -- Screenshot Keybind
 hl.bind("PRINT", hl.dsp.exec_cmd("flameshot gui"))
--- grim -g "$(slurp -c '#ff0000ff')" -t ppm - | satty --filename - --fullscreen --output-filename ~/Pictures/Screenshots/satty-$(date '+%Y%m%d-%H:%M:%S').png
 hl.bind("SUPER + PRINT", hl.dsp.exec_cmd("/home/zane/.scripts/grimblast copy output --notify"))
--- bind = SUPER ALT, n, exec, grim -g "$(slurp -o -r -c '##ff0000ff')" -t ppm - | satty --filename - --fullscreen --output-filename ~/Pictures/Screenshots/satty-$(date '+%Y%m%d-%H:%M:%S').png
--- grimblast uses hyprpicker to freeze the screen for screenshots. idk how this is the best way
 
 -- Audio keys
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%+"))
@@ -126,7 +113,6 @@ hl.bind("xf86monbrightnessdown", hl.dsp.exec_cmd("brightnessctl set 10%-"))
 hl.bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind("SUPER + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
--- TODO: figure out how to do this again
 hl.bind("SUPER + K", hl.dsp.workspace.swap_monitors({ monitor1 = "current", monitor2 = "+1" }))
 
 -- QE switch workspaces
@@ -139,9 +125,21 @@ hl.bind("SUPER + CTRL + E", hl.dsp.focus({ direction = "right" }))
 hl.bind("SUPER + SHIFT + Q", hl.dsp.layout("swapcol l"))
 hl.bind("SUPER + SHIFT + E", hl.dsp.layout("swapcol r"))
 
--- Scrolling left/right
-hl.bind("SUPER + A", hl.dsp.layout("move -col"))
-hl.bind("SUPER + D", hl.dsp.layout("move +col"))
+-- Scrolling left/right, on the workspaces that scroll. Elsewhere `move ?col` is not a
+-- valid layoutmsg and only produces an error toast, so fall back to plain directional
+-- focus -- which is what moving a column does on a scrolling workspace anyway.
+local function pan_or_focus(col, direction)
+	return function()
+		if layout.is_scrolling() then
+			hl.dispatch(hl.dsp.layout("move " .. col))
+		else
+			hl.dispatch(hl.dsp.focus({ direction = direction }))
+		end
+	end
+end
+
+hl.bind("SUPER + A", pan_or_focus("-col", "left"))
+hl.bind("SUPER + D", pan_or_focus("+col", "right"))
 
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]

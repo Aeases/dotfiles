@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Copy Google Chrome's bundled Widevine CDM into Helium's user-data dir so that
+# DRM sites (Netflix, Spotify, ...) work. Helium is an ungoogled-Chromium build:
+# it ships no CDM and has the component updater stripped, so it can never fetch
+# one itself. Re-run after a Chrome update to pick up a newer CDM.
+set -euo pipefail
+
+SRC=/opt/google/chrome/WidevineCdm
+DEST_ROOT="${XDG_CONFIG_HOME:-$HOME/.config}/net.imput.helium/WidevineCdm"
+
+if [[ ! -r "$SRC/manifest.json" ]]; then
+  echo "error: no Chrome Widevine CDM at $SRC (is google-chrome installed?)" >&2
+  exit 1
+fi
+
+version=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$SRC/manifest.json")
+[[ -n "$version" ]] || { echo "error: could not read version from $SRC/manifest.json" >&2; exit 1; }
+
+dest="$DEST_ROOT/$version"
+lib=_platform_specific/linux_x64/libwidevinecdm.so
+
+if [[ -f "$dest/$lib" ]] && cmp -s "$SRC/$lib" "$dest/$lib"; then
+  echo "Widevine $version already in place at $dest (no-op)"
+else
+  install -Dm644 "$SRC/$lib"            "$dest/$lib"
+  install -Dm644 "$SRC/manifest.json"   "$dest/manifest.json"
+  [[ -f "$SRC/LICENSE" ]] && install -Dm644 "$SRC/LICENSE" "$dest/LICENSE"
+  echo "Installed Widevine $version to $dest"
+fi
+
+# Pointer file Chromium's component registry reads at startup.
+printf '{"Path":"%s"}' "$dest" > "$DEST_ROOT/latest-component-updated-widevine-cdm"
+
+# Drop stale versions.
+for old in "$DEST_ROOT"/*/; do
+  old=${old%/}
+  [[ "$old" == "$dest" ]] && continue
+  [[ -d "$old" ]] || continue
+  rm -rf -- "$old"
+  echo "Removed old CDM $(basename "$old")"
+done
+
+echo "Restart Helium, then check chrome://components"

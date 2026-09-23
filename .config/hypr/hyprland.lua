@@ -77,7 +77,8 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("/lib/xdg-desktop-portal-gnome")
 	hl.exec_cmd("waypaper --restore")
 	-- hl.exec_cmd("linux-wallpaperengine --no-fullscreen-pause --screen-root eDP-1 --screen-root DP-2 2837297807")
-	hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+	hl.exec_cmd("psst-polkit-agent")
+	hl.exec_cmd("psst-keyring-prompter")
 	hl.exec_cmd("systemctl --user start hypridle.service") -- single instance; bare `hypridle` can stack up
 	hl.exec_cmd("wl-clip-persist --clipboard regular")
 	-- ^^^ fixes borderline retrded behaviour where clipboard information is deleted when app is closed (for 'security', no other os does this btw)
@@ -157,6 +158,7 @@ hl.config({
 		touchpad = {
 			natural_scroll = true,
 			clickfinger_behavior = true,
+			tap_to_click = false,
 			-- tap-to-click = 0,
 			disable_while_typing = true,
 			scroll_factor = 0.3,
@@ -182,7 +184,7 @@ hl.config({
 	scrolling = {
 		fullscreen_on_one_column = true,
 		column_width = 0.5,
-		focus_fit_method = 1,
+		focus_fit_method = 0,
 		follow_focus = true,
 		follow_min_visible = 0.1,
 		-- explicit_column_widths = { 0.25, 0.333, 0.5, 0.667, 0.75, 1.0 },
@@ -234,8 +236,9 @@ hl.curve("overshot", { type = "bezier", points = { { 0.05, 0.9 }, { 0.1, 1.1 } }
 hl.curve("emphasizedAccel", { type = "bezier", points = { { 0.03, 0 }, { 0.8, 0.15 } } })
 hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
 hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })
+hl.curve("macSmooth", { type = "bezier", points = { { 0.25, 0.1 }, { 0.25, 1 } } })
 
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "default" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "default", style = "slide" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 2, bezier = "emphasizedDecel", style = "popin 90%" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 2, bezier = "emphasizedDecel", style = "slide" })
 hl.animation({ leaf = "border", enabled = true, speed = 2, bezier = "default" })
@@ -284,6 +287,11 @@ hl.config({
 		-- workspace_swipe_cancel_ratio = 0,
 		workspace_swipe_min_speed_to_force = 10,
 		-- workspace_swipe_forever = true
+
+		scrolling = {
+			move_snap_to_grid = false,
+			move_snap_cursor = true,
+		},
 	},
 })
 
@@ -342,78 +350,7 @@ hl.config({
 	},
 })
 
-local hconf = "~/.config/hypr/"
-
 require("keys")
 require("window_rules")
 require("dropdown")
-
-function setup_hyprbars()
-	if hl.plugin.hyprbars ~= nil then
-		-- Close (red)
-		hl.plugin.hyprbars.add_button({
-			bg_color = "rgb(ff5f57)",
-			fg_color = "rgb(000000)",
-			size = 12,
-			icon = "",
-			action = "hyprctl dispatch 'hl.dsp.window.kill(active)'",
-		})
-
-		-- Minimize (yellow)
-		hl.plugin.hyprbars.add_button({
-			bg_color = "rgb(febc2e)",
-			fg_color = "rgb(000000)",
-			size = 12,
-			icon = "",
-			action = "hyprctl dispatch movetoworkspacesilent special",
-		})
-
-		-- Maximize (green)
-		hl.plugin.hyprbars.add_button({
-			bg_color = "rgb(28c840)",
-			fg_color = "rgb(000000)",
-			size = 12,
-			icon = "",
-			action = "hyprctl dispatch fullscreen 1",
-		})
-
-		-- no bars for everything
-		hl.window_rule({
-			match = { initial_class = ".*" },
-			["hyprbars:no_bar"] = true,
-		})
-
-		-- only exception, has bars.
-		hl.window_rule({
-			match = { title = "ControlWindow" },
-			["hyprbars:no_bar"] = false,
-		})
-
-		-- other exception, has bars.
-		hl.window_rule({
-			match = { initial_class = "mpv" },
-			["hyprbars:no_bar"] = false,
-		})
-
-		hl.window_rule({ match = { title = "ControlWindow", fullscreen = true }, ["hyprbars:no_bar"] = true })
-
-		hl.config({
-			plugin = {
-				hyprbars = {
-					bar_height = 28,
-					bar_color = "rgb(282726)",
-					col = { text = "rgb(CECDC3)" },
-					bar_text_size = 14,
-					bar_padding = 10,
-					bar_text_font = "Minecraft",
-					bar_text_align = "left",
-					bar_part_of_window = true,
-					bar_precedence_over_border = true,
-					inactive_button_color = "rgb(d1d1d1)",
-				},
-			},
-		})
-	end
-end
-
-setup_hyprbars()
+require("hyprbars")

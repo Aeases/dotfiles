@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""blueman-applet, minus the battery icon swap.
+
+blueman's ConnectionNotifier._on_battery_update edits the live "Connected"
+notification in place and swaps the device's own icon (audio-headphones,
+input-mouse, ...) for a generic "battery" icon. We want the percentage, not
+the icon swap.
+
+Editing the installed plugin works but pacman reverts it on every blueman
+upgrade, so instead this shadows /usr/bin/blueman-applet via PATH
+(~/.local/bin precedes /usr/bin) and patches the method before the applet runs.
+"""
+import logging
+import runpy
+from gettext import gettext as _
+
+from gi.repository import GLib
+
+from blueman.plugins.applet.ConnectionNotifier import ConnectionNotifier
+
+REAL_APPLET = "/usr/bin/blueman-applet"
+
+
+def _on_battery_update(self, path: str, value: int) -> None:
+    # Upstream's version, with the set_notification_icon("battery") call dropped.
+    notification = self._notifications.pop(path, None)
+    if notification:
+        try:
+            notification.set_message(f"{_('Connected')} {value}%")
+        except GLib.Error:
+            logging.error("Failed to update notification", exc_info=True)
+
+
+# Degrade to stock behaviour rather than breaking notifications outright if
+# upstream reshapes this plugin.
+if hasattr(ConnectionNotifier, "_on_battery_update"):
+    ConnectionNotifier._on_battery_update = _on_battery_update
+else:
+    logging.warning("ConnectionNotifier._on_battery_update is gone; running unpatched")
+
+runpy.run_path(REAL_APPLET, run_name="__main__")
