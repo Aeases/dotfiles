@@ -1,6 +1,7 @@
 [Unit]
 Description=Nautilus GApplication service
 After=graphical-session.target
+PartOf=graphical-session.target
 
 [Service]
 ExecStart=/usr/bin/nautilus --gapplication-service

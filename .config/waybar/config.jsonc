@@ -144,6 +144,7 @@
         "format-disconnected": "Disconnected ×",
         "format-disabled": "DISABLED ×",
         // "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "on-click": "$HOME/repos/noctalia-shell/build/noctalia msg panel-toggle control-center network",
     },
     "custom/seperator": {
         "format": " |",

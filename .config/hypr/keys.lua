@@ -3,8 +3,10 @@
 local special = require("special")
 local layout = require("layout")
 
-hl.bind("SUPER + SHIFT +Return", hl.dsp.exec_cmd("kitty --class=kitty-spawn"))
-hl.bind("SUPER + Return", hl.dsp.exec_cmd("kitty --single-instance"))
+-- Apps use launch_app() (defined in hyprland.lua); short-lived commands and scripts stay plain
+-- exec_cmd.
+hl.bind("SUPER + SHIFT +Return", launch_app("kitty --class=kitty-spawn"))
+hl.bind("SUPER + Return", launch_app("kitty --single-instance"))
 hl.bind("SUPER + C", hl.dsp.window.close())
 
 hl.bind("SUPER + ALT + C", hl.dsp.exec_cmd("hyprpicker| wl-copy"))
@@ -15,13 +17,13 @@ hl.bind("SUPER + W", hl.dsp.exec_cmd("vicinae toggle"))
 -- Launch Lock Screen
 hl.bind(
 	"SUPER + M",
-	hl.dsp.exec_cmd("pidof hyprlock || (hyprlock && pactl set-sink-mute alsa_output.pci-0000_c1_00.6.analog-stereo 1)")
+	hl.dsp.exec_cmd("loginctl lock-session && pactl set-sink-mute alsa_output.pci-0000_c1_00.6.analog-stereo 1")
 )
 
 -- Actually shutdown
 hl.bind(
 	"SUPER + SHIFT + M",
-	hl.dsp.exec_cmd("/home/zane/.scripts/lib/prompt.sh 'Are you sure you want to quit' && pkill Hyprland")
+	hl.dsp.exec_cmd("/home/zane/.scripts/lib/prompt.sh 'Are you sure you want to quit' && uwsm stop")
 )
 
 -- fullscreen (hide other windows)
@@ -75,9 +77,9 @@ hl.bind("MOD5 + S", special.toggle("spotify"))
 hl.bind("MOD5 + D", special.toggle("discord", special.WACKY))
 hl.bind("MOD5 + T", special.toggle("telegram", special.RIGHT))
 hl.bind("MOD5 + B", special.toggle("beeper", special.RIGHT))
-hl.bind("MOD5 + Q", hl.dsp.exec_cmd("kitty"))
-hl.bind("MOD5 + Z", hl.dsp.exec_cmd("zen-browser"))
-hl.bind("MOD5 + E", hl.dsp.exec_cmd("nautilus -w"))
+hl.bind("MOD5 + Q", launch_app("kitty"))
+hl.bind("MOD5 + Z", launch_app("zen.desktop"))
+hl.bind("MOD5 + E", launch_app("org.gnome.Nautilus.desktop"))
 
 -- MOD5 is the iso-level3-shift / alt grave key, used on international keyboards
 -- but i use it as another modifier key and bound it to holding down tab in keyd
@@ -140,6 +142,18 @@ end
 
 hl.bind("SUPER + A", pan_or_focus("-col", "left"))
 hl.bind("SUPER + D", pan_or_focus("+col", "right"))
+
+local function scrolling_msg(msg)
+	return function()
+		if layout.is_scrolling() then
+			hl.dispatch(hl.dsp.layout(msg))
+		end
+	end
+end
+
+hl.bind("SUPER + R", scrolling_msg("colresize +conf"))
+hl.bind("SUPER + SHIFT + A", scrolling_msg("consume_or_expel prev"))
+hl.bind("SUPER + SHIFT + D", scrolling_msg("consume_or_expel next"))
 
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]

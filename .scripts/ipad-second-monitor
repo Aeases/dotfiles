@@ -10,12 +10,12 @@ start() {
     sleep 1
   fi
 
-  # pkill -f "wayvnc.*${OUT}" 2>/dev/null || true
-  # exec wayvnc -o "$OUT" -f 30 0.0.0.0:"$PORT"
+  pkill -f "wayvnc.*${OUT}" 2>/dev/null || true
+  exec wayvnc -o "$OUT" -f 30 0.0.0.0:"$PORT"
 }
 
 stop() {
-  # pkill -f "wayvnc.*${OUT}" 2>/dev/null || true
+  pkill -f "wayvnc.*${OUT}" 2>/dev/null || true
   hyprctl output remove "$OUT" || true
 }
 

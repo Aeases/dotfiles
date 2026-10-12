@@ -112,6 +112,7 @@ button:hover {
     background-color: transparent;
     color: @fg;
     border-radius: 4px;
+    font-weight: bold;
 }
 
 #workspaces .taskbar-window {
@@ -181,6 +182,10 @@ button:hover {
     /* 6px, not 4px: these used to get 4px here plus 4px of bar `spacing`, and
        their neighbours now contribute 2px of their own margin instead. */
     margin: 0 6px;
+}
+
+#window {
+    font-weight: bold;
 }
 
 /* Whatever module is outermost sits flush against window#waybar>box's own

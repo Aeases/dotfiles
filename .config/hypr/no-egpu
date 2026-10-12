@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+# Succeeds when no eGPU is connected. Used in hypridle.conf as `no-egpu && <cmd>`.
+! switcherooctl list 2>/dev/null | grep -q 'Discrete: *yes'

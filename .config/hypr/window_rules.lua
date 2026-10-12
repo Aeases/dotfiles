@@ -94,6 +94,13 @@ hl.window_rule({
 
 hl.window_rule({
 	match = {
+		class = "modrinth-app-wrapped|Minecraft.*",
+	},
+	scrolling_width = 0.8,
+})
+
+hl.window_rule({
+	match = {
 		initial_class = "org.localsend.localsend_app",
 	},
 	float = true,
@@ -145,8 +152,9 @@ hl.window_rule({
 	match = { content = "game" },
 
 	animation = "gnomed",
-	border_size = 0,
-	rounding = 0,
+	--border_size = 0,
+	border_size = 3,
+	--rounding = 0,
 	no_blur = true,
 	render_unfocused = true,
 	no_follow_mouse = true,
@@ -164,7 +172,6 @@ hl.window_rule({
 	float = true,
 	center = true,
 })
-
 
 -- scrolling not centered fix
 hl.on("window.fullscreen", function(w)
@@ -211,6 +218,7 @@ hl.window_rule({
 })
 
 -- windowrule = scrollmouse 3.0, initialClass:steam_app_3513350
+hl.window_rule({ match = { initial_class = "steam_app_3513350" }, scroll_mouse = 6.0 })
 
 hl.window_rule({
 	name = "clipstudio-empty-title",
@@ -257,10 +265,8 @@ hl.window_rule({
 -- SMART GAPS
 hl.workspace_rule({ workspace = "w[tv1]s[false]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, rounding = 0 })
-hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0, rounding = 0 })
 -- float on maximized workspace
 hl.window_rule({
 	match = {
@@ -268,8 +274,6 @@ hl.window_rule({
 	},
 	float = true,
 })
-
-hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0, rounding = 0 })
 
 -- Special Workspace appearance
 hl.window_rule({
@@ -387,6 +391,13 @@ hl.window_rule({
 		initial_class = "discord|org.telegram.desktop|Bitwarden|Beeper",
 	},
 	no_screen_share = true,
+})
+
+hl.window_rule({
+	match = {
+		initial_class = "app.drey.EarTag",
+	},
+	float = true,
 })
 
 -- Pulls up the speical workspace for these apps if they are opened normally

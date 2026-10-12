@@ -1,3 +1,6 @@
+# Login environment, shared with systemd/uwsm and greetd
+emulate sh -c '. ~/.profile'
+
 append_path() {
   if [ -d "$1" ]; then
     case ":$PATH:" in
@@ -112,18 +115,9 @@ gifMe () {mkdir -p /tmp/gifMeImages/; rm /tmp/gifMeImages/*.png; ffmpeg -i $1 -v
 # ZSH-autcomplete settings
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#d19a66"
 
-# Node Version Manager
-export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Add installed bun binaries to path
-export BUN_INSTALL="$HOME/.bun"
-prepend_path "$BUN_INSTALL/bin"
-
-
-
-export HOMEBREW_NO_ANALYTICS=1
 
 
 

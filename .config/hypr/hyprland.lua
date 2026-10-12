@@ -1,5 +1,9 @@
 ---@module 'hl'
 
+function launch_app(cmd)
+	return hl.dsp.exec_cmd("uwsm-app -s app.slice -- " .. cmd)
+end
+
 local function lid_closed()
 	local f = io.open("/proc/acpi/button/lid/LID0/state", "r")
 	if not f then
@@ -69,46 +73,27 @@ hl.workspace_rule({ workspace = "1", layout = "scrolling" })
 -- Autostart
 hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprpm reload")
-	hl.exec_cmd(
-		"dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_CLASS XDG_SESSION_TYPE"
-	)
-	hl.exec_cmd("systemctl --user start hyprland-session.target") -- add this
-	-- ^^^ Sync hyprland env variables to systemd so services started know about them
+	hl.exec_cmd("uwsm finalize")
 	hl.exec_cmd("/lib/xdg-desktop-portal-gnome")
 	hl.exec_cmd("waypaper --restore")
 	-- hl.exec_cmd("linux-wallpaperengine --no-fullscreen-pause --screen-root eDP-1 --screen-root DP-2 2837297807")
 	hl.exec_cmd("psst-polkit-agent")
 	hl.exec_cmd("psst-keyring-prompter")
 	hl.exec_cmd("systemctl --user start hypridle.service") -- single instance; bare `hypridle` can stack up
+	hl.exec_cmd("/home/zane/repos/noctalia-shell/build/noctalia") -- lock screen only; hypridle's lock_cmd drives it
 	hl.exec_cmd("wl-clip-persist --clipboard regular")
 	-- ^^^ fixes borderline retrded behaviour where clipboard information is deleted when app is closed (for 'security', no other os does this btw)
 	hl.exec_cmd("kdeconnectd")
 	hl.exec_cmd("sleep 4; pactl set-sink-mute 'alsa_output.pci-0000_c1_00.6.analog-stereo' 1")
 	-- Mute laptop speakers on boot
 	hl.exec_cmd("fcitx5")
-	-- Allow casting to linux from ipad for discord screenshare ^^^^
 	hl.exec_cmd("keyd-application-mapper -d")
-	hl.exec_cmd("dex -a -s /etc/xdg/autostart/:~/.config/autostart/")
-	hl.exec_cmd("/home/zane/.local/bin/volumixer --daemon")
 end)
 
 -- exec-once = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
 
-hl.env("PATH", os.getenv("HOME") .. "/.local/bin:" .. os.getenv("PATH"))
-hl.env("QT_IM_MODULE", "fcitx")
-hl.env("XMODIFIERS", "@im=fcitx")
-hl.env("XCURSOR_SIZE", "24")
-hl.env("HYPRCURSOR_SIZE", "24")
 -- env = XCURSOR_THEME,Adwaita
--- env = XCURSOR_SIZE,18
--- env = HYPRCURSOR_SIZE,32
 -- env = HYPRCURSOR_THEME,aero
-hl.env("SDL_IM_MODULE", "fcitx")
-hl.env("GLFW_IM_MODULE", "ibus")
-hl.env("INPUT_METHOD", "fcitx")
-hl.env("QT_QPA_PLATFORM", "wayland")
-hl.env("QT_QPA_PLATFORMTHEME", "hyprqt6engine")
-hl.env("ILLOGICAL_IMPULSE_VIRTUAL_ENV", "~/.local/state/quickshell/.venv")
 
 -- ############ Others #############
 
@@ -136,7 +121,7 @@ hl.config({
 hl.config({
 	general = {
 		gaps_in = 2,
-		gaps_out = 5,
+		gaps_out = 8,
 		border_size = 2,
 		col = {
 			active_border = "rgba(4385BEee)",
@@ -184,7 +169,7 @@ hl.config({
 	scrolling = {
 		fullscreen_on_one_column = true,
 		column_width = 0.5,
-		focus_fit_method = 0,
+		focus_fit_method = 1,
 		follow_focus = true,
 		follow_min_visible = 0.1,
 		-- explicit_column_widths = { 0.25, 0.333, 0.5, 0.667, 0.75, 1.0 },
@@ -340,7 +325,8 @@ hl.config({
 		render_unfocused_fps = 5,
 		font_family = "Minecraft",
 		enable_swallow = true,
-		swallow_regex = "kitty|kitty-spawn",
+		-- swallow_regex = "kitty|kitty-spawn",
+		-- swallow_regex = "org.gnome.Nautilus",
 		session_lock_xray = true,
 		key_press_enables_dpms = true,
 		allow_session_lock_restore = true,
