@@ -4,7 +4,7 @@ PartOf=graphical-session.target
 After=graphical-session.target
 
 [Service]
-ExecStart=/home/zane/.local/bin/volumixer --daemon
+ExecStart=/usr/bin/env volumixer --daemon
 Restart=on-failure
 RestartSec=3
 

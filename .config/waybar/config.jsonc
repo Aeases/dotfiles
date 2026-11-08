@@ -15,6 +15,7 @@
         "hyprland/window"
     ],
     "modules-right": [
+        "privacy",
         "pulseaudio",
         "custom/egpu",
         "network#bt-tether",
@@ -78,6 +79,7 @@
             "orientation": "horizontal",
             // List of regexes. A window will NOT be shown if its window class or title match one or more items. Default: []
             // "ignore-list": [ "code", "Firefox - .*" ],
+            "ignore-list": [ "^Picture-in-Picture$" ],
             // Command to run when a window is clicked. Default: "" (switch to the workspace as usual). Allowed variables: {address}, {button}
             "on-click-window": "/some/arbitrary/script {address} {button}"
     }
@@ -157,6 +159,25 @@
         "interval": 5,
         "format": "{}",
         "on-click": "switcherooctl list | notify-send 'GPUs' \"$(switcherooctl list)\""
+    },
+    "privacy": {
+        "on-click": "/home/zane/.scripts/screenshare-reveal",
+        "icon-size": 15,
+        "transition-duration": 150,
+        "modules": [
+            {
+                "type": "audio-in",
+                "icon-name": "pixel-microphone-symbolic",
+                "tooltip": true,
+                "tooltip-icon-size": 20
+            }
+        ],
+        // Matched against node.name.
+        "ignore": [
+            { "type": "audio-in", "name": "deepfilter_mic.capture" },
+            { "type": "audio-in", "name": "gsr-default_input" },
+            { "type": "audio-in", "name": "gsr-default_output" }
+        ]
     },
     "pulseaudio/slider": {
         "min": 0,

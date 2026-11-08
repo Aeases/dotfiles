@@ -37,6 +37,10 @@ vim.o.smartcase = true
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
 
+vim.o.foldcolumn = '1'
+vim.o.foldtext = ''
+vim.opt.fillchars:append { fold = ' ', foldopen = '\239\129\184', foldclose = '\239\129\148', foldsep = ' ', foldinner = ' ' }
+
 -- Decrease update time
 vim.o.updatetime = 250
 
@@ -73,3 +77,6 @@ vim.o.scrolloff = 10
 vim.o.confirm = false
 
 -- vim: ts=2 sts=2 sw=2 et
+
+-- .pl files are Prolog here, not Perl
+vim.filetype.add { extension = { pl = 'prolog' } }

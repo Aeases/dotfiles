@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -u
+[ $# -gt 0 ] || { echo "usage: ${0##*/} COMMAND [ARGS...]" >&2; exit 2; }
+
+data_home=${XDG_DATA_HOME:-$HOME/.local/share}
+IFS=: read -ra data_dirs <<<"${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+dirs=()
+for d in "$data_home/applications" "${data_dirs[@]/%//applications}"; do
+    [ -d "$d" ] && dirs+=("$d")
+done
+
+result=
+[ ${#dirs[@]} -gt 0 ] && result=$(
+    find "${dirs[@]}" -maxdepth 2 -name '*.desktop' -type f -print0 2>/dev/null |
+    xargs -0 -r awk -v cmd="$*" '
+    function norm(s) {
+        gsub(/%[fFuUickdDnNvm]|"/, "", s); gsub("\047", "", s)
+        gsub(/[ \t]+/, " ", s); sub(/^ /, "", s); sub(/ $/, "", s)
+        return s
+    }
+    function flush(   e, vis) {
+        e = norm(exec)
+        if (e == "" || (cmd != e && index(cmd, e " ") != 1)) return
+        vis = nodisp !~ /^[Tt]rue$/
+        if (length(e) > bestlen || (length(e) == bestlen && vis > bestvis)) {
+            bestlen = length(e); bestvis = vis; best = pref; bestfile = curfile
+        }
+    }
+    FNR == 1 { flush(); curfile = FILENAME; exec = pref = nodisp = ""; insec = 0 }
+    /^[ \t]*\[/ { insec = /^[ \t]*\[Desktop Entry\][ \t]*$/; next }
+    !insec { next }
+    /^[ \t]*Exec[ \t]*=/ { if (exec == "") { sub(/^[^=]*=[ \t]*/, ""); exec = $0 }; next }
+    /^[ \t]*PrefersNonDefaultGPU[ \t]*=/ { sub(/^[^=]*=[ \t]*/, ""); pref = $0; next }
+    /^[ \t]*NoDisplay[ \t]*=/ { sub(/^[^=]*=[ \t]*/, ""); nodisp = $0 }
+    END { flush(); printf "%s\t%s\n", (best ~ /^[Tt]rue$/) ? "true" : "false", bestfile }
+    '
+)
+
+pref=false deskfile= appid=
+[ -n "$result" ] && IFS=$'\t' read -r pref deskfile <<<"$result"
+[ "$pref" = true ] || pref=false
+if [ -n "$deskfile" ]; then
+    appid=${deskfile##*/}
+    appid=$(systemd-escape -- "${appid%.desktop}" 2>/dev/null) || appid=
+fi
+
+cmd=("$@")
+[ "$pref" = true ] && cmd=(switcherooctl launch "$@")
+scope=()
+[ -n "$appid" ] && [ -n "${XDG_RUNTIME_DIR:-}" ] && command -v systemd-run >/dev/null 2>&1 &&
+    scope=(systemd-run --user --scope --slice=app.slice --quiet --collect
+           --unit="app-vicinae-${appid}-${RANDOM}${RANDOM}" --)
+
+if [ "${VICINAE_GPU_LAUNCH_DEBUG:-}" = 1 ]; then
+    printf 'desktop=%s\nappid=%s\nPrefersNonDefaultGPU=%s\nscope=%s\nwould run: %s\n' \
+        "${deskfile:-<no match>}" "${appid:-<none>}" "$pref" \
+        "$([ ${#scope[@]} -gt 0 ] && echo yes || echo no)" "${scope[*]:+${scope[*]} }${cmd[*]}"
+    exit 0
+fi
+exec "${scope[@]}" "${cmd[@]}"

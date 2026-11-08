@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Toggle Vicinae
+Exec=vicinae toggle
+Icon=vicinae
+NoDisplay=true
+Terminal=false
+StartupNotify=false

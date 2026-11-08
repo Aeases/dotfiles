@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 10 10" shape-rendering="crispEdges">
+<!-- Pixel mic for the waybar privacy module, drawn on the Minecraft font
+     grid (7x9). -symbolic so GTK tints it with the CSS colour.
+     10x10 canvas at icon-size 15 = 20 screen px on the 1.33-scaled eDP-1,
+     so every pixel is exactly 2 screen px. The drawing sits at the top of
+     the canvas so its centre lines up with the font glyphs.
+     Comments stay inside <svg>: GTK sniffs the first bytes for the svg tag. -->
+<g fill="#bebebe">
+  <rect x="3" y="0" width="3" height="1"/>
+  <rect x="3" y="1" width="3" height="1"/>
+  <rect x="1" y="2" width="1" height="1"/>
+  <rect x="3" y="2" width="3" height="1"/>
+  <rect x="7" y="2" width="1" height="1"/>
+  <rect x="1" y="3" width="1" height="1"/>
+  <rect x="3" y="3" width="3" height="1"/>
+  <rect x="7" y="3" width="1" height="1"/>
+  <rect x="1" y="4" width="1" height="1"/>
+  <rect x="3" y="4" width="3" height="1"/>
+  <rect x="7" y="4" width="1" height="1"/>
+  <rect x="2" y="5" width="1" height="1"/>
+  <rect x="6" y="5" width="1" height="1"/>
+  <rect x="3" y="6" width="3" height="1"/>
+  <rect x="4" y="7" width="1" height="1"/>
+  <rect x="2" y="8" width="5" height="1"/>
+</g>
+</svg>

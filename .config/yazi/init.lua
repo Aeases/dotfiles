@@ -10,3 +10,5 @@ require("relative-motions"):setup({
 		normal = ui.Style(),
 	},
 })
+
+require("inbee"):setup()

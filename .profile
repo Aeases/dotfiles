@@ -1,6 +1,3 @@
-# Login environment (POSIX sh). Read by greetd before every session, by uwsm (which then
-# exports it to systemd and D-Bus, so vicinae and other user services get it), and by zsh
-# through ~/.zprofile.
 
 prepend_path() {
   case ":$PATH:" in
@@ -17,7 +14,6 @@ append_path() {
 
 export EDITOR=nvim
 export VISUAL=nvim
-export BROWSER=nvim:vim:nano:firefox
 export NVC="$HOME/.config/nvim/"
 export FVM_CACHE_PATH="$HOME/.fvm"
 export GOPATH="$HOME/.local/share/go"
@@ -25,8 +21,9 @@ export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
 export TEXMFHOME="$HOME/.local/share/texmf"
 export ELECTRON_OZONE_PLATFORM_HINT=auto
 export HOMEBREW_NO_ANALYTICS=1
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR="$HOME/.local/share/nvm"
 export BUN_INSTALL="$HOME/.bun"
+export VICINAE_OVERRIDES="$HOME/.config/vicinae/gpu-launch.jsonc"
 
 prepend_path "$HOME/.local/bin"
 prepend_path "$HOME/.npm-global/bin"
@@ -34,5 +31,3 @@ prepend_path "$HOME/.npm-global/bin"
 append_path "$HOME/.cargo/bin"
 append_path "$HOME/.dotnet/tools"
 export PATH
-
-unset -f prepend_path append_path

@@ -4,7 +4,7 @@ PartOf=graphical-session.target
 After=graphical-session.target
 
 [Service]
-ExecStart=/usr/bin/kitty --single-instance --start-as=hidden --listen-on=unix:@mykitty
+ExecStart=/usr/bin/env kitty --single-instance --start-as=hidden --listen-on=unix:@mykitty
 Restart=on-failure
 RestartSec=3
 

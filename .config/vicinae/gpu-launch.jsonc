@@ -1,0 +1,25 @@
+// Loaded through VICINAE_OVERRIDES (~/.profile), on top of settings.json. Kept out of
+// settings.json because vicinae rewrites that file (temp file + rename) whenever a
+// setting changes in its GUI, which would replace a stow symlink with a plain file.
+//
+// The whole applications preferences object is here, not just launchPrefix, since
+// how vicinae merges two preferences objects isn't documented. Because overrides
+// win, GUI changes to these particular preferences get ignored: edit them here.
+{
+   "providers": {
+      "applications": {
+         "preferences": {
+            "defaultAction": "launch",
+            "paths": [
+               "/home/zane/.local/share/applications",
+               "/home/zane/.local/share/flatpak/exports/share/applications",
+               "/var/lib/flatpak/exports/share/applications",
+               "/usr/local/share/applications",
+               "/usr/share/applications"
+            ],
+            // PrefersNonDefaultGPU support and per-app scopes: ~/.local/bin/vicinae-gpu-launch
+            "launchPrefix": "vicinae-gpu-launch"
+         }
+      }
+   }
+}

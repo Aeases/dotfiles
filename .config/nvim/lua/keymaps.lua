@@ -112,4 +112,28 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- Remember folds (and cursor position) per file across sessions, see `:help :mkview`
+vim.o.viewoptions = 'folds,cursor'
+local remember_folds = vim.api.nvim_create_augroup('remember-folds', { clear = true })
+local function has_view(buf)
+  return vim.bo[buf].buftype == ''
+    and vim.api.nvim_buf_get_name(buf) ~= ''
+    and not vim.tbl_contains({ 'gitcommit', 'gitrebase' }, vim.bo[buf].filetype)
+    and not vim.wo.diff
+end
+vim.api.nvim_create_autocmd({ 'BufWinLeave', 'BufWritePost' }, {
+  desc = 'Save folds when leaving or writing a file (writing covers a crash or kill)',
+  group = remember_folds,
+  callback = function(event)
+    if has_view(event.buf) then vim.cmd 'silent! mkview' end
+  end,
+})
+vim.api.nvim_create_autocmd('BufWinEnter', {
+  desc = 'Restore folds when opening a file',
+  group = remember_folds,
+  callback = function(event)
+    if has_view(event.buf) then vim.cmd 'silent! loadview' end
+  end,
+})
+
 -- vim: ts=2 sts=2 sw=2 et

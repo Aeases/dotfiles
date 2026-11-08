@@ -10,8 +10,8 @@ HISTSIZE=1000000
 SAVEHIST=1000000
 setopt autocd autopushd pushdminus pushdsilent pushdtohome
 setopt SHARE_HISTORY
-# setopt INC_APPEND_HISTORY # Not needed with SHARE_HISTORY
-unsetopt correct_all BEEP # Disable Autocorrect
+setopt HIST_IGNORE_SPACE # commands starting with a space stay out of history
+unsetopt correct_all BEEP # no. more. AUTOCORRECT
 
 # DIV: > Compinit Setup <
 autoload -Uz compinit
@@ -19,39 +19,28 @@ zstyle ':completion:*' menu select # Tab goes into the list of options.
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # Color-coded completions
 zmodload zsh/complist
 
-# only runs the full compinit once every 24hrs. uses cached compinit otherwise.
-# needs EXTENDED_GLOB for (#qN.mh+24) to work.
+# EXTENDED_GLOB is needed for the (#qN.mh+24) compinit cache check further down.
 setopt EXTENDED_GLOB
-if [[ -n "${HOME}/.zcompdump"(#qN.mh+24) ]]; then
-  compinit
-else
-  compinit -C
-fi
-_comp_options+=(globdots) # Ensure hidden files are listed in completions
+setopt NO_CLOBBER APPEND_CREATE # > refuses to overwrite existing files (use >| to force); >> still creates
 zle_highlight=('paste:none') # Disable highlighting pasted text
 
 # DIV: >>> MY CUSTOM KEYBINDS <<<
 
-# Makes Ctrl+a accept zsh completions
+# Makes Alt+a accept zsh autosuggestions
 bindkey '^[a' autosuggest-accept 
 
-# Edit line in vim buffer
+# Edit line in vim buffer. Bound in zvm_after_init because zsh-vi-mode rebinds ^e to end-of-line when it loads.
 autoload -U edit-command-line; zle -N edit-command-line
-bindkey '^e' edit-command-line
+zvm_after_init() { bindkey '^e' edit-command-line }
 
-# vi mode (NOT NEEDED WITH VI MODE PLUGIN)
-# bindkey -v
-# export KEYTIMEOUT=1
-
-# Use vim keybinds to select stuff in the autocomplete menujk
+# Use vim keybinds to select stuff in the autocomplete menu
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
 
-# Opens lfcd on alt+o
-# lfcd () {cd "$(command lf -print-last-dir "$@")"}
+# Opens yazi on alt+o and cds to its last directory on exit
 function yazicd() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 	yazi "$@" --cwd-file="$tmp"
@@ -79,16 +68,23 @@ zinit light jeffreytse/zsh-vi-mode
 zinit load zdharma-continuum/history-search-multi-word
 zinit light zsh-users/zsh-completions
 zinit light hlissner/zsh-autopair
-#zinit light marlonrichert/zsh-autocomplete
 zinit light zsh-users/zsh-autosuggestions
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-export ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|ls *|zd *|xdg-open *|nautilus *|open *"
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|ls *|zd *|xdg-open *|nautilus *|open *"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
 zinit light zdharma-continuum/fast-syntax-highlighting
+
+if [[ -n "${HOME}/.zcompdump"(#qN.mh+24) ]]; then
+  compinit && touch "${HOME}/.zcompdump"
+else
+  compinit -C
+fi
+_comp_options+=(globdots)
 
 prepend_path "$HOME/bin"
 prepend_path "$HOME/.local/bin"
 append_path "$HOME/.scripts"
+append_path "$HOME/.toolscripts"
 
 source "${HOME}/.scriptsyFripsy.bash"
 source "${HOME}/.apikeys"

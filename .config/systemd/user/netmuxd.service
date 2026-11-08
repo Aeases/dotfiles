@@ -1,0 +1,11 @@
+[Unit]
+Description=netmuxd network-only iOS muxer (Wi-Fi iPhone access next to system usbmuxd)
+
+[Service]
+ExecStartPre=-/usr/bin/rm -f %t/netmuxd.sock
+ExecStart=/usr/bin/netmuxd --disable-usb --socket-path %t/netmuxd.sock
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

@@ -58,7 +58,7 @@ SimpleEventHook {
     -- metadata is keyed by id, so re-apply whenever a source appears.
     EventInterest {
       Constraint { "event.type", "=", "node-added" },
-      Constraint { "media.class", "=", "Audio/Source" },
+      Constraint { "media.class", "#", "Audio/Source*" },
     },
     EventInterest {
       Constraint { "event.type", "=", "metadata-added" },

@@ -22,21 +22,25 @@ hl.monitor({
 	scale = 1.25,
 })
 
--- Internal Screen
-hl.monitor({
-	output = "desc:BOE 0x0BCA",
-	mode = "2256x1504@59.99900",
-	position = "auto",
-	scale = 1.33,
-	disabled = lid_closed(),
-})
+local function internal_screen(closed, position)
+	hl.monitor({
+		output = "desc:BOE 0x0BCA",
+		mode = "2256x1504@59.99900",
+		position = position or "auto",
+		scale = 1.33,
+		disabled = closed,
+	})
+end
+internal_screen(lid_closed())
 
 -- AOC Monitor
+local aoc = "desc:AOC U34G2G4R3 0x00002828"
 hl.monitor({
-	output = "desc:AOC U34G2G4R3 0x00002828",
+	output = aoc,
 	mode = "3440x1440@144",
 	position = "auto-right",
 	scale = 1.33,
+	supports_hdr = -1,
 })
 
 -- --- Other Monitors ---
@@ -57,43 +61,44 @@ hl.monitor({
 
 -- --- Workspaces ---
 
-local aoc = "desc:AOC U34G2G4R3 0x00002828"
-
-if lid_closed() then
-	hl.workspace_rule({ workspace = "1", monitor = aoc, default = true })
-else
-	hl.workspace_rule({ workspace = "1", monitor = "eDP-1", default = true })
-	hl.workspace_rule({ workspace = "2", monitor = aoc, default = true })
+for i = 1, 10 do
+	if i == 3 then
+		hl.workspace_rule({ workspace = "3", monitor = "eDP-1", default = true })
+	else
+		hl.workspace_rule({ workspace = tostring(i), monitor = aoc, default = i == 1 })
+	end
 end
 
--- workspace = 1, layout:scrolling
-
 hl.workspace_rule({ workspace = "1", layout = "scrolling" })
+hl.workspace_rule({ workspace = "2", layout = "scrolling" })
 
 -- Autostart
 hl.on("hyprland.start", function()
+	if not hl.get_monitor(aoc) then
+		hl.dispatch(hl.dsp.focus({ workspace = 1 }))
+	end
 	hl.exec_cmd("hyprpm reload")
 	hl.exec_cmd("uwsm finalize")
-	hl.exec_cmd("/lib/xdg-desktop-portal-gnome")
+	hl.exec_cmd("systemctl --user start xdg-desktop-portal-gnome.service")
 	hl.exec_cmd("waypaper --restore")
+	hl.exec_cmd(
+		"test -e /usr/share/glib-2.0/schemas/zz1-aeases-os-icons.gschema.override && gsettings reset org.gnome.desktop.interface icon-theme"
+	) -- reset back to old icon theme to revert Plasma's GTK sync
 	-- hl.exec_cmd("linux-wallpaperengine --no-fullscreen-pause --screen-root eDP-1 --screen-root DP-2 2837297807")
 	hl.exec_cmd("psst-polkit-agent")
 	hl.exec_cmd("psst-keyring-prompter")
 	hl.exec_cmd("systemctl --user start hypridle.service") -- single instance; bare `hypridle` can stack up
-	hl.exec_cmd("/home/zane/repos/noctalia-shell/build/noctalia") -- lock screen only; hypridle's lock_cmd drives it
+	hl.exec_cmd("noctalia") -- lock screen only; hypridle's lock_cmd drives it
 	hl.exec_cmd("wl-clip-persist --clipboard regular")
 	-- ^^^ fixes borderline retrded behaviour where clipboard information is deleted when app is closed (for 'security', no other os does this btw)
 	hl.exec_cmd("kdeconnectd")
-	hl.exec_cmd("sleep 4; pactl set-sink-mute 'alsa_output.pci-0000_c1_00.6.analog-stereo' 1")
+	hl.exec_cmd("sleep 4; pactl set-sink-mute 'alsa_output.pci-0000_c1_00.6.analog-stereo-speaker' 1")
 	-- Mute laptop speakers on boot
 	hl.exec_cmd("fcitx5")
 	hl.exec_cmd("keyd-application-mapper -d")
+	hl.exec_cmd("/home/zane/.scripts/screenshare-privacy off") -- a share cut off by reboot/logout never ran its "off"
 end)
 
--- exec-once = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
-
--- env = XCURSOR_THEME,Adwaita
--- env = HYPRCURSOR_THEME,aero
 
 -- ############ Others #############
 
@@ -102,13 +107,16 @@ end)
 --
 local wallpaper = "${HOME}/.config/hypr/wallpapers/Final Fantasy VII.gif"
 
---exec-once = sleep 4; pactl set-sink-mute "alsa_output.pci-0000_c1_00.6.analog-stereo" 1
 
 -- Clamshell Mode configuration
-hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd("~/.config/hypr/lid.sh open"), { locked = true })
--- Lid is opened
-hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd("~/.config/hypr/lid.sh close"), { locked = true })
--- Lid is closed
+hl.bind("switch:on:Lid Switch", function()
+	if hl.get_monitor(aoc) then
+		internal_screen(true)
+	end
+end, { locked = true })
+hl.bind("switch:off:Lid Switch", function()
+	internal_screen(false, hl.get_monitor(aoc) and "auto-left" or "auto")
+end, { locked = true })
 
 hl.config({
 	debug = {
@@ -171,7 +179,7 @@ hl.config({
 		column_width = 0.5,
 		focus_fit_method = 1,
 		follow_focus = true,
-		follow_min_visible = 0.1,
+		follow_min_visible = 1.0, -- focus never scrolls
 		-- explicit_column_widths = { 0.25, 0.333, 0.5, 0.667, 0.75, 1.0 },
 	},
 
@@ -252,9 +260,16 @@ hl.config({
 -- TODO:
 --
 hl.gesture({
-	fingers = 3,
+	fingers = 4,
 	direction = "horizontal",
 	action = "workspace",
+})
+
+hl.gesture({
+	fingers = 3,
+	direction = "horizontal",
+	scale = 8,
+	action = "scroll_move",
 })
 
 hl.gesture({
@@ -338,5 +353,6 @@ hl.config({
 
 require("keys")
 require("window_rules")
+require("screenshare") -- after window_rules: its border/reveal rules must win
 require("dropdown")
 require("hyprbars")

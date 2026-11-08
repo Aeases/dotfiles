@@ -6,6 +6,7 @@
 
 @define-color black rgba(16, 15, 15, 1.0);
 @define-color red #D14D41;
+@define-color orange #DA702C;
 @define-color green #879A39;
 @define-color yellow #D0A215;
 @define-color blue #4385BE;
@@ -35,6 +36,7 @@
 @define-color mode @cyan;
 @define-color mode-fg @bg;
 @define-color workspaces-focused-fg @fg;
+@define-color privacy @orange;
 @define-color pulseaudio @blue;
 @define-color network @bright-green;
 @define-color network-bt-tether @blue;
@@ -148,6 +150,7 @@ button:hover {
 #temperature,
 #backlight,
 #network,
+#privacy,
 #pulseaudio,
 #wireplumber,
 #custom-media,
@@ -158,10 +161,7 @@ button:hover {
 #custom-egpu,
 #power-profiles-daemon,
 #mpd {
-    padding: 0 10px;
-    /* The inter-module gap lives here rather than in the bar's `spacing`, so
-       that zero-sizing a module (see ~/.scripts/screenshare-privacy) collapses
-       its gap too. 2px a side == the 4px gap `spacing` used to draw. */
+    padding: 0 7px;
     margin: 0 2px;
     color: @fg;
     border-radius: 0px;
@@ -270,6 +270,12 @@ window#waybar .modules-right>widget:last-child>* {
 
 #network.disconnected {
     border-top-color: @red;
+}
+
+#privacy {
+    padding: 0 3px 0 4px;
+    border-top-color: @privacy;
+    color: @privacy;
 }
 
 #pulseaudio {

@@ -1,0 +1,13 @@
+[Unit]
+Description=High nice priority for DeepFilter's worker threads
+BindsTo=deepfilter-mic.service
+After=deepfilter-mic.service
+
+[Service]
+Type=simple
+ExecStart=%h/.scripts/deepfilter-nice
+Restart=on-failure
+Slice=session.slice
+
+[Install]
+WantedBy=deepfilter-mic.service

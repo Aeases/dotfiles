@@ -1,5 +1,3 @@
-
-alias copy='wl-copy'
 export FNM_VERSION_FILE_STRATEGY="local"
 export FNM_DIR="/home/zane/.local/share/fnm"
 export FNM_LOGLEVEL="info"

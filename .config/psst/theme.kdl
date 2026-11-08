@@ -1,0 +1,114 @@
+backdrop {
+    background "#100F0F00"
+}
+
+window {
+    background "#100F0F"
+    border "#282726"
+    border-width 2
+    radius 10
+    padding { x 28; y 26 }
+    gap 20
+    shadow { color "#000000A0"; blur 25; spread 10; offset-x 0; offset-y 15 }
+
+    font "Minecraft"
+    text "#CECDC3"
+
+    title {
+        size 24
+    }
+
+    icon {
+        background "#879A3930"
+        text "#A7C080"
+        radius 10
+        size 0
+        padding { x 10; y 10 }
+    }
+
+    description-label {
+        text "#878580"
+        size 13
+    }
+
+    description-value {
+        text "#CECDC3"
+        size 13
+    }
+
+    error {
+        text "#D14D41"
+        background "#D14D4120"
+        radius 6
+        size 13
+        padding { x 12; y 8 }
+    }
+
+    field {
+        background "#1C1B1A"
+        placeholder "#878580"
+        selection "#879A3950"
+        border "#282726"
+        border-width 2
+        radius 8
+        font "Hack"
+        size 15
+        padding { x 13; y 11 }
+        focus { border "#343331"; background "#100F0F" }
+    }
+
+    reveal {
+        text "#878580"
+        size 20
+    }
+
+    strength {
+        background "#282726"
+        radius 3
+        size 6
+    }
+    strength-weak { background "#D14D41" }
+    strength-medium { background "#D0A215" }
+    strength-strong { background "#879A39" }
+
+    checkbox {
+        background "#1C1B1A"
+        text "#878580"
+        border "#282726"
+        border-width 2
+        radius 4
+        size 16
+        focus { border "#879A39" }
+        checked { text "#CECDC3"; border "#343331" }
+    }
+
+    confirm {
+        background "#879A39"
+        text "#100F0F"
+        radius 6
+        size 13
+        padding { x 18; y 9 }
+        hover { background "#A7C080" }
+        active { background "#6F8030" }
+    }
+
+    cancel {
+        background "#1C1B1A"
+        text "#878580"
+        radius 6
+        size 13
+        padding { x 12; y 9 }
+        hover { background "#282726" }
+        active { background "#343331" }
+    }
+
+    hint-key {
+        text "#878580"
+        size 12
+    }
+
+    hint-word {
+        text "#414B50"
+        size 12
+    }
+}

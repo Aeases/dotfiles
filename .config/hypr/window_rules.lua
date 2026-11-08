@@ -6,45 +6,8 @@ hl.layer_rule({
 	animation = "fade",
 }) -- ¯\_(ツ)_/¯
 
-local screenshare = {
-	active = 0,
-	confirmed = false,
-	generation = 0,
-}
-
-local function set_privacy(on)
-	-- setsid -f detaches so this never blocks Hyprland's main loop.
-	os.execute("setsid -f /home/zane/.scripts/screenshare-privacy " .. (on and "on" or "off") .. " >/dev/null 2>&1")
-end
-
-hl.on("screenshare.state", function(started)
-	local s = screenshare
-	local was_zero = s.active == 0
-	s.active = math.max(0, s.active + (started and 1 or -1))
-
-	if was_zero and s.active > 0 then
-		s.generation = s.generation + 1
-		local my_gen = s.generation
-		hl.timer(function()
-			if my_gen == s.generation and s.active > 0 then
-				s.confirmed = true
-				set_privacy(true)
-			end
-		end, { timeout = 700, type = "oneshot" }) -- confirm
-	elseif s.active == 0 and s.confirmed then
-		s.generation = s.generation + 1
-		local my_gen = s.generation
-		hl.timer(function()
-			if my_gen == s.generation and s.active == 0 then
-				s.confirmed = false
-				set_privacy(false)
-			end
-		end, { timeout = 500, type = "oneshot" }) -- Release
-	end
-end)
-
 hl.layer_rule({
-	match = { namespace = "launcher|selection|hyprpicker|vicinae|waybar|python3|oculante|wayscriber" },
+	match = { namespace = "launcher|selection|hyprpicker|vicinae|waybar|python3|oculante|wayscriber|cyberhud" },
 	no_anim = true,
 })
 
@@ -89,7 +52,8 @@ hl.window_rule({
 	match = {
 		class = "org.gnome.Nautilus",
 	},
-	float = true,
+	-- float = true,
+	scrolling_width = 0.4,
 })
 
 hl.window_rule({
@@ -156,8 +120,8 @@ hl.window_rule({
 	border_size = 3,
 	--rounding = 0,
 	no_blur = true,
-	render_unfocused = true,
-	no_follow_mouse = true,
+	render_unfocused = false,
+	no_follow_mouse = false,
 	scrolling_width = 1.0,
 	idle_inhibit = "focus",
 	no_shortcuts_inhibit = true,
@@ -173,7 +137,49 @@ hl.window_rule({
 	center = true,
 })
 
--- scrolling not centered fix
+-- hl.on("window.fullscreen", function(w)
+-- 	local ws = w and w.fullscreen == 0 and w.workspace
+-- 	if not ws or ws.tiled_layout ~= "scrolling" then
+-- 		return
+-- 	end
+-- 	hl.timer(function()
+-- 		local cur = hl.get_active_window()
+-- 		local col = cur and cur.address == w.address and type(cur.layout) == "table" and cur.layout.column
+-- 		if not col or not col.index or col.index == 0 then
+-- 			return
+-- 		end
+-- 		local total, start, seen = 0, 0, {}
+-- 		for _, m in ipairs(hl.get_windows()) do
+-- 			local c = not m.floating and m.workspace and m.workspace.name == ws.name and type(m.layout) == "table" and m.layout.column
+-- 			if c and c.index and not seen[c.index] then
+-- 				seen[c.index] = true
+-- 				total = total + (c.width or 0)
+-- 				start = start + (c.index < col.index and c.width or 0)
+-- 			end
+-- 		end
+-- 		local offset = hl.get_scrolling_offset()
+-- 		if offset and start > 0 and total - start < 0.99 then
+-- 			hl.set_scrolling_offset(math.max(0, offset * (total - 1) / start))
+-- 		end
+-- 	end, { timeout = 60, type = "oneshot" })
+-- end)
+
+-- START TODO REPLACE
+local function scrolling_columns(ws)
+	local cols = {}
+	for _, m in ipairs(hl.get_windows()) do
+		local c = not m.floating
+			and m.workspace
+			and m.workspace.name == ws.name
+			and type(m.layout) == "table"
+			and m.layout.column
+		if c and c.index then
+			cols[c.index] = cols[c.index] or { width = c.width or 0, window = m }
+		end
+	end
+	return cols
+end
+
 hl.on("window.fullscreen", function(w)
 	if not w or w.fullscreen ~= 0 then
 		return
@@ -189,12 +195,50 @@ hl.on("window.fullscreen", function(w)
 	hl.timer(function()
 		pcall(function()
 			local cur = hl.get_active_window()
-			if cur and cur.address == addr then
-				hl.dispatch(hl.dsp.focus({ window = cur }))
+			if not cur or cur.address ~= addr then
+				return
 			end
+
+			local col = type(cur.layout) == "table" and cur.layout.column
+			local cols = col and col.index and scrolling_columns(ws)
+			if cols and col.index > 0 then
+				local last, total, start = -1, 0, 0
+				for i, c in pairs(cols) do
+					last = math.max(last, i)
+				end
+				local starts = {}
+				for i = 0, last do
+					starts[i] = total
+					total = total + (cols[i] and cols[i].width or 0)
+				end
+				start = starts[col.index] or 0
+
+				-- view starts at this column (just fitted); empty space past the tape end?
+				if total - start < 1 - 0.01 then
+					local target = math.max(0, total - 1)
+					local k = 0
+					for i = 0, last do
+						if cols[i] and starts[i] < target - 0.001 then
+							k = i
+						end
+					end
+					if cols[k] then
+						hl.dispatch(hl.dsp.focus({ window = cols[k].window }))
+					end
+					if target > 0 and cols[last] then
+						hl.dispatch(hl.dsp.focus({ window = cols[last].window }))
+					end
+				end
+			end
+
+			hl.dispatch(hl.dsp.focus({ window = cur }))
 		end)
 	end, { timeout = 60, type = "oneshot" })
 end)
+-- END TODO REPLACE
+
+
+
 
 hl.window_rule({
 	match = {
@@ -209,12 +253,23 @@ hl.window_rule({
 hl.window_rule({
 	name = "PictureInPicture",
 	match = {
-		initial_title = "Picture-in-picture",
+		initial_title = "(?i)^picture-in-picture$",
 	},
 	float = true,
 	pin = true,
 	move = { "monitor_w - window_w*1.05", "monitor_h - window_h*1.05" },
 	persistent_size = true,
+})
+
+hl.window_rule({
+	name = "corner-review",
+	match = {
+		initial_title = "^Corner Review$",
+	},
+	float = true,
+	pin = true,
+	size = "989 581",
+	move = { "20", "50" },
 })
 
 -- windowrule = scrollmouse 3.0, initialClass:steam_app_3513350
@@ -275,6 +330,16 @@ hl.window_rule({
 	float = true,
 })
 
+-- workspace 10 (SUPER + 0): windows opened there float
+hl.window_rule({ name = "ws10-float", match = { workspace = "10" }, float = true })
+local ws10_float_early = hl.window_rule({ name = "ws10-float-early", match = { class = ".*" }, float = true })
+local function sync_ws10_float_early()
+	ws10_float_early:set_enabled((hl.get_active_workspace() or {}).id == 10)
+end
+sync_ws10_float_early()
+hl.on("workspace.active", sync_ws10_float_early)
+hl.on("monitor.focused", sync_ws10_float_early)
+
 -- Special Workspace appearance
 hl.window_rule({
 	name = "Special Workspace",
@@ -315,6 +380,15 @@ hl.window_rule({
 -- Make file portal open nice
 -- round the properties window, cus it looks ugly if u dont
 hl.window_rule({ match = { initial_title = "^(.*Properties.*)$" }, rounding = 10 })
+
+hl.window_rule({
+	match = { initial_class = "hyprland-share-picker" },
+	float = true,
+	size = "700 580",
+	center = true,
+	dim_around = true,
+	border_size = 0,
+})
 
 hl.window_rule({ match = { initial_title = "PT Activity" }, workspace = "special:ActivityHell" }) -- fuck packet tracer activity window
 hl.window_rule({ match = { class = "PacketTracer" }, render_unfocused = true })
@@ -378,21 +452,6 @@ hl.window_rule({
 	immediate = true,
 })
 
--- No Screensharing
-hl.window_rule({
-	match = {
-		title = "^(.*Bitwarden.*)$|^(.*Traveller Information.*)$|^(.*ATPI Profile.*)$",
-	},
-	no_screen_share = true,
-})
-
-hl.window_rule({
-	match = {
-		initial_class = "discord|org.telegram.desktop|Bitwarden|Beeper",
-	},
-	no_screen_share = true,
-})
-
 hl.window_rule({
 	match = {
 		initial_class = "app.drey.EarTag",
@@ -412,6 +471,12 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	match = { class = "discord", initial_title = "Discord Popout" },
+	opacity = "0.65 0.65",
+	no_blur = true,
+})
+
+hl.window_rule({
 	match = { class = "org.telegram.desktop" },
 	workspace = "special:telegram",
 })
@@ -419,6 +484,11 @@ hl.window_rule({
 hl.window_rule({
 	match = { class = "Beeper" },
 	workspace = "special:beeper",
+})
+
+hl.window_rule({
+	match = { class = "signal" },
+	workspace = "special:signal",
 })
 -- If special workspace opened without any apps in; spawn the apps.
 
@@ -429,7 +499,7 @@ hl.workspace_rule({
 
 hl.workspace_rule({
 	workspace = "special:spotify",
-	on_created_empty = "spotify",
+	on_created_empty = "uwsm-app -- com.spotify.Client.desktop",
 })
 
 hl.workspace_rule({
@@ -499,7 +569,7 @@ hl.window_rule({
 	no_anim = true,
 	rounding = 0,
 	border_size = 0,
-	fullscreen_state = "0 0",
+	suppress_event = "fullscreen", -- spawns floating anyway
 	float = true,
 	pin = true,
 	move = { "0", "0" },

@@ -5,7 +5,7 @@
 #   restore: back to the level saved by `soft`, only if `soft` actually dimmed
 #   kbd-off / kbd-restore: keyboard backlight
 
-noctalia=~/repos/noctalia-shell/build/noctalia
+noctalia=noctalia
 kbd=chromeos::kbd_backlight
 
 dimmed=$XDG_RUNTIME_DIR/idle-dimmed

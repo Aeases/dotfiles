@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Hands each new window's class and pid to `steam-desktop-aliases.sh --learn`, which aliases Steam
+# games that don't report steam_app_<appid> to their icon. Hyprland and niri.
+
+set -uo pipefail
+ALIASES=${ALIASES:-$HOME/.scripts/steam-desktop-aliases.sh}
+
+# "<window id> TAB <class> TAB <pid>" per window, whenever windows open or change.
+windows() {
+	if [[ -n ${NIRI_SOCKET:-} ]]; then # niri's events carry each window's pid
+		niri msg --json event-stream | jq --unbuffered -r \
+			'(.WindowsChanged.windows[]?, (.WindowOpenedOrChanged.window // empty)) | [.id, .app_id, .pid] | @tsv'
+	else # Hyprland's don't, so list every client on open and focus
+		socat -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" |
+			while IFS= read -r ev; do
+				[[ $ev == openwindow\>\>* || $ev == activewindowv2\>\>* ]] &&
+					hyprctl -j clients | jq -r '.[] | [.address, .class, .pid] | @tsv'
+			done
+	fi
+}
+
+[[ -n ${NIRI_SOCKET:-}${HYPRLAND_INSTANCE_SIGNATURE:-} ]] || { echo "not running under Hyprland or niri" >&2; exit 0; }
+for cmd in jq $([[ -n ${NIRI_SOCKET:-} ]] && echo niri || echo socat hyprctl); do
+	command -v "$cmd" > /dev/null || { echo "needs $cmd, not watching" >&2; exit 0; }
+done
+declare -A seen=() # keyed by window and class: a class can change after the window opens
+while IFS=$'\t' read -r id cls pid; do
+	[[ -n $cls && $pid =~ ^[1-9][0-9]*$ && -z ${seen[$id|$cls]:-} && ! $cls =~ ^steam_app_[0-9]+$ ]] || continue
+	seen[$id|$cls]=1
+	"$ALIASES" --learn "$cls" "$pid"
+done < <(windows)

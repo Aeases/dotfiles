@@ -1,0 +1,20 @@
+window {
+    icon {
+        background "#D7775730"
+        text "#DF9279"
+    }
+
+    field {
+        selection "#D7775750"
+    }
+
+    checkbox {
+        focus { border "#D77757" }
+    }
+
+    confirm {
+        background "#D77757"
+        hover { background "#DF9279" }
+        active { background "#B7654A" }
+    }
+}

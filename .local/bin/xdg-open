@@ -1,0 +1,5 @@
+#!/bin/sh
+if command -v gio >/dev/null 2>&1; then
+    exec gio open "$@"
+fi
+exec /usr/bin/xdg-open "$@"

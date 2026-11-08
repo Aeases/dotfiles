@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=volumixer
+Comment=Layer-shell volume mixer
+Exec=/home/zane/.local/bin/volumixer --toggle
+Icon=dev.aeases.volumixer
+Categories=AudioVideo;Audio;Settings;
+Terminal=false
+StartupNotify=false
+StartupWMClass=dev.aeases.volumixer

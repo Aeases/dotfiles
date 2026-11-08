@@ -23,7 +23,7 @@ open = [
 	{ run = 'termux-open "%s1"',             desc = "Open", for = "android" },
 ]
 view = [
-	{ run = 'oculante "$s"', orphan = true, for = "unix" },
+	{ run = "imv %s", orphan = true, for = "unix" },
 ]
 [open]
 rules = [
@@ -41,3 +41,4 @@ max_height = 1600
 
 [mgr]
 sort_by = "natural"
+sort_dir_first = false

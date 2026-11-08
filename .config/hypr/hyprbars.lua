@@ -1,31 +1,34 @@
+local bar_bg = "rgb(100F0F)"
+local fg = "rgb(CECDC3)"
+local dim = "rgb(575653)"
 
 function setup_hyprbars()
 	if hl.plugin.hyprbars ~= nil then
-		-- Close (red)
+		-- Close
 		hl.plugin.hyprbars.add_button({
-			bg_color = "rgb(ff5f57)",
-			fg_color = "rgb(000000)",
-			size = 12,
-			icon = "",
-			action = "hyprctl dispatch 'hl.dsp.window.kill(active)'",
+			bg_color = "rgba(00000000)",
+			fg_color = fg,
+			size = 22,
+			icon = "\u{F0156}", -- nf-md-close
+			action = [[hyprctl dispatch 'hl.dsp.window.close()']],
 		})
 
-		-- Minimize (yellow)
+		-- Maximize
 		hl.plugin.hyprbars.add_button({
-			bg_color = "rgb(febc2e)",
-			fg_color = "rgb(000000)",
-			size = 12,
-			icon = "",
-			action = "hyprctl dispatch movetoworkspacesilent special",
+			bg_color = "rgba(00000000)",
+			fg_color = fg,
+			size = 24,
+			icon = "\u{F0143}", -- nf-md-chevron_up
+			action = [[hyprctl dispatch 'hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" })']],
 		})
 
-		-- Maximize (green)
+		-- Minimize
 		hl.plugin.hyprbars.add_button({
-			bg_color = "rgb(28c840)",
-			fg_color = "rgb(000000)",
-			size = 12,
-			icon = "",
-			action = "hyprctl dispatch fullscreen 1",
+			bg_color = "rgba(00000000)",
+			fg_color = fg,
+			size = 24,
+			icon = "\u{F0140}", -- nf-md-chevron_down
+			action = [[hyprctl dispatch 'hl.dsp.window.move({ workspace = "special", follow = false })']],
 		})
 
 		-- no bars for everything
@@ -48,19 +51,23 @@ function setup_hyprbars()
 
 		hl.window_rule({ match = { title = "ControlWindow", fullscreen = true }, ["hyprbars:no_bar"] = true })
 
+		hl.window_rule({ match = { focus = false }, ["hyprbars:title_color"] = dim })
+
 		hl.config({
 			plugin = {
 				hyprbars = {
-					bar_height = 28,
-					bar_color = "rgb(282726)",
-					col = { text = "rgb(CECDC3)" },
-					bar_text_size = 14,
-					bar_padding = 10,
-					bar_text_font = "Minecraft",
+					bar_height = 34,
+					bar_color = bar_bg,
+					col = { text = fg },
+					bar_text_size = 16,
+					bar_text_font = "Minecraft, JetBrainsMonoNL Nerd Font",
 					bar_text_align = "left",
+					bar_buttons_alignment = "right",
+					bar_padding = 10,
+					bar_button_padding = 2,
+					bar_blur = true,
 					bar_part_of_window = true,
 					bar_precedence_over_border = true,
-					inactive_button_color = "rgb(d1d1d1)",
 				},
 			},
 		})

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+pgrep -x slurp >/dev/null && exit 0
+
+shown=$(hyprctl monitors -j | jq -c '[.[] | .activeWorkspace.name, .specialWorkspace.name] | map(select(. != ""))')
+
+boxes=$(hyprctl clients -j | jq -r --argjson shown "$shown" '.[]
+	| select(.mapped and (.hidden | not) and (.pinned or (.workspace.name | IN($shown[]))))
+	| select(any(.tags[]?; sub("\\*$"; "") | IN("share_private", "share_revealed")))
+	| "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1]) \(.stableId)"')
+
+[ -n "$boxes" ] || exit 0
+
+sid=$(printf '%s\n' "$boxes" | slurp -r -f '%l' \
+	-b '#00000044' -B '#B16AF433' -c '#B16AF4ff' -s '#B16AF455' -w 3) || exit 0
+[[ "$sid" =~ ^[0-9a-f]+$ ]] || exit 0
+
+hyprctl eval "screenshare_reveal('$sid')" >/dev/null

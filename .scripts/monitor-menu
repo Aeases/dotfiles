@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+
+INTERNAL = "eDP-1"
+SEPARATOR = "──────────  Scaling  ──────────"
+SCALE_TARGETS = [1, 1.25, 4 / 3, 1.5, 1.6, 5 / 3, 1.75, 2, 2.25, 2.5, 3]
+STATE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "monitor-menu-scales.json")
+
+scripted = os.environ.get("MONITOR_MENU_CHOICE")
+scripted = scripted.split("\n") if scripted is not None else None
+
+
+def hypr(*args):
+    return subprocess.run(["hyprctl", *args], capture_output=True, text=True).stdout
+
+
+def monitors():
+    return json.loads(hypr("monitors", "all", "-j"))
+
+
+def menu(lines, title, placeholder):
+    if scripted is not None:
+        return scripted.pop(0) if scripted else ""
+    r = subprocess.run(
+        ["vicinae", "dmenu", "-n", title, "-p", placeholder, "--no-quick-look"],
+        input="\n".join(lines),
+        capture_output=True,
+        text=True,
+    )
+    return r.stdout.strip()
+
+
+def label(m):
+    return f"{m['name']} ({re.sub(r' 0x[0-9A-Fa-f]+$', '', m['description'])})"
+
+
+def fmt(x):
+    return f"{x:.6f}".rstrip("0").rstrip(".")
+
+
+def logical(m, scale=None):
+    w, h = m["width"], m["height"]
+    if m["transform"] % 2:
+        w, h = h, w
+    s = scale or m["scale"]
+    return w / s, h / s
+
+
+def valid_scale(m, target):
+    """Nearest scale in 1/120 steps that gives an integer logical size (as Hyprland requires)."""
+    w, h = m["width"], m["height"]
+    base = round(target * 120)
+    for i in range(0, 90):
+        for k in (base - i, base + i):
+            s = k / 120
+            if s > 0 and abs(w / s - round(w / s)) < 0.01 and abs(h / s - round(h / s)) < 0.01:
+                return s
+    return None
+
+
+def rule(m, **over):
+    f = {
+        "output": m["name"],
+        "mode": f"{m['width']}x{m['height']}@{m['refreshRate']:.5f}",
+        "position": f"{m['x']}x{m['y']}",
+        "scale": m["scale"],
+        **over,
+    }
+    parts = []
+    for k, v in f.items():
+        if isinstance(v, bool):
+            parts.append(f"{k} = {str(v).lower()}")
+        elif isinstance(v, (int, float)):
+            parts.append(f"{k} = {fmt(v)}")
+        else:
+            parts.append(f'{k} = "{v}"')
+    return "hl.monitor({ " + ", ".join(parts) + " })"
+
+
+def load_state():
+    try:
+        with open(STATE) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+def save_state(s):
+    with open(STATE, "w") as f:
+        json.dump(s, f)
+
+
+def scale_lua(mons, name, scale):
+    """Rules that rescale `name` and repack the screens in its row so nothing overlaps or gaps."""
+    active = [m for m in mons if not m["disabled"] and m["mirrorOf"] == "none"]
+    target = next(m for m in active if m["name"] == name)
+    t_top, t_bot = target["y"], target["y"] + logical(target)[1]
+
+    def in_row(m):
+        top, bot = m["y"], m["y"] + logical(m)[1]
+        return top < t_bot and t_top < bot
+
+    row = sorted((m for m in active if in_row(m)), key=lambda m: m["x"])
+    x = row[0]["x"]
+    out = []
+    for m in row:
+        s = scale if m["name"] == name else m["scale"]
+        if m["name"] == name or m["x"] != x:
+            out.append(rule(m, scale=s, position=f"{round(x)}x{m['y']}"))
+        x += logical(m, s)[0]
+    return " ".join(out)
+
+
+def apply_saved(state):
+    """Re-apply remembered scale overrides after a reload."""
+    for name, scale in state.items():
+        mons = monitors()
+        if any(m["name"] == name and not m["disabled"] for m in mons):
+            hypr("eval", scale_lua(mons, name, scale))
+
+
+def reset(state):
+    hypr("reload")
+    time.sleep(0.3)
+    apply_saved(state)
+    return monitors()
+
+
+def main():
+    mons = monitors()
+    externals = [m for m in mons if m["name"] != INTERNAL]
+    internal = next((m for m in mons if m["name"] == INTERNAL), None)
+    state = load_state()
+
+    actions = {"Extend (restore config)": ("extend",)}
+    for e in externals:
+        actions[f"Mirror {label(e)} → laptop screen"] = ("mirror", INTERNAL, e["name"])
+        actions[f"Mirror laptop screen → {label(e)}"] = ("mirror", e["name"], INTERNAL)
+    if externals:
+        actions["External only (laptop screen off)"] = ("disable", INTERNAL)
+        actions["Laptop screen only (externals off)"] = ("disable", *(e["name"] for e in externals))
+    scalable = [m for m in [internal, *externals] if m and not m["disabled"]]
+    if scalable:
+        actions[SEPARATOR] = ("separator",)
+    for m in scalable:
+        actions[f"Scale {label(m)} — {fmt(round(m['scale'], 3))}"] = ("scale", m["name"])
+
+    while True:
+        choice = menu(list(actions), "Displays", "Monitor layout…")
+        if not choice:
+            return
+        if choice not in actions:
+            sys.exit(f"unknown choice: {choice}")
+        if actions[choice][0] != "separator":
+            break
+        if scripted is not None:
+            return
+    verb, *args = actions[choice]
+
+    if verb == "extend":
+        save_state({})
+        hypr("reload")
+        return
+
+    if verb == "scale":
+        m = next(m for m in mons if m["name"] == args[0])
+        options = {}
+        for t in SCALE_TARGETS:
+            s = valid_scale(m, t)
+            if s is None:
+                continue
+            w, h = logical(m, s)
+            current = "  •" if abs(s - m["scale"]) < 0.005 else ""
+            options.setdefault(f"{fmt(round(s, 3))}  ({round(w)}×{round(h)}){current}", s)
+        pick = menu(list(options), f"Scale {m['name']}", "Scale…")
+        if pick not in options:
+            return
+        state[m["name"]] = options[pick]
+        save_state(state)
+        hypr("eval", scale_lua(mons, m["name"], options[pick]))
+        return
+
+    mons = reset(state)
+    by_name = {m["name"]: m for m in mons}
+    if verb == "mirror":
+        target, source = args
+        hypr("eval", rule(by_name[target], position="auto", mirror=source))
+    elif verb == "disable":
+        hypr("eval", " ".join(f'hl.monitor({{ output = "{n}", disabled = true }})' for n in args))
+
+
+main()

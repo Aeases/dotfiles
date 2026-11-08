@@ -13,3 +13,10 @@
 **/wallpapers/game.png
 **/wallpapers/Kirby.gif
 **/screenshare.css
+__pycache__/
+.config/kwinrc
+.config/kglobalshortcutsrc
+.config/plasma-org.kde.plasma.desktop-appletsrc
+.config/fcitx5/profile
+
+**/wallpapers/coolguy.jpg

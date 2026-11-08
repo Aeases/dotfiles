@@ -1,0 +1,14 @@
+[Unit]
+Description=Alias the window class of Steam games that don't report steam_app_<appid>
+PartOf=graphical-session.target
+After=graphical-session.target
+ConditionEnvironment=|HYPRLAND_INSTANCE_SIGNATURE
+ConditionEnvironment=|NIRI_SOCKET
+
+[Service]
+ExecStart=%h/.scripts/steam-wayland-class-watch
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target

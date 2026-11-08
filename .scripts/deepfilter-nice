@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+unit=deepfilter-mic.service
+nice=${DEEPFILTER_NICE:--15}  # rtkit's MinNiceLevel
+declare -A refused
+
+while :; do
+    pid=$(systemctl --user show -p MainPID --value "$unit")
+    if [ "${pid:-0}" -gt 0 ]; then
+        for task in /proc/"$pid"/task/*; do
+            tid=${task##*/}
+            [ "$tid" = "$pid" ] && continue
+            [ -n "${refused[$pid.$tid]}" ] && continue
+            stat=$(< "$task/stat") 2>/dev/null || continue
+            # stat field 19 is the nice value and 41 the scheduling policy
+            # (0 = SCHED_OTHER). Split after the comm field, which can contain
+            # spaces: field 3 is $1.
+            set -- ${stat##*\) }
+            [ "${39}" = 0 ] && [ "${17}" -gt "$nice" ] || continue
+            if ! busctl call --system org.freedesktop.RealtimeKit1 /org/freedesktop/RealtimeKit1 \
+                org.freedesktop.RealtimeKit1 MakeThreadHighPriorityWithPID tti -- "$pid" "$tid" "$nice" \
+                > /dev/null; then
+                echo "rtkit refused thread $tid of $pid" >&2
+                refused[$pid.$tid]=1
+            fi
+        done
+    fi
+    sleep 2
+done

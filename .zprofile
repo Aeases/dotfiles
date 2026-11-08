@@ -1,47 +1,31 @@
-# Login environment, shared with systemd/uwsm and greetd
 emulate sh -c '. ~/.profile'
-
-append_path() {
-  if [ -d "$1" ]; then
-    case ":$PATH:" in
-      *:"$1":*) ;;  # already present, skip
-      *) PATH="${PATH:+$PATH:}$1" ;;
-    esac
-  fi
-}
-prepend_path() {
-  if [ -d "$1" ]; then
-    case ":$PATH:" in
-      *:"$1":*) ;;  # already present, skip
-      *) PATH="$1${PATH:+:$PATH}" ;;
-    esac
-  fi
-}
 
 #command for switching default audio track in mkv
 #for i in ./*; do mkvpropedit $i --edit track:a1 --set flag-default=0 --edit track:a2 --set flag-default=1; done
 #command for disabling signs and songs
 alias v="nvim"
-# MPV but it plays two audio tracks simultaneously
 alias open=xdg-open
 function psh() {
     podman exec -it "$1" ${2:-/bin/bash}
 }
-alias daa="cd ~/Documents/Engram/University/DAA・COMP3001/"
-alias ia="cd ~/Dev/Uni/IA/Assignment3/"
-alias china="cd ~/Documents/Engram/Resources/Chinese/"
 function files() { nautilus "${1:-.}" &disown 2>/dev/null; }
-alias hcf='cd ~/.config/hypr/'
-alias eng='cd ~/Documents/Engram/'
 alias mp='mathypad'
-alias dun='cd ~/Dev/Uni/'
-alias hci='cd ~/Documents/Engram/University/HCI/'
 alias uni='cd ~/Documents/Engram/University/'
-alias gra='cd ~/Documents/Engram/University/Graphics/'
 alias noslep='systemd-inhibit --what=handle-lid-switch sleep infinity'
 alias prep='cd ~/repos/asbplayer/scripts/web-socket-server/; go run main.go & anki'
-alias nvide="neovide"
 alias watchtex='function _watchtex(){ while inotifywait -e close_write "$1"; do pdflatex "$1"; done }; _watchtex'
+alias copy='wl-copy'
+alias donotsleep='setsid -f systemd-inhibit --what=handle-lid-switch:sleep:idle --mode=block --who=donotsleep --why="Lid closed, staying awake" zenity --info --title="Do Not Sleep" --text="Sleep is blocked, including with the lid shut.\nClose this window to allow sleep again." --ok-label="Allow sleep" >/dev/null 2>&1'
+dosleep() {
+  setsid -f systemd-inhibit --what=handle-lid-switch:sleep:idle --mode=block --who=dosleep \
+    --why="Screen off, staying awake" sh -c '
+      sleep 1
+      hyprctl dispatch "hl.dsp.dpms({ action = \"disable\" })" >/dev/null
+      sleep 2
+      until hyprctl monitors -j | jq -e "any(.[]; .dpmsStatus)" >/dev/null; do sleep 2; done
+    ' >/dev/null 2>&1
+}
+
 
 # in ~/.zshrc
 venv() {
@@ -65,10 +49,9 @@ alias dart="dart --disable-analytics"
 #alias fixgpu="sudo cat /sys/kernel/debug/dri/1/amdgpu_gpu_recover"
 alias fixspicetify="sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify; sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify"
 alias userctl="systemctl --user"
-alias refreshWaybar="pkill waybar && hyprctl dispatch exec waybar"
-alias watchmeboogie="while true; do make -q || make; sleep 0.5; done"
-alias was-watch='cargo watch -i .gitignore -i "pkg/*" -s "wasm-pack build"'
+alias refreshWaybar="pkill -9 waybar && hyprctl dispatch exec waybar"
 alias d2b='python ~/Dev/Uni/PDI/binaryConversion.py -d2b'
+alias blobs='ssh thermal ls Blobs | awk -F_ '\''/\.shsh2$/ {split($4, v, "-"); print $2, v[1], v[2]}'\'' | sort -k1,1 -k2,2V -k3,3 | awk '\''$1 != d {d = $1; printf "\n%s\n", d} {printf "  %-10s %s\n", $2, $3}'\'''
 
 
 lwhich () { which $1 | xargs dirname | xargs eza --color=always -l | grep $1 }
@@ -112,17 +95,9 @@ ncd ()
 
 
 gifMe () {mkdir -p /tmp/gifMeImages/; rm /tmp/gifMeImages/*.png; ffmpeg -i $1 -vf scale=320:-1 -r 30 /tmp/gifMeImages/ffout%3d.png && magick convert -delay 2 -loop 0 /tmp/gifMeImages/ffout*.png ./${1:t:r}.gif; }
-# ZSH-autcomplete settings
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#d19a66"
 
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
-
-
-
-
 
 # DIV: >>> ZSH KEYBINDS STOLEN FROM OMZ <<< 
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then

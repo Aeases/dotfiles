@@ -4,15 +4,21 @@ local columns = {
 		width = 623,
 		expanded = 920,
 		class = "org.telegram.desktop",
-		launch = "Telegram",
+		launch = "uwsm-app -- org.telegram.desktop.desktop",
 		media_viewer = "Media viewer",
+	},
+	{
+		name = "signal",
+		width = 920,
+		class = "signal",
+		launch = "uwsm-app -- signal.desktop",
 	},
 	{
 		name = "beeper",
 		width = 520,
 		expanded = 820,
 		class = "Beeper",
-		launch = "env DESKTOPINTEGRATION=1 /home/zane/AppImages/beeper.appimage --no-sandbox",
+		launch = "uwsm-app -- beeper.desktop",
 	},
 }
 

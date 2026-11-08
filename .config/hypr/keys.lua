@@ -32,8 +32,23 @@ hl.bind("SUPER + F", hl.dsp.window.fullscreen({ mode = "maximized" }))
 -- full-fullscreen
 hl.bind("SUPER + SHIFT + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 
--- Tell window it is fullscreened when it is actually not, great for PIP
-hl.bind("SUPER + ALT + F", hl.dsp.window.fullscreen_state({ internal = 2, client = 0, action = "toggle" }))
+--hl.bind("SUPER + ALT + F", hl.dsp.window.fullscreen_state({ internal = 2, client = -1, action = "toggle" }))
+--workaround till PR#16896 is in release 
+hl.bind("SUPER + ALT + F", function()
+	local w = hl.get_active_window()
+	if not w then
+		return
+	end
+	if w.fullscreen == 0 then
+		hl.dispatch(hl.dsp.window.fullscreen_state({ internal = 2, client = -1, action = "set" }))
+		return
+	end
+	local client = w.fullscreen_client
+	hl.dispatch(hl.dsp.window.fullscreen_state({ internal = 0, client = 0, action = "set" }))
+	if client ~= 0 then
+		hl.dispatch(hl.dsp.window.fullscreen_state({ internal = 0, client = client, action = "set" }))
+	end
+end)
 hl.bind("SUPER + ALT + SHIFT + F", hl.dsp.window.fullscreen_state({ internal = 3, client = 2, action = "toggle" }))
 hl.bind("SUPER + ALT + C", hl.dsp.exec_cmd("/home/zane/.scripts/camera.sh"))
 hl.bind("SUPER + ALT + P", hl.dsp.exec_cmd("/home/zane/.scripts/audio_sink.py"))
@@ -41,11 +56,44 @@ hl.bind("SUPER + ALT + P", hl.dsp.exec_cmd("/home/zane/.scripts/audio_sink.py"))
 -- Wifi Manager
 hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("/home/zane/.scripts/networkmanager_dmenu"))
 
+hl.bind("SUPER + ALT + H", hl.dsp.exec_cmd("/home/zane/.scripts/monitor-menu"))
+
+local function toggle_pip()
+	local pip
+	for _, w in ipairs(hl.get_windows()) do
+		if w.title == "Picture-in-Picture" then
+			pip = w
+			break
+		end
+	end
+	if not pip then
+		return
+	end
+
+	if pip.workspace and pip.workspace.name == "special:pip" then
+		local prev = hl.get_active_window()
+		local target = prev and prev.workspace and not prev.workspace.name:match("^special:") and prev.workspace
+			or hl.get_active_workspace()
+		hl.dispatch(hl.dsp.window.move({ window = pip, workspace = target.id, follow = false }))
+		hl.dispatch(hl.dsp.window.pin({ window = pip, action = "set" }))
+	else
+		-- a pinned window lives on every workspace, so unpin before moving it
+		hl.dispatch(hl.dsp.window.pin({ window = pip, action = "unset" }))
+		hl.dispatch(hl.dsp.window.move({ window = pip, workspace = "special:pip", follow = false }))
+	end
+end
+hl.bind("SUPER + SHIFT + P", toggle_pip)
+
 -- Keybinds for master
 hl.bind("SUPER + P", hl.dsp.window.pin())
 hl.bind("SUPER + TAB", hl.dsp.layout("swapwithmaster master"))
-hl.bind("SUPER + T", hl.dsp.layout("orientationcycle"))
-hl.bind("SUPER + SHIFT + T", hl.dsp.layout("orientationleft"))
+hl.bind("SUPER + T", function()
+	if layout.is_scrolling() then
+		layout.toggle_column_tabs()
+	else
+		hl.dispatch(hl.dsp.layout("orientationcycle"))
+	end
+end)
 hl.bind("SUPER + n", hl.dsp.layout("addmaster"))
 hl.bind("SUPER + SHIFT + n", hl.dsp.layout("removemaster"))
 
@@ -77,27 +125,42 @@ hl.bind("MOD5 + S", special.toggle("spotify"))
 hl.bind("MOD5 + D", special.toggle("discord", special.WACKY))
 hl.bind("MOD5 + T", special.toggle("telegram", special.RIGHT))
 hl.bind("MOD5 + B", special.toggle("beeper", special.RIGHT))
+hl.bind("MOD5 + R", special.toggle("signal", special.RIGHT))
 hl.bind("MOD5 + Q", launch_app("kitty"))
-hl.bind("MOD5 + Z", launch_app("zen.desktop"))
+hl.bind("MOD5 + Z", launch_app("helium.desktop"))
 hl.bind("MOD5 + E", launch_app("org.gnome.Nautilus.desktop"))
 
 -- MOD5 is the iso-level3-shift / alt grave key, used on international keyboards
 -- but i use it as another modifier key and bound it to holding down tab in keyd
 hl.bind("SUPER + S", special.toggle_or_dismiss("scratchpad"))
 hl.bind("SUPER + CTRL + S", hl.dsp.window.move({ workspace = "special:scratchpad" }))
-hl.bind("SUPER + SHIFT + S", hl.dsp.window.move({ workspace = "special:scratchpad" }, { follow = false }))
+hl.bind("SUPER + SHIFT + S", hl.dsp.window.move({ workspace = "special:scratchpad", follow = false }))
 
 hl.bind("mouse:272", special.dismiss_on_outside_click, { non_consuming = true })
 
 -- Screenshot Keybind
-hl.bind("PRINT", hl.dsp.exec_cmd("flameshot gui"))
+hl.bind("PRINT", function()
+	screenshot_privacy_lift()
+	local mons = hl.get_monitors()
+	table.sort(mons, function(a, b)
+		return a.id < b.id
+	end)
+	for i, m in ipairs(mons) do
+		if m.focused then
+			hl.exec_cmd("flameshot screen -n " .. (i - 1) .. " -e")
+			return
+		end
+	end
+	hl.exec_cmd("flameshot gui")
+end)
 hl.bind("SUPER + PRINT", hl.dsp.exec_cmd("/home/zane/.scripts/grimblast copy output --notify"))
+hl.bind("SUPER + SHIFT + T", hl.dsp.exec_cmd("/home/zane/.scripts/ocr-region"))
 
 -- Audio keys
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%+"))
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%-"))
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
-hl.bind("SUPER + SHIFT + V", hl.dsp.exec_cmd("/home/zane/.local/bin/volumixer --toggle"))
+hl.bind("SUPER + SHIFT + V", hl.dsp.exec_cmd("volumixer --toggle"))
 
 -- Media Keys
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
@@ -127,9 +190,7 @@ hl.bind("SUPER + CTRL + E", hl.dsp.focus({ direction = "right" }))
 hl.bind("SUPER + SHIFT + Q", hl.dsp.layout("swapcol l"))
 hl.bind("SUPER + SHIFT + E", hl.dsp.layout("swapcol r"))
 
--- Scrolling left/right, on the workspaces that scroll. Elsewhere `move ?col` is not a
--- valid layoutmsg and only produces an error toast, so fall back to plain directional
--- focus -- which is what moving a column does on a scrolling workspace anyway.
+-- uses move +col / -col specifically on scrolling workspaces
 local function pan_or_focus(col, direction)
 	return function()
 		if layout.is_scrolling() then
@@ -199,3 +260,7 @@ hl.bind("SUPER + SHIFT + minus", function()
 end, { description = "Reset Zoom" })
 
 hl.bind("SUPER + b", hl.dsp.exec_cmd("wayscriber --daemon-toggle"))
+
+for _, key in ipairs({ "F13", "F14", "F15", "F16" }) do
+	hl.bind(key, hl.dsp.pass({ window = "title:^ControlWindow$" }), { description = "Buzzer to ControlWindow" })
+end
